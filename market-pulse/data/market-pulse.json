@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "status": "bootstrap",
+  "generatedAt": null,
+  "score": null,
+  "bias": "NEUTRAL",
+  "confidence": null,
+  "confidenceLabel": "WARTET AUF MORGENANALYSE",
+  "buyerPressure": null,
+  "sellerPressure": null,
+  "indicators": [
+    {"key":"structure","label":"Wyckoff / SMC","score":null,"status":"pending","weight":30},
+    {"key":"orderflow","label":"Orderflow","score":null,"status":"pending","weight":20},
+    {"key":"trend","label":"Trend & Momentum","score":null,"status":"pending","weight":15},
+    {"key":"macro","label":"Makro & Liquidität","score":null,"status":"pending","weight":15},
+    {"key":"sentiment","label":"Sentiment / Psychologie","score":null,"status":"pending","weight":10},
+    {"key":"news","label":"News / Events","score":null,"status":"pending","weight":5},
+    {"key":"cycles","label":"Mond / Langzyklen","score":null,"status":"pending","weight":5}
+  ],
+  "crossMarkets": [
+    {"symbol":"BTC","status":"pending"},
+    {"symbol":"ETH","status":"pending"},
+    {"symbol":"NASDAQ","status":"pending"},
+    {"symbol":"S&P 500","status":"pending"},
+    {"symbol":"DAX","status":"pending"},
+    {"symbol":"GOLD","status":"pending"},
+    {"symbol":"DXY","status":"pending"},
+    {"symbol":"VIX","status":"pending"}
+  ],
+  "levels": {"support":[],"resistance":[],"bullTrigger":null,"bearTrigger":null},
+  "moon": {"phase":null,"illumination":null,"cycleDay":null,"daysToFullMoon":null,"timingBias":"neutral"},
+  "cycles": {"btc1063": {"cycleDay":null,"phase":null,"weight":2.5},"macroLong": {"phase":null,"weight":2.5,"note":"Hypothese / Timingfaktor, kein alleiniger Trigger"}},
+  "topReasons": [],
+  "newsSummary": "Die erste Morgenanalyse wurde noch nicht geschrieben.",
+  "bullScenario": null,
+  "bearScenario": null,
+  "disclaimer": "Informations- und Analysewerkzeug. Kein automatischer Trade-Auslöser."
+}
