@@ -23,6 +23,7 @@ jobs:
           sudo apt-get install -y ffmpeg
           python -m pip install --upgrade pip
           pip install piper-tts
+          python -m piper.download_voices de_DE-thorsten-high
       - name: Render neural German hypnosis
         run: bash tools/render_piper_hypnosis.sh
       - name: Upload MP3
