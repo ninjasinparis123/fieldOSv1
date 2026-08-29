@@ -1,0 +1,36 @@
+name: Render Open Source Hypnosis
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/render-hypnosis.yml'
+      - 'tools/hypnosis_tts.py'
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Install Chatterbox
+        run: |
+          python -m pip install --upgrade pip
+          pip install chatterbox-tts
+      - name: Render
+        env:
+          HF_HOME: ${{ github.workspace }}/.hf-cache
+        run: python tools/hypnosis_tts.py
+      - name: Upload MP3
+        uses: actions/upload-artifact@v4
+        with:
+          name: hypnosis-dunkelheit-licht
+          path: hypnosis_build/Hypnose_Dunkelheit_zu_Licht_OpenSource.mp3
+          if-no-files-found: error
+          retention-days: 7
