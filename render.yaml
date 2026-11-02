@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: agent-commons-audit-pilot
+    runtime: node
+    plan: free
+    buildCommand: npm install --omit=dev --no-audit --no-fund
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeployTrigger: off
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ENABLE_REAL_PAYMENTS
+        value: disabled
