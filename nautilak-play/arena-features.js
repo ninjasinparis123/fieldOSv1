@@ -14,7 +14,7 @@ export function makeCreature(kind){
  return g
 }
 export function enhanceArena(opts){
- const {scene,renderer,characters,pedestalPoints,getPosition,getYaw,getPlayer,getSelected,getLoaded,setPlayer,getKeys,status}=opts;
+ const {scene,renderer,characters,pedestalPoints,getPosition,getYaw,getPlayer,getSelected,getLoaded,setPlayer,getKeys,status,rpg}=opts;
  const $=id=>document.getElementById(id);
  const extra=[
  {id:'elemental',name:'Elementar',elements:'Feuer + Wasser',asset:'procedural',color:0x6ecbd9},
@@ -38,16 +38,16 @@ export function enhanceArena(opts){
  let c=document.createElement('canvas');c.width=512;c.height=96;let ct=c.getContext('2d');ct.fillStyle='#152421';ct.fillRect(0,0,512,96);ct.fillStyle='#f3ddb0';ct.font='bold 29px Georgia';ct.textAlign='center';ct.fillText('WELTENTOR  [E]',256,61);let title=new THREE.Mesh(new THREE.PlaneGeometry(8,1.5),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),side:THREE.DoubleSide}));title.position.set(0,12,.1);gateGroup.add(title);
  const effectList=[],shots=[],targets=[];
  const abilityKeys={KeyJ:'melee1',KeyK:'melee2',KeyL:'melee3',Digit1:'range1',Digit2:'range2',Digit3:'range3',KeyQ:'shield',KeyR:'dash'};
- const cd={melee1:.38,melee2:1.5,melee3:2.3,range1:.85,range2:1.35,range3:3,shield:5,dash:2.6},ready={},S={time:0,hp:100,hits:0,guardUntil:0,dashRemaining:0,dashVec:new THREE.Vector3(),invulnerableUntil:0,beast:false,oldBody:null};
+ let hitStyle='attack';const cd={melee1:.38,melee2:1.5,melee3:2.3,range1:.85,range2:1.35,range3:3,shield:5,dash:2.6},ready={},S={time:0,hp:100,hits:0,guardUntil:0,dashRemaining:0,dashVec:new THREE.Vector3(),invulnerableUntil:0,beast:false,oldBody:null};
  const matDummy=new THREE.MeshLambertMaterial({color:0xa88a6d});
  for(const [x,z] of [[0,-12],[12,4],[-12,4],[0,22],[23,4],[-23,4]]){const group=new THREE.Group();group.position.set(x,0,z);const material=matDummy.clone(),body=new THREE.Mesh(new THREE.CylinderGeometry(.75,.9,3,10),material);body.position.y=1.85;group.add(body);const head=new THREE.Mesh(new THREE.IcosahedronGeometry(.72,1),matDummy);head.position.y=3.8;group.add(head);scene.add(group);targets.push({group,body,hp:100,respawn:0,attack:S.time+3+Math.random()*2})}
  function forward(){return new THREE.Vector3(Math.sin(getYaw()),0,Math.cos(getYaw()))}
  function glow(x,y,z,color,size=.5,ttl=.3){const mesh=new THREE.Mesh(new THREE.IcosahedronGeometry(size,1),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.9,depthWrite:false}));mesh.position.set(x,y,z);scene.add(mesh);effectList.push({mesh,t:ttl,total:ttl})}
- function hit(target,dmg){if(target.hp<=0)return;target.hp-=dmg;S.hits++;glow(target.group.position.x,2.6,target.group.position.z,0xffe3ae,.5,.27);target.body.material.color.setHex(target.hp>0?0xd69a7a:0x505d50);$('score').textContent=S.hits+' Treffer';if(target.hp<=0){target.group.visible=false;target.respawn=S.time+4}}
+ function hit(target,dmg){if(target.hp<=0)return;target.hp-=dmg;S.hits++;if(rpg)rpg.combatHit(hitStyle,dmg);glow(target.group.position.x,2.6,target.group.position.z,0xffe3ae,.5,.27);target.body.material.color.setHex(target.hp>0?0xd69a7a:0x505d50);$('score').textContent=S.hits+' Treffer';if(target.hp<=0){target.group.visible=false;target.respawn=S.time+4;if(rpg)rpg.defeated()}}
  function melee(dmg,reach,angle,color){const p=getPosition(),f=forward();for(const target of targets){if(target.hp<=0)continue;const dx=target.group.position.x-p.x,dz=target.group.position.z-p.z,d=Math.hypot(dx,dz);if(d>reach)continue;const dot=(dx*f.x+dz*f.z)/(d||1);if(angle>=6.2||dot>Math.cos(angle*.5))hit(target,dmg)}
  const ring=new THREE.Mesh(new THREE.RingGeometry(reach*.65,reach*.82,40,1,0,angle>=6.2?Math.PI*2:angle),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.75,side:THREE.DoubleSide,depthWrite:false}));ring.rotation.x=-Math.PI/2;ring.rotation.z=-getYaw();ring.position.set(p.x,.3,p.z);scene.add(ring);effectList.push({mesh:ring,t:.28,total:.28})}
  function projectile(color,speed,dmg,size,spread=0){const f=forward().applyAxisAngle(new THREE.Vector3(0,1,0),spread),p=getPosition();const mesh=new THREE.Mesh(new THREE.OctahedronGeometry(size,1),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.9}));mesh.position.set(p.x+f.x*2.1,2.7,p.z+f.z*2.1);scene.add(mesh);shots.push({mesh,vel:f.multiplyScalar(speed),t:2.4,dmg,enemy:false})}
- function ability(name){if(S.time<(ready[name]||0))return false;ready[name]=S.time+cd[name];const c=({knight:0xf0c36e,warrior:0xf56b49,mage:0x79c9ff,spirit:0x83cf83,elemental:0x74efff,shifter:0xc3d588,dragon:0xfd8c5a,assassin:0xb58cff})[getSelected()]||0xe7bc88;
+ function ability(name){if(S.time<(ready[name]||0))return false;ready[name]=S.time+cd[name];hitStyle=name.startsWith('range')?(getSelected()==='mage'||getSelected()==='elemental'||getSelected()==='dragon'?'magic':'ranged'):name.startsWith('melee')?'attack':'defence';const c=({knight:0xf0c36e,warrior:0xf56b49,mage:0x79c9ff,spirit:0x83cf83,elemental:0x74efff,shifter:0xc3d588,dragon:0xfd8c5a,assassin:0xb58cff})[getSelected()]||0xe7bc88;
  if(name==='melee1')melee(23,6,1.5,c);
  if(name==='melee2')melee(15,7,6.283,c);
  if(name==='melee3')melee(38,8,1.85,0xf9dc89);
