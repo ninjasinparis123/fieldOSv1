@@ -22,13 +22,13 @@ header{position:fixed;top:17px;left:20px;z-index:3;pointer-events:none;text-shad
 </style>
 </head><body>
 <div id="view"></div>
-<header><div class="brand">NAUTILAK UNIVERSE</div><div class="sub">DIE ARENA DER VIER PFADE</div></header>
+<header><div class="brand">NAUTILAK UNIVERSE</div><div class="sub">DIE ARENA DER VIER PFADE · BUILD 0.4</div></header>
 <aside id="roster"><h2>CHARAKTER WÄHLEN</h2>
 <button class="choice active" data-character="knight">I · Ritter<small>Erde + Feuer</small></button>
 <button class="choice" data-character="warrior">II · Krieger<small>Feuer + Luft</small></button>
 <button class="choice" data-character="mage">III · Zauberer<small>Wasser + Luft</small></button>
 <button class="choice" data-character="spirit">IV · Naturgeist<small>Erde + Wasser</small></button>
-<div id="fps">3D-Modelle werden geladen …</div></aside>
+<div id="fps">CHARAKTERMODELLE: 0 / 4</div><div id="assetCheck" style="font:11px system-ui,sans-serif;color:#d1bd9d;margin-top:6px;line-height:1.5">Prüfe 3D-Assets …</div></aside>
 <div id="crosshair">✦</div>
 <div id="help">Klick in die Arena → Mausblick · <b>WASD</b> bewegen · Leertaste springen · Shift sprinten · E Figur am Podest wählen · Esc Maus freigeben<span id="status">Spawnpunkt: Arena des Weltenbaums</span></div>
 <div id="loading">NAUTILAK – ARENA WIRD ERSCHAFFEN …</div>
@@ -76,7 +76,7 @@ const characters=[
  {id:'mage',name:'Zauberer',elements:'Wasser + Luft',model:'player_priest.glb',color:0x6095c8,asset:'tactical'},
  {id:'spirit',name:'Naturgeist',elements:'Erde + Wasser',model:'orc.glb',color:0x75a97c,asset:'jev'}
 ];
-const displays=new Map(),loaded=new Map(),mixers=[];
+const displays=new Map(),loaded=new Map(),mixers=[];let resultsLoaded=0;
 // CC0 character meshes from KayKit and Quaternius community game projects.
 const assetRoots={
  jev:'https://cdn.jsdelivr.net/gh/kikoncuo/jevfire@5df83b558bf635e006d31f8f2fc2798d0e3ff051/web/public/assets/',
@@ -120,12 +120,20 @@ for(let side of [-1,1]){part(new THREE.CylinderGeometry(.24,.3,1.45,8),m,side*.8
 part(new THREE.BoxGeometry(1.45,.3,.9),iron,0,1.08,0);return group}
 function normalizedCharacter(raw,height=4.6){raw.traverse(obj=>{if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true;if(obj.material){const mats=Array.isArray(obj.material)?obj.material:[obj.material];for(const mat of mats){if(mat.isMeshStandardMaterial){mat.roughness=Math.max(.36,mat.roughness??.6);mat.metalness=Math.min(.5,mat.metalness??0)}}}}});const outer=new THREE.Group(),bbox=new THREE.Box3().setFromObject(raw),size=bbox.getSize(new THREE.Vector3());
 if(size.y<.0001)throw Error('Ungültiges Charaktermodell');const scale=height/size.y;raw.scale.setScalar(scale);raw.position.set(-(bbox.min.x+bbox.max.x)*.5*scale,-bbox.min.y*scale,-(bbox.min.z+bbox.max.z)*.5*scale);outer.add(raw);return outer}
-async function loadModel(char){const loader=new GLTFLoader();try{const gltf=await loader.loadAsync(assetRoots[char.asset]+char.model);return {source:gltf.scene,animations:gltf.animations}}
-catch(err){status.textContent='Ein Modell fehlt: '+char.name+' – Ersatzfigur verwendet';return {source:humanoidFallback(char.color),animations:[]}}}
-async function setupCharacters(){const results=await Promise.all(characters.map(loadModel));results.forEach((item,i)=>{const c=characters[i],p=pedestalPoints[i];loaded.set(c.id,item);place(cylinder(5.4,5.9,1.6,24),stone,p[0],.8,p[1]);const trim=place(new THREE.TorusGeometry(5,.22,8,40),bronze,p[0],1.66,p[1]);trim.rotation.x=Math.PI/2;
+async function loadModel(char){
+ const loader=new GLTFLoader(),primary=assetRoots[char.asset]+char.model;
+ const raw=char.asset==='jev'?'https://raw.githubusercontent.com/kikoncuo/jevfire/5df83b558bf635e006d31f8f2fc2798d0e3ff051/web/public/assets/': 'https://raw.githubusercontent.com/sion-rgb/tactical-slash/8bf8d835cb7afa7cb3f4d893b0966c6b4e9b7727/assets/characters/player/';
+ let firstError=null;
+ for(const url of [primary,raw+char.model]){
+  try{const gltf=await loader.loadAsync(url);if(!gltf.scene||!gltf.scene.children.length)throw Error('Leeres Modell');return {source:gltf.scene,animations:gltf.animations,ok:true}}
+  catch(err){firstError=String(err?.message||err)}
+ }
+ return {source:humanoidFallback(char.color),animations:[],ok:false,error:firstError}
+}
+async function setupCharacters(){const results=await Promise.all(characters.map(loadModel));const good=results.filter(item=>item.ok).length;resultsLoaded=good;$('assetCheck').textContent='Echte GLB-Modelle: '+good+' / 4'+(good<4?' · '+results.filter(x=>!x.ok).map((x,i)=>x.error||'Ladefehler').slice(0,1).join(' ').slice(0,75):' · alle geladen ✓');results.forEach((item,i)=>{const c=characters[i],p=pedestalPoints[i];loaded.set(c.id,item);place(cylinder(5.4,5.9,1.6,24),stone,p[0],.8,p[1]);const trim=place(new THREE.TorusGeometry(5,.22,8,40),bronze,p[0],1.66,p[1]);trim.rotation.x=Math.PI/2;
 let statue=normalizedCharacter(cloneSkeleton(item.source));statue.position.set(p[0],1.65,p[1]);statue.rotation.y=Math.atan2(-p[0],-p[1]);scene.add(statue);displays.set(c.id,statue);
 if(item.animations.length){let mixer=new THREE.AnimationMixer(statue);const action=mixer.clipAction(item.animations.find(a=>/idle/i.test(a.name))||item.animations[0]);action.play();mixers.push(mixer)}
-});setPlayer('knight');$('loading').remove();status.textContent='Arena bereit · echte 3D-Charaktere · E am Podest wählt'}
+});setPlayer('knight');$('loading').remove();status.textContent='Arena Build 0.4 · '+good+'/4 echte Modelle geladen · E am Podest wählt'}
 let player=new THREE.Group();scene.add(player);let selected='knight',playerMixer=null;
 function setPlayer(id){const data=loaded.get(id);if(!data)return;selected=id;scene.remove(player);playerMixer=null;player=normalizedCharacter(cloneSkeleton(data.source));scene.add(player);if(data.animations.length){playerMixer=new THREE.AnimationMixer(player);let clip=data.animations.find(a=>/walk|run/i.test(a.name))||data.animations.find(a=>/idle/i.test(a.name))||data.animations[0];playerMixer.clipAction(clip).play()}
 document.querySelectorAll('.choice').forEach(btn=>btn.classList.toggle('active',btn.dataset.character===id));status.textContent='Ausgewählt: '+characters.find(c=>c.id===id).name}
@@ -139,7 +147,7 @@ document.addEventListener('mousemove',e=>{if(document.pointerLockElement===rende
 renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(5,Math.min(19,zoom+e.deltaY*.012))},{passive:false});
 window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
 let last=performance.now(),frames=0,fpsStart=last,fps=0;const clock=new THREE.Clock();
-function loop(now){requestAnimationFrame(loop);let dt=Math.min((now-last)/1000,.04);last=now;frames++;if(now-fpsStart>1000){fps=Math.round(frames*1000/(now-fpsStart));frames=0;fpsStart=now;$('fps').textContent=fps+' FPS · WASD aktiv'}
+function loop(now){requestAnimationFrame(loop);let dt=Math.min((now-last)/1000,.04);last=now;frames++;if(now-fpsStart>1000){fps=Math.round(frames*1000/(now-fpsStart));frames=0;fpsStart=now;$('fps').textContent=fps+' FPS · '+resultsLoaded+' / 4 echte Charaktere'}
 const forward=Number(!!keys.KeyW)-Number(!!keys.KeyS),side=Number(!!keys.KeyD)-Number(!!keys.KeyA),len=Math.hypot(forward,side);
 if(len){let step=(keys.ShiftLeft||keys.ShiftRight?12:6.5)*dt/len,dx=Math.sin(yaw)*forward+Math.cos(yaw)*side,dz=Math.cos(yaw)*forward-Math.sin(yaw)*side;
 position.x+=dx*step;position.z+=dz*step;let d=Math.hypot(position.x,position.z);if(d>42){position.x*=42/d;position.z*=42/d}player.rotation.y=Math.atan2(dx,dz)}
