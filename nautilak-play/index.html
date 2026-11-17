@@ -1,259 +1,116 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nautilak Universe — Living Realms</title>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nautilak Universe – Arena</title>
 <style>
-:root{--bg:#0a1011;--panel:#121d20;--edge:#29403c;--gold:#e9ca86;--mint:#90d9b6;--white:#f6f1e5;--muted:#a4b2a9}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font:14px Inter,Segoe UI,system-ui,sans-serif}button,input,select{font:inherit}button{cursor:pointer;color:var(--white);background:#263a36;border:1px solid #425d52;border-radius:9px;padding:10px 13px}button:hover{background:#355348}button:disabled{opacity:.45;cursor:default}.primary{background:var(--gold);color:#1e241d;border-color:var(--gold);font-weight:800}.primary:hover{background:#f5dfad}.shell{display:grid;grid-template-columns:305px minmax(0,1fr);height:100dvh;min-height:600px}aside{background:linear-gradient(155deg,#1a2c29,#0b1417);border-right:1px solid #29463c;padding:21px;overflow:auto;z-index:3}.brand{font:700 22px Georgia,serif;letter-spacing:.08em;color:var(--gold)}.brand small{display:block;font:10px system-ui;letter-spacing:.35em;color:#a2cfb8;margin-top:5px}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.19em;color:#a4c6b3;margin:23px 0 8px}h1{font:normal 26px Georgia,serif;margin:0 0 8px}p{line-height:1.6;color:var(--muted);font-size:12px}select,input{width:100%;background:#0b1718;color:var(--white);border:1px solid #3b574e;border-radius:8px;padding:10px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}.statline{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #284139;font-size:12px}.statline b{color:var(--gold)}.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btnrow button{flex:1;font-size:12px}.message{min-height:32px;color:#c9e7c5;padding:13px 0;font-size:12px}.main{position:relative;min-width:0;background:#172529}.world{position:absolute;inset:0}canvas{display:block;width:100%;height:100%}.topbar{position:absolute;left:20px;top:17px;right:20px;display:flex;gap:8px;justify-content:space-between;align-items:start;pointer-events:none}.topbar>*{pointer-events:auto}.glass{background:#0b1718dc;backdrop-filter:blur(8px);border:1px solid #456051bb;border-radius:12px;padding:12px 16px;box-shadow:0 6px 28px #0006}.region{font:23px Georgia,serif;color:#f4dcac}.small{font-size:11px;color:#c9d1c6}.hudright{display:flex;gap:8px;align-items:center}.hudright button{font-size:12px}.bottom{position:absolute;left:20px;bottom:18px;right:20px;display:flex;align-items:end;justify-content:space-between;gap:12px;pointer-events:none}.bottom>*{pointer-events:auto}.actionhint{font-size:12px;color:#e3e8dc}.cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;color:#fff8}.modalshade{position:absolute;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:22px;z-index:10}.modalshade.show{display:flex}.modal{background:linear-gradient(150deg,#1c2e29,#0b171a);border:1px solid #5a7663;border-radius:17px;padding:23px;width:min(730px,100%);max-height:89vh;overflow:auto;box-shadow:0 20px 90px #000}.modalhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.modal h2{font:25px Georgia,serif;color:var(--gold);margin:0}.modal h3{font-size:15px;margin:17px 0 8px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tile{background:#142420;border:1px solid #426052;border-radius:12px;padding:13px}.tile strong{color:#ecd49d}.tile p{margin:8px 0 0}.tile button{margin-top:11px;width:100%}.chip{display:inline-block;border:1px solid #456457;border-radius:40px;font-size:10px;color:#a2dab8;padding:4px 9px;margin:3px 4px 3px 0}.note{font-size:11px;color:#bdcbbf}.warning{color:#f5caa0}.spacer{height:8px}#veil{position:absolute;inset:0;background:#101919;color:white;display:flex;align-items:center;justify-content:center;z-index:15;flex-direction:column;gap:8px}#veil strong{font:27px Georgia,serif;color:#ead6a8}@media(max-width:800px){.shell{grid-template-columns:1fr;grid-template-rows:auto minmax(480px,1fr);height:auto}aside{max-height:none}.main{height:70vh;min-height:500px}.topbar{left:9px;right:9px;top:8px}.glass{padding:8px}.region{font-size:17px}.bottom{left:9px;bottom:9px;right:9px}.cards{grid-template-columns:1fr}.hudright{flex-wrap:wrap;justify-content:end}.hudright button{padding:7px;font-size:11px}}
-
-/* Nautilak Nordic Edition: original minimal open-world RPG interface */
-:root{--bg:#0b0e12;--panel:#151a1d;--edge:#62655d;--gold:#ddd4bb;--mint:#b9c5bd;--white:#ebe9e3;--muted:#aaa99e}
-body{font-family:Georgia,"Times New Roman",serif;letter-spacing:.015em}
-.shell{display:block;height:100dvh;min-height:550px;position:relative}
-.main{position:absolute;inset:0;height:100%;overflow:hidden;background:#191f23}
-aside{position:absolute;inset:0 auto 0 0;width:min(370px,92vw);max-height:100%;z-index:11;transform:translateX(-105%);transition:transform .28s ease;background:linear-gradient(110deg,#0a0e11f8,#1d2226ed);border-right:1px solid #878576;box-shadow:22px 0 90px #000b;padding:28px 26px 30px}
-body.menu-open aside{transform:translateX(0)}
-body.menu-open:before{content:"";position:absolute;inset:0;background:#0009;z-index:10}
-.brand{font:normal 25px Georgia,serif;letter-spacing:.16em;color:#e8e0cb}
-.brand span{color:#e8e0cb!important}
-.brand small{color:#928d7a;letter-spacing:.28em}
-h1{font:normal 26px Georgia,serif}
-.eyebrow{color:#b3ae9e;font-size:10px;letter-spacing:.24em}
-aside button,aside select,aside input{background:#1b2125e8;border:1px solid #75776b;border-radius:2px;color:#ddd8c8;font-family:Georgia,serif}
-aside button:hover{background:#333c3e;border-color:#e9e0cc}
-aside .statline{border-bottom:1px solid #454c4a}
-.statline b{color:#e4dcc7}
-.glass{background:transparent;border:0;box-shadow:none;backdrop-filter:none;text-shadow:0 2px 8px #000c;padding:4px 8px}
-.topbar{top:17px;left:26px;right:26px;align-items:center}
-.topbar .region{font:normal 14px Georgia,serif;letter-spacing:.15em;text-transform:uppercase;color:#f2ecdc}
-.topbar .small{font:10px Georgia,serif;color:#d6d3c8;letter-spacing:.06em}
-.hudright button{background:#141c22a8;border:1px solid #878b7d77;border-radius:2px;padding:9px 12px;font-size:11px;letter-spacing:.1em}
-.hudright button:hover{background:#2b383c}
-.cross{font-size:16px;color:#e7dfc5aa}
-.bottom{bottom:15px;left:24px;right:24px}
-.bottom .glass{background:#07090aaa;padding:8px 12px;border:1px solid #4f554c55;font-family:Georgia,serif}
-#hint{max-width:440px}
-#veil{background:#101417}
-#veil strong{font:normal 28px Georgia,serif;color:#e4ddcc}
-.modalshade{background:#050708de}
-.modal{background:linear-gradient(140deg,#22282a,#0e1115);border:1px solid #898678;border-radius:2px;box-shadow:0 25px 100px #000f}
-.modal h2{color:#e7dfc7;letter-spacing:.1em;text-transform:uppercase;font:normal 22px Georgia,serif}
-.tile{border:1px solid #5d665e;background:#1e2628;border-radius:2px}
-.tile strong{color:#f1e5cd}.chip{border-color:#72796e;color:#d7d1be}
-.modal button{border-radius:2px;background:#2a3233;border-color:#686f66}
-.nordic-toggle{position:absolute;left:24px;top:19px;z-index:7;background:#11171cb8;border:1px solid #c8c5b380;border-radius:2px;padding:9px 13px;color:#e4ddc9;font:12px Georgia,serif;letter-spacing:.16em;box-shadow:0 4px 16px #0006}
-body.menu-open .nordic-toggle{left:min(392px,calc(92vw + 16px));z-index:12}
-.nordic-compass{position:absolute;top:19px;left:50%;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;pointer-events:none;color:#e9e4d7;text-shadow:0 2px 8px #000}
-.nordic-compass .directions{min-width:210px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #dedbcc77;padding:0 12px 7px;letter-spacing:.08em;font-size:13px}
-.nordic-compass .bearing{font:9px Georgia,serif;letter-spacing:.26em;margin-top:7px}
-.nordic-compass strong{color:#eed8a5;font-size:19px;font-weight:normal}
-.nordic-vitals{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:4;display:flex;gap:13px;align-items:end;pointer-events:none}
-.vital{width:min(18vw,152px);height:6px;border:1px solid #aaa99b;background:#0e1013b9;position:relative;box-shadow:0 2px 8px #000b}
-.vital i{display:block;height:100%;width:100%}
-.vital.health i{background:#9f4644}.vital.magic i{background:#5287aa}.vital.stamina i{background:#84a17b}
-.vital-label{position:absolute;bottom:10px;width:100%;text-align:center;font:9px Georgia,serif;letter-spacing:.18em;color:#e8dfce;text-shadow:0 1px 6px #000}
-.menu-footnote{font:11px Georgia,serif;color:#aaa99a;text-align:center;line-height:1.6;margin:19px 0 6px}
-@media(max-width:840px){.shell{height:100dvh;min-height:480px;display:block}.main{height:100%;min-height:0}.topbar{left:12px;right:12px;top:70px}.topbar .glass{background:#0d1518aa}.topbar .region{font-size:11px}.hudright button{padding:6px}.nordic-compass{top:16px;left:57%}.nordic-compass .directions{min-width:130px;font-size:10px}.bottom{left:7px;right:7px;bottom:7px}.bottom .glass{font-size:9px}.nordic-vitals{bottom:58px}.vital{width:20vw}.nordic-toggle{top:11px;left:11px}.cards{grid-template-columns:1fr}}
-
-/* Movement diagnostics and accessible fallback controls */
-.play-controls{position:absolute;left:18px;bottom:103px;z-index:6;display:grid;grid-template-columns:repeat(3,40px);grid-template-rows:repeat(2,40px);gap:5px}
-.play-controls button{background:#0d1c20df;border:1px solid #e3dcbd85;color:#fff3d8;border-radius:6px;font-size:19px;touch-action:none;user-select:none;padding:0}
-.play-controls button.pressed{background:#7d9d6bcf}
-.play-controls button[data-move="KeyW"]{grid-column:2;grid-row:1}
-.play-controls button[data-move="KeyA"]{grid-column:1;grid-row:2}
-.play-controls button[data-move="KeyS"]{grid-column:2;grid-row:2}
-.play-controls button[data-move="KeyD"]{grid-column:3;grid-row:2}
-#inputStatus{position:absolute;bottom:75px;left:18px;z-index:6;background:#102019df;color:#f4eacc;font:11px Georgia,serif;padding:5px 9px;border-radius:4px;pointer-events:none}
-#world canvas{outline:none}
-@media(max-width:700px){.play-controls{bottom:116px;left:10px}#inputStatus{bottom:88px;left:10px}}
-</style></head>
-<body><div class="shell"><aside><div class="brand">NAUTILAK <span style="color:#b0e2bd">UNIVERSE</span><small>LIVING REALMS · PROTOTYPE</small></div><div class="eyebrow">Dein Charakter</div><h1 id="heroTitle">Wanderer des Waldes</h1><div class="pair"><div><label class="small" for="charName">Name</label><input id="charName" maxlength="22" value="Wanderer"></div><div><label class="small" for="charRace">Volk / Herkunft</label><select id="charRace"><option value="human">Mensch</option><option value="elf">Elf</option><option value="orc">Ork</option><option value="spirit">Naturgeist</option><option value="dragon">Drache</option></select></div></div><label class="small" for="charClass">Berufung / Klasse</label><select id="charClass"><option value="warrior">Krieger</option><option value="mage">Zauberer</option><option value="warden">Wächter</option><option value="knight">Ritter</option><option value="assassin">Assassine</option><option value="shifter">Gestaltwandler</option></select><div class="eyebrow">Spielmodus</div><select id="mode"><option value="official">Offizielles Reich · Fair-Play-Regeln</option><option value="creative">Freie Welt · Sandbox & Mods</option></select><p id="modeDesc">Zukünftig mit serverseitiger Prüfung. Aktuell eine lokale Simulation ohne Cheatschutz.</p><div class="eyebrow">Inventar & Fortschritt</div><div class="statline"><span>🪙 Münzen</span><b id="coins">120</b></div><div class="statline"><span>🪵 Holz</span><b id="wood">10</b></div><div class="statline"><span>🌿 Naturbalance</span><b id="nature">75%</b></div><div class="statline"><span>🏛 Einfluss</span><b id="influence">0</b></div><div class="statline"><span>⭐ Skillpunkte</span><b id="points">3</b></div><div class="btnrow"><button id="skillsBtn">✦ Skilltree</button><button id="landBtn">⌂ Land</button><button id="councilBtn">⚖ Rat</button></div><div class="eyebrow">Elementarorden</div><div class="statline"><span>Affinität</span><b id="elementName">Luft</b></div><div class="btnrow"><button id="elementBtn">✧ Elemente</button><button id="creatureBtn">♧ Kreaturen</button></div><div class="btnrow"><button id="elementCast">Fähigkeit wirken</button></div><div class="eyebrow">Welt & Ökosystem</div><div class="statline"><span>Region</span><b id="regionSide">Eldergrove</b></div><div class="statline"><span>Lebewesen</span><b id="creatures">—</b></div><div class="btnrow"><button id="gather">Holz sammeln</button><button id="restore">Wald pflegen</button></div><div class="eyebrow">Gemeinschaft</div><div class="statline"><span>Spieler online</span><b>1 (lokal)</b></div><div class="btnrow"><button id="share">Welt teilen</button><button id="save">Fortschritt speichern</button></div><p>WASD bewegen · Maus drehen · E interagieren · Shift laufen · Mausrad zoomen</p><div class="menu-footnote">TAB — Menü öffnen / schließen<br>ESC — Menüs schließen</div><div class="message" id="message" role="status">Willkommen in Eldergrove.</div><p class="warning">Alpha: Land, Politik, Ökologie und Wirtschaft sind lokal simuliert. Kein Echtgeld, keine Online-Spieler und keine sicheren Besitznachweise.</p></aside><main class="main"><div id="inputStatus">Klicke in die Welt · WASD bewegen</div><div class="play-controls" aria-label="Bewegungstasten"><button data-move="KeyW" aria-label="Vorwärts">▲</button><button data-move="KeyA" aria-label="Links">◀</button><button data-move="KeyS" aria-label="Rückwärts">▼</button><button data-move="KeyD" aria-label="Rechts">▶</button></div><button class="nordic-toggle" id="menuToggle" aria-label="Charaktermenü öffnen">☰ MENÜ</button><div class="nordic-compass" aria-label="Kompass"><div class="directions"><span>W</span><span>◆</span><strong id="compassFacing">N</strong><span>◇</span><span>O</span></div><span class="bearing" id="compassBearing">NORDEN</span></div><div class="nordic-vitals"><div class="vital magic"><span class="vital-label">MAGICKA</span><i></i></div><div class="vital health"><span class="vital-label">LEBEN</span><i></i></div><div class="vital stamina"><span class="vital-label">AUSDAUER</span><i></i></div></div><div id="world" class="world"></div><div id="veil"><strong>Die Welt erwacht …</strong><span>3D-Umgebung wird geladen</span></div><div class="topbar"><div class="glass"><div class="region" id="region">Eldergrove · Die grünen Lande</div><div class="small" id="regionSub">Ein zusammenhängendes Reich aus fünf Biomen</div></div><div class="hudright"><button class="glass" id="questBtn">📜 Quest</button><button class="glass" id="helpBtn">ⓘ Info</button></div></div><div class="cross">•</div><div class="bottom"><div class="glass actionhint" id="hint">Erkunde das Königreich und entdecke seine Grenzen.</div><div class="glass small" id="coords">X 0 · Z 0</div></div><div class="modalshade" id="shade"><div class="modal"><div class="modalhead"><h2 id="modalTitle">Das Reich</h2><button id="close">✕</button></div><div id="modalBody"></div></div></div></main></div>
+:root{color-scheme:dark;--ink:#e6dbc4;--gold:#dec28a;--shade:#101a20}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101a20;font-family:Georgia,serif;color:var(--ink)}button{font:inherit;cursor:pointer}
+#view{position:fixed;inset:0}canvas{width:100%;height:100%;display:block;outline:none}
+header{position:fixed;top:17px;left:20px;z-index:3;pointer-events:none;text-shadow:0 2px 12px #000e}
+.brand{font-size:21px;letter-spacing:.18em;color:#fff3d9}.sub{font-size:11px;letter-spacing:.22em;color:#e2d0a5;margin-top:6px}
+#help{position:fixed;bottom:18px;left:20px;z-index:3;background:#091016b8;border:1px solid #aaa28965;padding:12px 15px;border-radius:5px;line-height:1.6;font:12px system-ui,sans-serif;max-width:470px}
+#status{display:block;color:#e4ce94;margin-top:4px}
+#roster{position:fixed;right:20px;top:20px;z-index:3;width:min(255px,42vw);padding:16px 15px 14px;background:linear-gradient(135deg,#0a1318e9,#20272ad9);border:1px solid #b7a47e80;border-radius:7px;box-shadow:0 12px 35px #0007}
+#roster h2{font-weight:normal;letter-spacing:.14em;font-size:16px;margin:0 0 12px;color:var(--gold)}
+.choice{width:100%;text-align:left;color:#ded6c2;padding:9px 10px;margin:3px 0;background:#242d32ad;border:1px solid #797b7560;border-radius:4px}
+.choice:hover,.choice.active{border-color:#e7c98f;background:#53524278}
+.choice small{display:block;color:#beb5a3;font:10px system-ui,sans-serif;margin-top:3px}
+#fps{font:11px system-ui,sans-serif;color:#e4dbcd;margin-top:11px}
+#crosshair{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.72;font:17px system-ui;pointer-events:none}
+#error{position:fixed;inset:0;display:none;place-items:center;background:#101a20;z-index:20;padding:30px;text-align:center}
+#error strong{display:block;font-size:21px;color:#ffccad;margin-bottom:8px}
+#loading{position:fixed;inset:0;display:grid;place-items:center;z-index:15;background:#111d23;color:var(--gold);font-size:18px;letter-spacing:.12em}
+@media(max-width:650px){#roster{right:9px;top:9px;width:160px;padding:10px}#roster h2{font-size:12px}.choice{font-size:11px;padding:5px}.choice small{font-size:9px}header{top:12px;left:10px}.brand{font-size:15px}#help{left:8px;bottom:8px;right:8px;font-size:10px;padding:8px}#crosshair{display:none}}
+</style>
+</head><body>
+<div id="view"></div>
+<header><div class="brand">NAUTILAK UNIVERSE</div><div class="sub">DIE ARENA DER VIER PFADE</div></header>
+<aside id="roster"><h2>CHARAKTER WÄHLEN</h2>
+<button class="choice active" data-character="knight">I · Ritter<small>Erde + Feuer</small></button>
+<button class="choice" data-character="warrior">II · Krieger<small>Feuer + Luft</small></button>
+<button class="choice" data-character="mage">III · Zauberer<small>Wasser + Luft</small></button>
+<button class="choice" data-character="spirit">IV · Naturgeist<small>Erde + Wasser</small></button>
+<div id="fps">3D-Modelle werden geladen …</div></aside>
+<div id="crosshair">✦</div>
+<div id="help">Klick in die Arena → Mausblick · <b>WASD</b> bewegen · Leertaste springen · Shift sprinten · E Figur am Podest wählen · Esc Maus freigeben<span id="status">Spawnpunkt: Arena des Weltenbaums</span></div>
+<div id="loading">NAUTILAK – ARENA WIRD ERSCHAFFEN …</div>
+<div id="error"><div><strong>Die Spielszene konnte nicht gestartet werden.</strong><span id="errorText"></span></div></div>
 <script>
-/* Runtime errors stay visible so browser failures cannot look like frozen controls. */
-window.addEventListener('error',function(e){var x=document.getElementById('inputStatus');if(x)x.textContent='SPIELFEHLER: '+String(e.message||'Unbekannt').slice(0,145)});
-window.addEventListener('unhandledrejection',function(e){var x=document.getElementById('inputStatus');if(x)x.textContent='LADEFEHLER: '+String(e.reason?.message||e.reason||'Unbekannt').slice(0,145)});
-</script><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
+window.addEventListener('error',e=>{const x=document.getElementById('status');if(x)x.textContent='FEHLER: '+e.message});
+window.addEventListener('unhandledrejection',e=>{const x=document.getElementById('status');if(x)x.textContent='LADEFEHLER: '+String(e.reason?.message||e.reason)});
+</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
 <script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js';
-import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/GLTFLoader.js';
-const $=id=>document.getElementById(id),skey='nautilak-universe-v2';let game={mode:'official',name:'Wanderer',class:'warden',race:'human',elements:['air','earth'],coins:120,wood:10,nature:75,influence:0,points:3,skills:{},land:false,quest:0,day:1,element:"air",elementLevels:{},mana:100,flight:false};try{game={...game,...JSON.parse(localStorage.getItem(skey)||'{}')}}catch(e){}game.elementLevels=game.elementLevels||{};game.elements=Array.isArray(game.elements)?[...new Set(game.elements.filter(e=>['air','water','earth','fire'].includes(e)))].slice(0,2):[game.element||'air','earth'];for(const e of ['air','water','earth','fire'])if(game.elements.length<2&&!game.elements.includes(e))game.elements.push(e);game.element=game.elements.includes(game.element)?game.element:game.elements[0];game.race=['human','elf','orc','spirit','dragon'].includes(game.race)?game.race:'human';game.class=['warrior','mage','warden','knight','assassin','shifter'].includes(game.class)?game.class:'warden';game.mana=Number.isFinite(game.mana)?game.mana:100;game.flight=false;const clamp=(n,min,max)=>Math.max(min,Math.min(max,n)), msg=t=>$('message').textContent=t,write=()=>{try{localStorage.setItem(skey,JSON.stringify(game))}catch(e){}},refresh=()=>{for(const k of ['coins','wood','influence','points'])$(k).textContent=game[k];$('nature').textContent=game.nature+'%';$('elementName').textContent=game.elements.map(e=>({air:'Luft',water:'Wasser',earth:'Erde',fire:'Feuer'})[e]).join(' + ');$('heroTitle').textContent=game.name+' · '+({warrior:'Krieger',mage:'Zauberer',warden:'Wächter',knight:'Ritter',assassin:'Assassine',shifter:'Gestaltwandler'}[game.class]);$('modeDesc').textContent=game.mode==='official'?'Offizielle Regeln (Prototyp: lokal; spätere Serverprüfung erforderlich).':'Sandbox mit kostenlosen Bauressourcen. Kein Transfer ins offizielle Reich.';$('creatures').textContent=String(Math.round(10+game.nature/8));};$('charName').value=game.name;$('charRace').value=game.race;$('charClass').value=game.class;$('mode').value=game.mode;function save(){refresh();write()}function modal(title,content){$('modalTitle').textContent=title;$('modalBody').innerHTML=content;$('shade').classList.add('show')}$('close').onclick=()=>$('shade').classList.remove('show');$('shade').addEventListener('click',e=>{if(e.target===$('shade'))$('shade').classList.remove('show')});document.addEventListener('keydown',e=>{if(e.key==='Escape')$('shade').classList.remove('show')});
-
-const elemental={air:{name:'Luft',title:'Himmelswanderer',skills:['Windstoß','Luftschild','Schweben','Freier Flug'],creatures:['Wolkenhirsch','Sturmfalken','Nebelrochen']},water:{name:'Wasser',title:'Gezeitenrufer',skills:['Wasserschwall','Eiskristall','Strömung','Heilquelle'],creatures:['Quellotter','Flussdrache','Nebelwal']},earth:{name:'Erde',title:'Steinwächter',skills:['Steinstoß','Erdwall','Felsenrüstung','Bodenwelle'],creatures:['Moosbär','Kristallschildkröte','Wurzelwächter']},fire:{name:'Feuer',title:'Flammenhüter',skills:['Funken','Flammenbogen','Feuerschild','Hitzeschub'],creatures:['Aschenfuchs','Glutgreif','Sonnenhirsch']}};
-
-function openElements(){let panels=game.elements.map(id=>{const el=elemental[id],lvl=game.elementLevels[id]||0;return '<div class="tile"><strong>'+el.name+' – '+el.title+'</strong><p>'+el.skills.map((sk,i)=>'<span class="chip">'+(i<lvl?'✓ ':'◇ ')+sk+'</span>').join('')+'</p><button data-active-element="'+id+'">'+(game.element===id?'Aktive Kraft':'Als aktive Kraft wählen')+'</button><button data-learn-element="'+id+'" '+(game.points<=0||lvl>=4?'disabled':'')+'>Fähigkeit lernen · 1 Punkt</button></div>'}).join('');
-modal('Zwei Elemente · Eine Berufung','<p>Du beherrschst genau <strong>zwei von vier Elementen</strong>. Wähle zwei unterschiedliche Affinitäten und kombiniere ihre Fähigkeiten. Du kannst den aktiven Zauber zwischen beiden wechseln.</p><div class="cards">'+Object.entries(elemental).map(([id,el])=>'<div class="tile"><strong>'+el.name+'</strong><p>'+el.title+'</p><button data-pick-element="'+id+'">'+(game.elements.includes(id)?'✓ Ausgewählt':'Wählen')+'</button></div>').join('')+'</div><h3>Dein Elementarpaar: '+game.elements.map(e=>elemental[e].name).join(' + ')+'</h3><div class="cards">'+panels+'</div><p class="note">Freier Flug: Luft-Stufe 4 (F). Elementarkombinationen und Zauber sind Prototypen, noch ohne vollständige Effekte.</p>')}
-$('elementBtn').onclick=openElements;
-$('creatureBtn').onclick=()=>modal('Lebewesen & Symbiose','<p>Jedes Wesen besitzt genau eine Elementaffinität. Tierwelt und elementare Ökologie sind im aktuellen Stand konzeptionell – noch keine animierten 3D-Mobs.</p><div class="cards">'+Object.entries(elemental).map(([id,e])=>'<div class="tile"><strong>'+e.name+'</strong><p>'+e.creatures.join('<br>')+'</p><p class="note">Beziehungen: Nahrung, Schutz, Wanderung, Bestäubung und Symbiose</p></div>').join('')+'</div>');
-$('elementCast').onclick=()=>{let lv=game.elementLevels[game.element]||0;if(!game.elements.includes(game.element))game.element=game.elements[0];if(lv===0){msg('Schalte zuerst eine Fähigkeit deines aktiven Elements frei.');return}if(game.mana<15){msg('Nicht genug Elementarenergie.');return}game.mana-=15;msg('Du wirkst '+elemental[game.element].skills[Math.min(lv-1,3)]+'! (Noch ohne Kampf- und Partikeleffekt)');save()};
-$('shade').addEventListener('click',ev=>{let pick=ev.target.closest('[data-pick-element]');if(pick){let id=pick.dataset.pickElement;if(!game.elements.includes(id)){game.elements=[game.elements[1],id];game.element=id;game.flight=false;save()}openElements();return}let active=ev.target.closest('[data-active-element]');if(active){game.element=active.dataset.activeElement;save();openElements();return}let learn=ev.target.closest('[data-learn-element]');if(learn){let id=learn.dataset.learnElement,lvl=game.elementLevels[id]||0;if(game.elements.includes(id)&&game.points>0&&lvl<4){game.points--;game.elementLevels[id]=lvl+1;save()}openElements()}});
-$('elementBtn').title='Zwei unterschiedliche Elemente auswählen';
-const skillList=[['harvest','Waldkunde','Mehr Holz pro Ernte'],['ecology','Symbiose','Mehr Naturbalance bei Pflege'],['trade','Handel','Bessere Preise beim Markt'],['craft','Baukunst','Reduzierte Baukosten'],['diplomacy','Diplomatie','Zusätzlicher Einfluss'],['combat','Kampfkunst','Vorbereitung für zukünftige Kämpfe']];
-$('skillsBtn').onclick=()=>modal('Skilltree · '+game.points+' freie Punkte','<p>Wähle dauerhafte Spezialisierungen. Maximal drei Stufen pro Fähigkeit.</p><div class="cards">'+skillList.map(([id,name,desc])=>'<div class="tile"><strong>'+name+'</strong><p>'+desc+'</p><span class="chip">Stufe '+(game.skills[id]||0)+'/3</span><button data-skill="'+id+'">Lernen · 1 Punkt</button></div>').join('')+'</div>');
-$('landBtn').onclick=()=>modal('Land & Siedlungen','<p>Du kannst ein Grundstück in Eldergrove erwerben und pflegen. Der Besitz wird in dieser Alpha nur im Browser gespeichert.</p><div class="tile"><strong>🌲 Lichtung am Silberbach</strong><p>Ein Bauplatz mit Wald, Bach und einer kleinen Hütte.</p><span class="chip">'+(game.land?'In deinem Besitz':'Preis: 80 Münzen')+'</span><button data-action="land">'+(game.land?'Hütte ausbauen · 6 Holz':'Land beanspruchen')+'</button></div>');
-$('councilBtn').onclick=()=>modal('Rat der Reiche','<p>Die künftige Politik basiert auf gewählten Fraktionen, Landrechten und regionalen Abstimmungen. Hier simulierst du eine erste Ratsentscheidung.</p><div class="cards"><div class="tile"><strong>Waldschutz</strong><p>Schützt den Wald und stärkt das Ökosystem.</p><button data-action="protect">Vorschlag unterstützen</button></div><div class="tile"><strong>Handelshaus</strong><p>Ressourcen in eine Handelswirtschaft überführen.</p><button data-action="trade">Handeln</button></div><div class="tile"><strong>Siedlerbund</strong><p>Neue Bewohner unterstützen.</p><button data-action="settle">Unterstützen</button></div></div><p class="note">Noch keine echten Abstimmungen oder anderen Spieler.</p>');
-$('questBtn').onclick=()=>modal('Die Wurzeln von Eldergrove','<h3>Kapitel '+(game.quest+1)+' – Das Gleichgewicht</h3><p>'+(game.quest===0?'Die Leuchtwurzeln des alten Waldes sterben. Sammle Holz und pflege den Wald, ohne sein Gleichgewicht zu zerstören.':game.quest===1?'Die Siedler bitten dich, eine Lichtung zu beanspruchen und dort eine Zuflucht zu errichten.':'Der Rat der Reiche erwartet deinen Bericht. Kehre zurück und bringe neue Geschichten in die Welt.')+'</p><button data-action="quest">Questfortschritt prüfen</button>');
-$('helpBtn').onclick=()=>modal('Nautilak Universe · Architektur','<p>Eine eigenständige Fantasy-Welt mit fünf verbundenen Regionen, Third-Person-Kamera und lokalen Prototyp-Systemen.</p><div class="chip">Eldergrove · Wald</div><div class="chip">Frostspire · Hochland</div><div class="chip">Ashenmoor · Ruinen</div><div class="chip">Sunreach · Steppe</div><div class="chip">Luminara · Leuchtwald</div><h3>Fair Play</h3><p>Offizielle Welten erfordern einen autoritativen Game-Server für Positionen, Inventar, Handel und Grundstücke. Selbst gehostete Creative-Server dürfen keine autoritativ geprüften Werte ins offizielle Reich übertragen. Diese Demo ist noch nicht multiplayerfähig.</p><h3>Generative Geschichten</h3><p>Die jetzige Quest ist vorgegeben. KI-generierte Quests, Kreaturen und Online-Synchronisierung sind weitere Entwicklungsschritte, nicht bereits aktiv.</p>');
-$('shade').addEventListener('click',e=>{const sk=e.target.closest('[data-skill]'),a=e.target.closest('[data-action]');if(sk){let k=sk.dataset.skill;if(game.points<1||game.skills[k]>=3){msg('Nicht genug Skillpunkte oder bereits maximiert.');return}game.points--;game.skills[k]=(game.skills[k]||0)+1;save();$('skillsBtn').click()}if(!a)return;const id=a.dataset.action;if(id==='land'){if(!game.land){if(game.coins<80&&game.mode!=='creative'){msg('Du brauchst 80 Münzen.');return}if(game.mode!=='creative')game.coins-=80;game.land=true;msg('Deine Lichtung wurde beansprucht.')}else if(game.wood>=6||game.mode==='creative'){if(game.mode!=='creative')game.wood-=6;game.influence+=3;msg('Deine Hütte wurde ausgebaut.')}else msg('Du brauchst sechs Holz.');save();$('landBtn').click()}if(id==='protect'){game.nature=clamp(game.nature+4,0,100);game.influence+=1+(game.skills.diplomacy||0);msg('Der Waldschutz gewinnt Unterstützung.');save()}if(id==='trade'){if(game.wood<3&&game.mode!=='creative'){msg('Du brauchst drei Holz.');return}if(game.mode!=='creative')game.wood-=3;game.coins+=14+(game.skills.trade||0)*4;msg('Handel abgeschlossen.');save()}if(id==='settle'){game.influence+=2;game.nature=clamp(game.nature-1,0,100);msg('Die Siedler danken dir.');save()}if(id==='quest'){if((game.quest===0&&game.nature>=80&&game.wood>=12)||(game.quest===1&&game.land)){game.quest++;game.coins+=40;game.points++;msg('Quest abgeschlossen. +40 Münzen, +1 Skillpunkt.')}else msg('Questziel noch nicht erfüllt.');save();$('questBtn').click()}});$('gather').onclick=()=>{game.wood+=(2+(game.skills.harvest||0));game.nature=clamp(game.nature-2,0,100);msg('Holz gesammelt. Der Wald verliert etwas Balance.');save()};$('restore').onclick=()=>{game.nature=clamp(game.nature+3+(game.skills.ecology||0)*2,0,100);game.influence++;msg('Das Ökosystem erholt sich.');save()};$('mode').onchange=e=>{game.mode=e.target.value;msg(game.mode==='creative'?'Freie Welt aktiv: Baukosten entfallen.':'Offizielle Regeln aktiv: aktuell nur lokal simuliert.');save()};$('charName').onchange=e=>{game.name=e.target.value.trim().slice(0,22)||'Wanderer';save()};$('charClass').onchange=e=>{game.class=e.target.value;save()};$('charRace').onchange=e=>{game.race=e.target.value;save()};$('save').onclick=()=>{write();msg('Fortschritt lokal im Browser gespeichert.');};$('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);msg('Demo-Link kopiert. Spielstände sind noch nicht zwischen Nutzern synchronisiert.')}catch(e){msg('Link bitte aus der Browserzeile kopieren.')}};refresh();
-
-const wrap=$('world'),scene=new THREE.Scene();scene.background=new THREE.Color(0x9db7ba);scene.fog=new THREE.FogExp2(0xc5ceba,.0042);
-const cam=new THREE.PerspectiveCamera(68,1,.1,320);
-let renderer;try{renderer=new THREE.WebGLRenderer({antialias:false,powerPreference:'default'});}catch(error){$('veil').innerHTML='<strong>3D konnte nicht starten</strong><span>Bitte WebGL/Grafikbeschleunigung im Browser aktivieren.</span>';throw error}
-renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.5;wrap.append(renderer.domElement);
-scene.add(new THREE.HemisphereLight(0xdfeeff,0x555f46,2.3));
-const sun=new THREE.DirectionalLight(0xffe2b9,2.2);sun.position.set(70,105,30);scene.add(sun);
-
-/* Fixed-cost sky dome and distant multi-layer mountain horizons following player.
-   Neither requires extra map chunks or network textures. */
-const skyMaterial=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,uniforms:{underworld:{value:0}},vertexShader:'varying vec3 vPos; void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',fragmentShader:'varying vec3 vPos; uniform float underworld; void main(){float t=clamp(vPos.y/270.0*1.8+0.10,0.0,1.0);vec3 low=mix(vec3(.84,.80,.65),vec3(.23,.16,.30),underworld);vec3 high=mix(vec3(.27,.47,.66),vec3(.08,.07,.15),underworld);vec3 color=mix(low,high,smoothstep(0.,.83,t));vec3 dir=normalize(vPos);float sun=max(0.,dot(dir,normalize(vec3(.7,.19,-.6))));color+=vec3(1.0,.62,.27)*pow(sun,120.)*.75*(1.-underworld);color+=vec3(.48,.24,.08)*pow(sun,8.)*.38*(1.-underworld);float haze=pow(1.-abs(dir.y),7.);color=mix(color,vec3(.77,.78,.69),haze*.42*(1.-underworld));gl_FragColor=vec4(color,1.);}'});
-const skyDome=new THREE.Mesh(new THREE.SphereGeometry(267,24,12),skyMaterial);skyDome.renderOrder=-100;scene.add(skyDome);
-const horizons=new THREE.Group();scene.add(horizons);const horizonColors=[0xc0b6a4,0x9aada4,0x7b918d];for(let band=0;band<3;band++){const radius=218-band*22,verts=[],idx=[];for(let i=0;i<=128;i++){let angle=(i/128)*Math.PI*2,noise=Math.sin(angle*7+band*2)*9+Math.sin(angle*16+band)*6+Math.sin(angle*31+band*3)*3.5,height=12+band*7+noise;verts.push(Math.cos(angle)*radius,-36,Math.sin(angle)*radius,Math.cos(angle)*radius,height,Math.sin(angle)*radius);if(i<128){let j=i*2;idx.push(j,j+1,j+2,j+1,j+3,j+2)}}let g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.setIndex(idx);g.computeVertexNormals();let mesh=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:horizonColors[band],side:THREE.DoubleSide,fog:false,depthWrite:false}));mesh.renderOrder=-band-1;horizons.add(mesh)}
-
-const mat=c=>new THREE.MeshLambertMaterial({color:c});
-const materials={trunk:mat(0x624a32),pine:mat(0x315d46),pine2:mat(0x55734d),snow:mat(0x9eacaa),desert:mat(0xa99b72),glow:mat(0x54ac9d),stone:mat(0x656b67),house:mat(0xbba282),roof:mat(0x594844),road:mat(0x958773)};
-const colorMap={underworld:new THREE.Color(0x503340),forest:new THREE.Color(0x4e804e),snow:new THREE.Color(0x97a8a8),steppe:new THREE.Color(0xa8a16e),ruins:new THREE.Color(0x74796e),glow:new THREE.Color(0x438977)};
-const chunkSize=64,chunkSegments=18,loadRadius=2,unloadRadius=3,activeChunks=new Map();
-// These are Quaternius CC0 models from the public skyline-run repository, pinned at commit 0c41526.
-const natureAssetBase='https://cdn.jsdelivr.net/gh/anshaneja5/skyline-run@0c41526d8d4130c37c15e219c2c3737fa8cb4ad8/public/assets/models/';
-const natureModels={trees:[],bush:null,loaded:false,failed:false};
-const trunkGeom=new THREE.CylinderGeometry(.23,.43,3.3,5),leafGeom=new THREE.ConeGeometry(2.2,5.8,6),hutGeom=new THREE.BoxGeometry(7,4,6),roofGeom=new THREE.ConeGeometry(5.5,3,4);
-
-
-/* Small, locally baked ground, bark and stone textures: no network images. */
-function makeArtTexture(kind){const canvas=document.createElement('canvas');canvas.width=canvas.height=256;const ctx=canvas.getContext('2d');const palette={earth:[179,179,161],bark:[141,103,75],stone:[182,181,166],leaves:[201,222,190]}[kind];ctx.fillStyle='rgb('+palette.join(',')+')';ctx.fillRect(0,0,256,256);let seed={earth:123,bark:234,stone:345,leaves:456}[kind];const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};for(let i=0;i<4800;i++){let x=rand()*256,y=rand()*256,v=(rand()-.5)*95;let c=palette.map(n=>Math.max(0,Math.min(255,Math.round(n+v))));ctx.fillStyle='rgba('+c.join(',')+','+(.2+rand()*.5)+')';let w=1+rand()*4;ctx.fillRect(x,y,w,kind==='bark'?w*4:w)}if(kind==='earth')for(let j=0;j<500;j++){let x=rand()*256,y=rand()*256;ctx.strokeStyle=rand()>.4?'#5d7950':'#b6b49b';ctx.globalAlpha=.4;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+rand()*3-1.5,y-3-rand()*6);ctx.stroke()}ctx.globalAlpha=1;const tex=new THREE.CanvasTexture(canvas);tex.colorSpace=THREE.SRGBColorSpace;tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return tex}
-const soilTex=makeArtTexture('earth'),woodTex=makeArtTexture('bark'),stoneTex=makeArtTexture('stone'),foliageTex=makeArtTexture('leaves');soilTex.repeat.set(6,6);
-const soilMat=new THREE.MeshLambertMaterial({map:soilTex,vertexColors:true,side:THREE.DoubleSide});
-
-/* Lightweight, textured fantasy scenery built from reused geometry */
-const artBark=new THREE.MeshLambertMaterial({color:0xc4ab95,map:woodTex}),artLeaves=[0x438a4c,0x609957,0x8aa45c].map(c=>new THREE.MeshLambertMaterial({color:c,map:foliageTex,flatShading:true})),artRock=new THREE.MeshLambertMaterial({color:0xbab8aa,map:stoneTex,flatShading:true}),artShrub=new THREE.MeshLambertMaterial({color:0x76a45a,map:foliageTex,flatShading:true}),artGold=new THREE.MeshLambertMaterial({color:0xe2ce91});
-const geoStem=new THREE.CylinderGeometry(.3,.52,4.3,7),geoCrown=new THREE.IcosahedronGeometry(2.5,1),geoRock=new THREE.DodecahedronGeometry(1.2,0),geoShrub=new THREE.IcosahedronGeometry(.65,0);
-function instanced(group,geo,material,positions,place){if(!positions.length)return;const obj=new THREE.InstancedMesh(geo,material,positions.length),matrix=new THREE.Matrix4();positions.forEach((p,i)=>{place(matrix,p,i);obj.setMatrixAt(i,matrix)});obj.instanceMatrix.needsUpdate=true;obj.frustumCulled=false;group.add(obj)}
-const mCathedral=new THREE.MeshLambertMaterial({color:0xe4d5bd,map:stoneTex,flatShading:true}),mStained=new THREE.MeshLambertMaterial({color:0x598db6,emissive:0x14243c}),mRoof=new THREE.MeshLambertMaterial({color:0x465363,flatShading:true});
-function sanctuary(group,x,z){const y=terrainHeight(x,z);let church=new THREE.Mesh(new THREE.BoxGeometry(13,13,20),mCathedral);church.position.set(x,y+6.5,z);group.add(church);let roof=new THREE.Mesh(new THREE.ConeGeometry(10.2,9,4),mRoof);roof.rotation.y=Math.PI/4;roof.scale.z=1.38;roof.position.set(x,y+17.5,z);group.add(roof);for(const dx of [-5,5]){let tower=new THREE.Mesh(new THREE.CylinderGeometry(2.1,3,24,8),mCathedral);tower.position.set(x+dx,y+12,z-10);group.add(tower);let spire=new THREE.Mesh(new THREE.ConeGeometry(2.8,11,8),mRoof);spire.position.set(x+dx,y+29.5,z-10);group.add(spire);let stained=new THREE.Mesh(new THREE.BoxGeometry(1.1,4,.2),mStained);stained.position.set(x+dx,y+17,z-12.2);group.add(stained)}let entry=new THREE.Mesh(new THREE.BoxGeometry(4.4,7,.4),materials.roof);entry.position.set(x,y+3.5,z-10.2);group.add(entry);for(let i=0;i<4;i++){let win=new THREE.Mesh(new THREE.BoxGeometry(.2,4,1.3),mStained);win.position.set(x+6.65,y+7,z-6+i*4);group.add(win);let twin=win.clone();twin.position.x=x-6.65;group.add(twin)}}
-
-const hash=(x,z,s=0)=>{let n=Math.sin(x*127.17+z*311.77+s*91.13)*43758.545;return n-Math.floor(n)};
-const smooth=(a,b,v)=>{let t=Math.max(0,Math.min(1,(v-a)/(b-a)));return t*t*(3-2*t)};
-function regionKind(x,z){if(z>460)return 'underworld';if(x< -165)return 'snow';if(x>165)return 'steppe';if(z>165)return 'glow';if(z< -165)return 'ruins';return 'forest'}
-function terrainHeight(x,z){let n=Math.sin(x*.034)*3.7+Math.cos(z*.037)*3.1+Math.sin((x+z)*.095)*.85;if(z>460)return n*.8-4;
-let north=smooth(100,330,-x),east=smooth(110,290,x);
-return n+14*north+4*east}
-function regionColor(x,z){if(z>460)return colorMap.underworld.clone().multiplyScalar(.78+hash(Math.round(x),Math.round(z))*.25);let base=colorMap.forest.clone();let a=smooth(100,230,-x),b=smooth(110,235,x),c=smooth(100,220,z),d=smooth(105,235,-z);base.lerp(colorMap.snow,a);base.lerp(colorMap.steppe,b);base.lerp(colorMap.glow,c);base.lerp(colorMap.ruins,d);base.multiplyScalar(.88+hash(Math.round(x),Math.round(z))*.22);return base}
-function zone(x,z){if(Math.hypot(x,z)<62)return ['Arbor Aeterna · Baum des Lebens','Weltenachse · Himmel, Erde und Unterwelt'];let b=regionKind(x,z);return {underworld:['Noxroot · Die Unterwelt','Die Schattenwurzeln unter der Welt'],forest:['Eldergrove · Die grünen Lande','Dörfer, Waldpfade und alte Königreiche'],snow:['Frostspire · Die Nordlande','Schneegipfel und verlassene Festungen'],steppe:['Sunreach · Die Sonnensteppe','Goldenes Grasland und Handelswege'],ruins:['Ashenmoor · Das alte Reich','Burgen, Ruinen und verschwundene Könige'],glow:['Luminara · Der Leuchtwald','Symbiose und wundersame Natur']}[b]}
-
-/* Arbor Aeterna: original world-tree and root portal; centre persists as streamed chunk. */
-const trunkGold=new THREE.MeshLambertMaterial({color:0x69503a}),rootBark=new THREE.MeshLambertMaterial({color:0x44372b}),canopy1=new THREE.MeshLambertMaterial({color:0x427a55}),canopy2=new THREE.MeshLambertMaterial({color:0x7aa46c}),starglow=new THREE.MeshBasicMaterial({color:0xbce8a3,transparent:true,opacity:.75}),portalGlow=new THREE.MeshBasicMaterial({color:0x9d65c7,transparent:true,opacity:.75,side:THREE.DoubleSide});
-function beam(group,start,end,r1,r2,material,segments=7){let a=new THREE.Vector3(...start),b=new THREE.Vector3(...end),d=new THREE.Vector3().subVectors(b,a),mesh=new THREE.Mesh(new THREE.CylinderGeometry(r2,r1,d.length(),segments),material);mesh.position.copy(a).add(b).multiplyScalar(.5);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());group.add(mesh);return mesh}
-function buildWorldTree(group){const y=terrainHeight(0,0);let trunk=new THREE.Mesh(new THREE.CylinderGeometry(4.1,8.3,53,10,3),trunkGold);trunk.position.set(0,y+26.5,0);group.add(trunk);
-for(let i=0;i<9;i++){let a=i*Math.PI*2/9,r=23+(i%3)*3;beam(group,[Math.cos(a)*3,y+6,Math.sin(a)*3],[Math.cos(a)*r,y+.7,Math.sin(a)*r],2.25,.7,rootBark)}
-let crown=new THREE.Group();crown.position.set(0,y,0);group.add(crown);for(let i=0;i<17;i++){let a=i*Math.PI*2/17,rad=12+(i%3)*6,ht=43+(i%5)*4;beam(crown,[Math.cos(a)*2,39,Math.sin(a)*2],[Math.cos(a)*rad,ht,Math.sin(a)*rad],1.7,.6,trunkGold)}
-const leafGeo=new THREE.IcosahedronGeometry(1,1);let leaves=new THREE.InstancedMesh(leafGeo,canopy1,30),glowing=new THREE.InstancedMesh(leafGeo,canopy2,16),matrix=new THREE.Matrix4();for(let i=0;i<30;i++){let ang=i*2.399,rad=10+hash(i,1)*21,height=49+hash(i,2)*23,scale=5+hash(i,3)*5;matrix.makeTranslation(Math.cos(ang)*rad,y+height,Math.sin(ang)*rad);matrix.scale(new THREE.Vector3(scale,scale*.72,scale));leaves.setMatrixAt(i,matrix)}for(let i=0;i<16;i++){let ang=i*2.399+.9,rad=7+hash(i,5)*20,height=56+hash(i,6)*21,scale=3+hash(i,7)*4;matrix.makeTranslation(Math.cos(ang)*rad,y+height,Math.sin(ang)*rad);matrix.scale(new THREE.Vector3(scale,scale*.8,scale));glowing.setMatrixAt(i,matrix)}leaves.instanceMatrix.needsUpdate=true;glowing.instanceMatrix.needsUpdate=true;group.add(leaves,glowing);
-const stone=new THREE.Mesh(new THREE.CylinderGeometry(15,16,1.1,20),materials.stone);stone.position.set(0,y+.3,0);group.add(stone);
-for(let i=0;i<9;i++){let a=i*Math.PI*2/9;let rune=new THREE.Mesh(new THREE.OctahedronGeometry(.75,0),starglow);rune.position.set(Math.sin(a)*13,y+1.2,Math.cos(a)*13);group.add(rune)}
-}
-function makePortal(group,x,z,under=false){const y=terrainHeight(x,z);const gateStone=materials.stone;for(let side of [-1,1]){let pillar=new THREE.Mesh(new THREE.BoxGeometry(2.5,11,3),gateStone);pillar.position.set(x+side*5,y+5.5,z);group.add(pillar)}let top=new THREE.Mesh(new THREE.BoxGeometry(12,2.6,3.2),gateStone);top.position.set(x,y+11,z);group.add(top);let vortex=new THREE.Mesh(new THREE.PlaneGeometry(9,9),portalGlow);vortex.position.set(x,y+5.7,z);group.add(vortex);let marker=new THREE.Mesh(new THREE.OctahedronGeometry(1.4),under?starglow:portalGlow);marker.position.set(x,y+13,z);group.add(marker)}
-
-function house(x,z,group){let h=new THREE.Mesh(hutGeom,materials.house);h.position.set(x,terrainHeight(x,z)+2,z);group.add(h);let roof=new THREE.Mesh(roofGeom,materials.roof);roof.rotation.y=Math.PI/4;roof.position.set(x,terrainHeight(x,z)+5.4,z);group.add(roof)}
-
-/* Real textured GLB scenery is loaded exactly once.
-   Scene chunks clone the source nodes; geometry and materials are shared on the GPU. */
-async function prepareNatureAssets(){
- const labels=['tree1.glb','tree2.glb','tree3.glb','bush.glb'],loader=new GLTFLoader();
- const results=await Promise.allSettled(labels.map(name=>loader.loadAsync(natureAssetBase+name)));
- const loaded=results.map((result,i)=>result.status==='fulfilled'?{name:labels[i],model:result.value.scene}:null).filter(Boolean);
- if(!loaded.length){natureModels.failed=true;$('inputStatus').textContent='3D-Modelle konnten nicht geladen werden – vereinfachter Wald aktiv';return}
- for(const item of loaded){const box=new THREE.Box3().setFromObject(item.model),size=box.getSize(new THREE.Vector3()),min=box.min.clone();if(size.y<.01)continue;
-   // Normalize source dimensions; the bottom of the model is exactly at terrain height.
-   const targetHeight=item.name==='bush.glb'?1.9:10;
-   const scale=targetHeight/size.y;
-   item.model.scale.setScalar(scale);item.model.position.set(-min.x*scale,-min.y*scale,-min.z*scale);
-   item.model.traverse(obj=>{if(obj.isMesh){obj.castShadow=false;obj.receiveShadow=false;obj.frustumCulled=true}});
-   const anchor=new THREE.Group();anchor.add(item.model);
-   if(item.name==='bush.glb')natureModels.bush=anchor;else natureModels.trees.push(anchor);
- }
- natureModels.loaded=!!natureModels.trees.length;
- if(!natureModels.loaded){natureModels.failed=true;return}
- // Recreate already generated chunks after the assets arrive.
- for(const id of [...activeChunks.keys()])unloadChunk(id);
- scheduleChunks(true);
- for(let i=0;i<Math.min(4,pending.length);i++){const item=pending.shift();addChunk(item.x,item.z)}
- $('inputStatus').textContent='Echte GLB-Naturmodelle: '+natureModels.trees.length+' Baumarten geladen ✓';
-}
-function addRealNature(group,forest,shrubs){
- if(!natureModels.loaded)return false;
- // Capped per-chunk count bounds low-end laptop draw calls and GPU time.
- for(let i=0;i<Math.min(15,forest.length);i++){let [x,z,k]=forest[i],proto=natureModels.trees[i%natureModels.trees.length],obj=proto.clone(true);obj.position.set(x,terrainHeight(x,z),z);obj.rotation.y=hash(x|0,z|0,7)*6.283;obj.scale.multiplyScalar(.72+k*.3);group.add(obj)}
- if(natureModels.bush)for(let i=0;i<Math.min(9,shrubs.length);i++){let [x,z,k]=shrubs[i],obj=natureModels.bush.clone(true);obj.position.set(x,terrainHeight(x,z),z);obj.scale.multiplyScalar(k);group.add(obj)}
- return true;
-}
-
-function addChunk(cx,cz){let id=cx+':'+cz;if(activeChunks.has(id))return;let group=new THREE.Group(),geo=new THREE.PlaneGeometry(chunkSize,chunkSize,chunkSegments,chunkSegments);geo.rotateX(-Math.PI/2);geo.translate(cx*chunkSize,0,cz*chunkSize);let a=geo.attributes.position,colors=[];for(let i=0;i<a.count;i++){let x=a.getX(i),z=a.getZ(i);a.setY(i,terrainHeight(x,z));let c=regionColor(x,z);colors.push(c.r,c.g,c.b)}geo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geo.computeVertexNormals();const terrain=new THREE.Mesh(geo,soilMat);group.add(terrain);
-
-const forest=[],stones=[],shrubs=[];for(let ix=0;ix<8;ix++)for(let iz=0;iz<8;iz++){let x=cx*chunkSize-31+ix*8+hash(ix+cx*8,iz+cz*8)*3,z=cz*chunkSize-31+iz*8+hash(iz+cz*8,ix+cx*8)*3,n=hash(x|0,z|0),bi=regionKind(x,z);if(Math.hypot(x,z)<34||Math.abs(z)<5.5||Math.hypot(x-43,z-2)<20)continue;if(n>.37&&bi!=='ruins'&&bi!=='underworld')forest.push([x,z,.75+hash(x|0,z|0,7)*.65]);else if(n>.19)stones.push([x,z,.7+hash(x|0,z|0,8)]);else shrubs.push([x,z,.6+hash(x|0,z|0,9)])}
-if(!addRealNature(group,forest,shrubs)){
- instanced(group,geoStem,artBark,forest,(m,p)=>{let [x,z,k]=p;m.makeTranslation(x,terrainHeight(x,z)+2.15*k,z);m.scale(new THREE.Vector3(k,k,k))});
- for(let l=0;l<3;l++)instanced(group,geoCrown,artLeaves[l],forest,(m,p,i)=>{let [x,z,k]=p,height=[4.7,6.1,7.3][l]*k,size=[1.2,1,.74][l]*k;m.makeTranslation(x+Math.sin(i*1.7+l)*.4,terrainHeight(x,z)+height,z+Math.cos(i*1.9+l)*.4);m.scale(new THREE.Vector3(size,size*.73,size))});
-}
-instanced(group,geoRock,artRock,stones,(m,p)=>{let [x,z,k]=p;m.makeTranslation(x,terrainHeight(x,z)+.4*k,z);m.scale(new THREE.Vector3(k,k*.5,k))});
-if(!natureModels.loaded||!natureModels.bush)instanced(group,geoShrub,artShrub,shrubs,(m,p)=>{let [x,z,k]=p;m.makeTranslation(x,terrainHeight(x,z)+.25*k,z);m.scale(new THREE.Vector3(k*1.5,k*.75,k))});
-if(cx===0&&cz===0){buildWorldTree(group);makePortal(group,0,-31);house(35,28,group);house(-37,23,group);sanctuary(group,48,6)}if(cx===0&&cz===10){makePortal(group,0,640,true)}
-if(cx===-2&&cz===-2){let ruin=new THREE.Mesh(new THREE.CylinderGeometry(5,6,18,8),materials.stone);ruin.position.set(-128,terrainHeight(-128,-128)+9,-128);group.add(ruin)}
-if(cz===0){let road=new THREE.Mesh(new THREE.PlaneGeometry(chunkSize,5),materials.road);road.rotation.x=-Math.PI/2;road.position.set(cx*chunkSize,terrainHeight(cx*chunkSize,0)+.15,0);group.add(road)}
-scene.add(group);activeChunks.set(id,{group,geo,terrainMaterial:terrain.material})}
-function unloadChunk(id){let rec=activeChunks.get(id);if(!rec)return;scene.remove(rec.group);rec.geo.dispose();activeChunks.delete(id)}
-let pending=[],originCx=NaN,originCz=NaN;
-function scheduleChunks(force=false){let cx=Math.floor((pos.x+32)/chunkSize),cz=Math.floor((pos.z+32)/chunkSize);if(!force&&cx===originCx&&cz===originCz)return;originCx=cx;originCz=cz;for(const id of activeChunks.keys()){let [x,z]=id.split(':').map(Number);if(Math.max(Math.abs(x-cx),Math.abs(z-cz))>unloadRadius)unloadChunk(id)}
-pending=[];for(let x=-loadRadius;x<=loadRadius;x++)for(let z=-loadRadius;z<=loadRadius;z++){let ax=x+cx,az=z+cz;if(!activeChunks.has(ax+':'+az))pending.push({x:ax,z:az,d:x*x+z*z})}pending.sort((a,b)=>a.d-b.d)}
-/* APE KNIGHT: articulated original armored primate character; deliberately not a capsule. */
-const ape=new THREE.Group(),apeFur=new THREE.MeshLambertMaterial({color:0x5e4130}),apeFace=new THREE.MeshLambertMaterial({color:0x9a755a}),apeDark=new THREE.MeshLambertMaterial({color:0x211d18}),apeEyes=new THREE.MeshLambertMaterial({color:0xf3d8a2}),apeSteel=new THREE.MeshLambertMaterial({color:0x7c898d,metalness:0}),apeTrim=new THREE.MeshLambertMaterial({color:0xd6b376});
-const apeBall=new THREE.SphereGeometry(1,12,9),apeBox=new THREE.BoxGeometry(1,1,1),apeCone=new THREE.ConeGeometry(1,1,8);
-function bodyPart(parent,geo,ma,pos,scale){const part=new THREE.Mesh(geo,ma);part.position.set(...pos);part.scale.set(...scale);parent.add(part);return part}
-bodyPart(ape,apeBall,apeFur,[0,2.4,0],[.86,1.12,.54]);bodyPart(ape,apeBox,apeSteel,[0,2.55,-.02],[1.38,1.18,.9]);
-bodyPart(ape,apeBall,apeFur,[0,4.0,0],[.68,.67,.64]);bodyPart(ape,apeBall,apeFace,[0,3.87,.46],[.59,.42,.33]);
-bodyPart(ape,apeBall,apeFace,[0,3.64,.68],[.43,.23,.26]);
-for(const sign of [-1,1]){bodyPart(ape,apeBall,apeFace,[sign*.61,4.04,0],[.23,.29,.19]);bodyPart(ape,apeBall,apeEyes,[sign*.24,4.04,.73],[.14,.12,.06]);bodyPart(ape,apeBall,apeDark,[sign*.24,4.04,.784],[.06,.076,.035]);bodyPart(ape,apeBall,apeDark,[sign*.16,3.72,.9],[.075,.05,.035]);}
-bodyPart(ape,apeBall,apeSteel,[0,4.42,-.15],[.70,.29,.68]);bodyPart(ape,apeCone,apeTrim,[0,4.85,-.11],[.21,.51,.23]);
-bodyPart(ape,apeBox,apeTrim,[0,2.46,.53],[.12,.9,.08]);bodyPart(ape,apeBox,apeTrim,[0,1.78,.05],[1.38,.14,.93]);
-const apeArms=[],apeLegs=[];
-for(const sign of [-1,1]){const arm=new THREE.Group();arm.position.set(sign*.95,3.19,0);ape.add(arm);bodyPart(arm,apeBall,apeFur,[sign*.14,-.59,0],[.40,.77,.39]);bodyPart(arm,apeBall,apeSteel,[sign*.04,-.15,0],[.49,.4,.45]);bodyPart(arm,apeBall,apeFur,[sign*.22,-1.23,.06],[.39,.37,.39]);bodyPart(arm,apeBox,apeTrim,[sign*.20,-1.07,.08],[.29,.15,.35]);apeArms.push(arm);
-const leg=new THREE.Group();leg.position.set(sign*.49,1.64,0);ape.add(leg);bodyPart(leg,apeBall,apeFur,[0,-.65,0],[.43,.81,.41]);bodyPart(leg,apeBox,apeSteel,[0,-.17,0],[.39,.25,.42]);bodyPart(leg,apeBall,apeDark,[0,-1.23,.22],[.45,.27,.68]);apeLegs.push(leg)}
-bodyPart(ape,apeBall,apeTrim,[0,3.26,-.52],[.35,.34,.13]);ape.scale.setScalar(.78);
-const avatar=ape;scene.add(avatar);
-let pos=new THREE.Vector3(0,0,36),yaw=Math.PI,pitch=.32,dist=13,keys={},rotating=false,jumpHeight=0,jumpVelocity=0,grounded=true,climbHeight=0,climbing=false,walkPhase=0;renderer.domElement.style.cursor='crosshair';
-
-const trackedKeys=new Set(['KeyW','KeyA','KeyS','KeyD','Space','ControlLeft','ControlRight','ShiftLeft','ShiftRight']);
-const isTyping=el=>!!el?.closest?.('input,textarea,select,[contenteditable="true"]');
-const inputStatus=$('inputStatus');
-renderer.domElement.tabIndex=0;
-function activateControls(){if(isTyping(document.activeElement))document.activeElement.blur();renderer.domElement.focus({preventScroll:true});inputStatus.textContent='Spiel aktiv · WASD · SPACE: Springen / Klettern'}
-renderer.domElement.addEventListener('pointerdown',activateControls);document.addEventListener('visibilitychange',()=>{if(document.hidden)for(const k of trackedKeys)keys[k]=false});
-window.addEventListener('keydown',e=>{if(isTyping(e.target)||isTyping(document.activeElement))return;if(trackedKeys.has(e.code)){keys[e.code]=true;e.preventDefault();if(['KeyW','KeyA','KeyS','KeyD'].includes(e.code))inputStatus.textContent='Eingabe: '+e.code.replace('Key','')+' ✓'}},true);
-window.addEventListener('keyup',e=>{if(trackedKeys.has(e.code)){keys[e.code]=false;e.preventDefault()}},true);
-window.addEventListener('blur',()=>{for(const k of trackedKeys)keys[k]=false});
-document.querySelectorAll('[data-move]').forEach(button=>{let code=button.dataset.move;button.addEventListener('pointerdown',e=>{e.preventDefault();keys[code]=true;button.classList.add('pressed');inputStatus.textContent='Bildschirmtaste '+code.replace('Key','')+' ✓';button.setPointerCapture(e.pointerId)});for(const type of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(type,()=>{keys[code]=false;button.classList.remove('pressed')})});
-window.addEventListener('keydown',e=>{if(e.code==='KeyE'&&!e.repeat&&!e.target.matches('input,select,textarea')){if(Math.hypot(pos.x,pos.z+31)<10){pos.set(0,0,665);scheduleChunks(true);msg('Das Wurzelportal führt dich nach Noxroot, in die Unterwelt.')}else if(Math.hypot(pos.x,pos.z-640)<10){pos.set(0,0,36);scheduleChunks(true);msg('Du kehrst zum Baum des Lebens zurück.')}}});
-window.addEventListener('keydown',e=>{if(e.code==='KeyF'&&!e.repeat&&!e.target.matches('input,select,textarea')){if(game.elements.includes('air')&&(game.elementLevels.air||0)>=4){game.flight=!game.flight;msg(game.flight?'Flug aktiviert. Drücke F zum Landen.':'Du landest.')}else msg('Flug erfordert Luft-Stufe 4.')}});
-renderer.domElement.addEventListener('click',()=>{activateControls();if(!document.body.classList.contains('menu-open')&&!$('shade').classList.contains('show')){try{const p=renderer.domElement.requestPointerLock?.();p?.catch?.(()=>{inputStatus.textContent='Maus nicht gesperrt · WASD funktioniert trotzdem'})}catch(e){inputStatus.textContent='Maus nicht gesperrt · WASD funktioniert trotzdem'}}});
-document.addEventListener('mousemove',e=>{if(document.pointerLockElement===renderer.domElement){yaw-=e.movementX*.0025;pitch=Math.max(-.35,Math.min(1.15,pitch+e.movementY*.0025))}});
-document.addEventListener('pointerlockchange',()=>{renderer.domElement.style.cursor=document.pointerLockElement===renderer.domElement?'none':'crosshair'});
-document.addEventListener('keydown',e=>{if(e.code==='Space'&&!e.repeat&&grounded&&!e.target.matches('input,select,textarea')&&!nearClimbable()){jumpVelocity=10.5;grounded=false}});
-renderer.domElement.addEventListener('wheel',e=>{dist=Math.max(0,Math.min(20,dist+e.deltaY*.014));e.preventDefault()},{passive:false});
-function resize(){let w=wrap.clientWidth,h=wrap.clientHeight;cam.aspect=w/h;cam.updateProjectionMatrix();renderer.setSize(w,h,false)}
-new ResizeObserver(resize).observe(wrap);resize();
-scheduleChunks(true);for(let i=0;i<Math.min(4,pending.length);i++){let item=pending.shift();addChunk(item.x,item.z)}
-prepareNatureAssets().catch(err=>{$('inputStatus').textContent='Naturmodelle: '+String(err?.message||err).slice(0,95)});
-$('veil').remove();let previous=performance.now(),lastZone='',clock=0,frames=0,fpsTime=performance.now(),fps=0;
-function nearClimbable(){const root=Math.hypot(pos.x,pos.z);const nearTree=root>=5.5&&root<=14&&pos.z<100;const dx=Math.abs(pos.x-48),dz=Math.abs(pos.z-6),nearCathedral=((dx>5.9&&dx<10&&dz<13)||(dz>8&&dz<13&&dx<9));return nearTree||nearCathedral}
-function climbTick(dt){if(keys.Space&&keys.KeyW&&nearClimbable()){climbing=true;climbHeight=Math.min(24,climbHeight+dt*5);grounded=true;jumpVelocity=0;jumpHeight=0;inputStatus.textContent='KLETTERN · '+Math.round(climbHeight)+' m'}else if(climbing&&keys.Space&&keys.KeyS){climbHeight=Math.max(0,climbHeight-dt*5);if(climbHeight===0)climbing=false}else if(climbing&&!nearClimbable()){climbing=false}if(!climbing&&climbHeight>0)climbHeight=Math.max(0,climbHeight-dt*9)}
-function animate(now){let dt=Math.min((now-previous)/1000,.05);previous=now;frames++;if(now-fpsTime>1000){fps=Math.round(frames*1000/(now-fpsTime));frames=0;fpsTime=now}let f=Number(!!keys.KeyW)-Number(!!keys.KeyS),side=Number(!!keys.KeyD)-Number(!!keys.KeyA),len=Math.hypot(f,side);if(len&&!climbing){let v=(keys.ControlLeft||keys.ControlRight?17:keys.ShiftLeft||keys.ShiftRight?3.5:9)*dt;pos.x+=(Math.sin(yaw)*f+Math.cos(yaw)*side)*v/len;pos.z+=(Math.cos(yaw)*f-Math.sin(yaw)*side)*v/len;inputStatus.textContent='Bewegung aktiv · X '+Math.round(pos.x)+' Z '+Math.round(pos.z);avatar.rotation.y=Math.atan2(Math.sin(yaw)*f+Math.cos(yaw)*side,Math.cos(yaw)*f-Math.sin(yaw)*side)}
-climbTick(dt);if(game.flight && (!game.elements.includes('air')||(game.elementLevels.air||0)<4||game.mana<=0)){game.flight=false}if(game.flight){game.mana=clamp(game.mana-dt*4,0,100)}else{game.mana=clamp(game.mana+dt*2,0,100)}if(!grounded){jumpHeight+=jumpVelocity*dt;jumpVelocity-=24*dt;if(jumpHeight<=0){jumpHeight=0;jumpVelocity=0;grounded=true}}const altitude=(game.flight?11:0)+jumpHeight+climbHeight;avatar.position.set(pos.x,terrainHeight(pos.x,pos.z)+altitude,pos.z);if(len&&!climbing)walkPhase+=dt*11;else if(climbing)walkPhase+=dt*6;const moving=len>0||climbing;apeArms[0].rotation.x=moving?Math.sin(walkPhase)*.65:0;apeArms[1].rotation.x=moving?-Math.sin(walkPhase)*.65:0;apeLegs[0].rotation.x=moving?-Math.sin(walkPhase)*.55:0;apeLegs[1].rotation.x=moving?Math.sin(walkPhase)*.55:0;let target=new THREE.Vector3(pos.x,terrainHeight(pos.x,pos.z)+2.4+altitude,pos.z);cam.position.lerp(target.clone().add(new THREE.Vector3(-Math.sin(yaw)*Math.cos(pitch)*dist,Math.sin(pitch)*dist+4,-Math.cos(yaw)*Math.cos(pitch)*dist)),.18);cam.lookAt(target);avatar.visible=dist>1;
-let isBelow=pos.z>460;skyMaterial.uniforms.underworld.value=isBelow?1:0;skyDome.position.set(pos.x,0,pos.z);horizons.position.set(pos.x,0,pos.z);horizons.visible=!isBelow;scene.background.setHex(isBelow?0x211e2a:0x9db7ba);scene.fog.color.setHex(isBelow?0x3c3049:0xc5ceba);scheduleChunks();if(pending.length){let item=pending.shift();addChunk(item.x,item.z)}
-let [label,desc]=zone(pos.x,pos.z);if(label!==lastZone){$('region').textContent=label;$('regionSub').textContent=desc;$('regionSide').textContent=label.split(' · ')[0];msg('Du betrittst '+label);lastZone=label}
-$('coords').textContent='X '+Math.round(pos.x)+' · Z '+Math.round(pos.z)+' · '+activeChunks.size+' Chunks · '+fps+' FPS';
-$('hint').textContent=(Math.hypot(pos.x,pos.z+31)<12||Math.hypot(pos.x,pos.z-640)<12?'E: Wurzelportal benutzen · ':'')+'WASD: Bewegen · Maus: Blick · Space: Springen / am Baum + W: Klettern · Strg: Sprinten · Shift: Schleichen';
-renderer.render(scene,cam);requestAnimationFrame(animate)}
-requestAnimationFrame(animate);
-
-// Original Nordic UI navigation; no game mechanics modified.
-const menuToggle=$('menuToggle');
-function toggleMenu(force){if(document.pointerLockElement===renderer.domElement)document.exitPointerLock?.();let open=typeof force==='boolean'?force:!document.body.classList.contains('menu-open');document.body.classList.toggle('menu-open',open);menuToggle.textContent=open?'✕ SCHLIESSEN':'☰ MENÜ';menuToggle.setAttribute('aria-expanded',String(open))}
-menuToggle.onclick=()=>toggleMenu();
-document.addEventListener('keydown',e=>{if(e.code==='Tab'&&!e.target.matches('input,textarea,select')){e.preventDefault();toggleMenu()}if(e.key==='Escape'&&document.body.classList.contains('menu-open'))toggleMenu(false)});
-const compassLabels=['N','NO','O','SO','S','SW','W','NW'];
-setInterval(()=>{if(typeof yaw==='number'){let degrees=((yaw*180/Math.PI)%360+360)%360;let i=Math.round(degrees/45)%8;$('compassFacing').textContent=compassLabels[i];$('compassBearing').textContent=Math.round(degrees)+'° · '+compassLabels[i]}},140);
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {clone as cloneSkeleton} from 'three/addons/utils/SkeletonUtils.js';
+const $=id=>document.getElementById(id),view=$('view'),status=$('status');
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x9bb7c4);scene.fog=new THREE.FogExp2(0xabb6a8,.0065);
+const camera=new THREE.PerspectiveCamera(68,innerWidth/innerHeight,.1,350);
+let renderer;
+try{renderer=new THREE.WebGLRenderer({antialias:false,powerPreference:'default'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.05));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.38;renderer.shadowMap.enabled=false;view.append(renderer.domElement)}
+catch(e){$('loading').remove();$('error').style.display='grid';$('errorText').textContent=e.message;throw e}
+scene.add(new THREE.HemisphereLight(0xecf2f4,0x6a5547,2.4));
+const sun=new THREE.DirectionalLight(0xffe5bc,2.3);sun.position.set(80,110,-40);scene.add(sun);
+const fill=new THREE.DirectionalLight(0x91b4e2,.75);fill.position.set(-75,35,85);scene.add(fill);
+const skyMat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,vertexShader:'varying vec3 v;void main(){v=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec3 v;void main(){vec3 d=normalize(v);float h=clamp(d.y*.9+.4,0.,1.);vec3 c=mix(vec3(.91,.75,.54),vec3(.26,.48,.72),smoothstep(0.,1.,h));float s=max(0.,dot(d,normalize(vec3(.8,.27,-.5))));c+=vec3(.9,.57,.23)*pow(s,80.)*.6;gl_FragColor=vec4(c,1.);}'});
+const sky=new THREE.Mesh(new THREE.SphereGeometry(320,24,14),skyMat);sky.renderOrder=-100;scene.add(sky);
+function stoneTexture(){let c=document.createElement('canvas');c.width=c.height=256;let x=c.getContext('2d');x.fillStyle='#a7a59a';x.fillRect(0,0,256,256);let seed=19;const rnd=()=>{seed=(Math.imul(1664525,seed)+1013904223)>>>0;return seed/4294967296};for(let i=0;i<3500;i++){let v=90+rnd()*85;x.fillStyle='rgba('+v+','+(v-5)+','+(v-14)+','+(rnd()*.35)+')';x.fillRect(rnd()*256,rnd()*256,rnd()*5+1,rnd()*5+1)}x.strokeStyle='#4d4f4d88';x.lineWidth=2;for(let y=0;y<256;y+=32){x.beginPath();x.moveTo(0,y);x.lineTo(256,y);x.stroke();for(let t=(Math.floor(y/32)%2)*32;t<256;t+=64){x.beginPath();x.moveTo(t,y);x.lineTo(t,y+32);x.stroke()}}let map=new THREE.CanvasTexture(c);map.wrapS=map.wrapT=THREE.RepeatWrapping;map.colorSpace=THREE.SRGBColorSpace;map.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return map}
+const stoneTex=stoneTexture(),floorTex=stoneTex.clone();floorTex.repeat.set(9,9);floorTex.needsUpdate=true;
+const stone=new THREE.MeshLambertMaterial({map:stoneTex,color:0xe8e6de}),floorMat=new THREE.MeshLambertMaterial({map:floorTex,color:0xc8c4b9}),dark=new THREE.MeshLambertMaterial({color:0x515b62}),bronze=new THREE.MeshLambertMaterial({color:0xc6a26e}),brick=new THREE.MeshLambertMaterial({color:0x88796b}),grass=new THREE.MeshLambertMaterial({color:0x56815d}),bannerMats=[0x8f2936,0x284e74,0x526344,0x8a672e].map(color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide}));
+function place(geo,mat,x,y,z,rx=0,ry=0,rz=0){const mesh=new THREE.Mesh(geo,mat);mesh.position.set(x,y,z);mesh.rotation.set(rx,ry,rz);scene.add(mesh);return mesh}
+const cylinder=(rt,rb,h,n=32)=>new THREE.CylinderGeometry(rt,rb,h,n);
+place(cylinder(65,67,2,96),brick,0,-1.6,0);place(cylinder(52,52,1,96),floorMat,0,-.4,0);
+const arenaRing=new THREE.Group();scene.add(arenaRing);
+function addRing(radius,y,thickness,height,mat){const mesh=new THREE.Mesh(new THREE.RingGeometry(radius-thickness,radius,128,1),mat);mesh.rotation.x=-Math.PI/2;mesh.position.y=y;scene.add(mesh)}
+for(let row=0;row<5;row++){let radius=48+row*3.4;const ring=new THREE.Mesh(new THREE.CylinderGeometry(radius+2,radius+2,1.6,96,1,true),row%2?stone:brick);ring.position.y=1.1+row*2.2;scene.add(ring);addRing(radius+2,2+row*2.2,3.2,1.5,row%2?stone:brick)}
+for(let i=0;i<28;i++){const a=i*Math.PI*2/28,rad=62,x=Math.sin(a)*rad,z=Math.cos(a)*rad;
+let col=place(cylinder(1.25,1.6,17,10),stone,x,14,z);place(cylinder(2.4,2.4,1.1,10),bronze,x,23,z);place(new THREE.ConeGeometry(2.7,6,8),dark,x,26.4,z);
+if(i%2===0){const cloth=place(new THREE.PlaneGeometry(4.2,8),bannerMats[i%4],x*.94,16.3,z*.94,0,a,0);cloth.rotation.y=a;}}
+for(let i=0;i<4;i++){let a=(i*Math.PI/2)+Math.PI/4,x=Math.sin(a)*44,z=Math.cos(a)*44;let gate=place(new THREE.BoxGeometry(10,12,3.5),stone,x,6,z,0,a,0);const passage=place(new THREE.BoxGeometry(6,7,3.8),dark,x,3.3,z,0,a,0);gate.position.y=11.5}
+for(let i=0;i<16;i++){let a=i*Math.PI*2/16,x=Math.sin(a)*35,z=Math.cos(a)*35;place(cylinder(.24,.34,4.2,8),dark,x,2.1,z);let flame=place(new THREE.ConeGeometry(.85,2.1,8),new THREE.MeshBasicMaterial({color:i%2?0xf3b653:0xf7d08b}),x,5.1,z);flame.rotation.z=.05}
+const pedestalPoints=[[-17,-16],[17,-16],[-17,16],[17,16]];
+const characters=[
+ {id:'knight',name:'Ritter',elements:'Erde + Feuer',model:'knight.glb',color:0xd2b27b},
+ {id:'warrior',name:'Krieger',elements:'Feuer + Luft',model:'hero.glb',color:0xae5552},
+ {id:'mage',name:'Zauberer',elements:'Wasser + Luft',model:'ghost.glb',color:0x6095c8},
+ {id:'spirit',name:'Naturgeist',elements:'Erde + Wasser',model:'demon.glb',color:0x75a97c}
+];
+const displays=new Map(),loaded=new Map(),mixers=[];
+const assetURL='https://cdn.jsdelivr.net/gh/ilrein/warptracker@71bbfbdfacd118196994b26da68eec1876d55c6b/public/models/';
+function humanoidFallback(color){const group=new THREE.Group(),m=new THREE.MeshLambertMaterial({color}),skin=new THREE.MeshLambertMaterial({color:0xc9a88a}),iron=new THREE.MeshLambertMaterial({color:0x454d56});
+function part(geo,material,x,y,z){const a=new THREE.Mesh(geo,material);a.position.set(x,y,z);group.add(a)}
+part(new THREE.BoxGeometry(1.25,1.7,.75),m,0,1.9,0);part(new THREE.SphereGeometry(.45,12,8),skin,0,3.15,0);
+for(let side of [-1,1]){part(new THREE.CylinderGeometry(.24,.3,1.45,8),m,side*.83,1.88,0);part(new THREE.CylinderGeometry(.3,.35,1.35,8),iron,side*.37,.64,0)}
+part(new THREE.BoxGeometry(1.45,.3,.9),iron,0,1.08,0);return group}
+function normalizedCharacter(raw,height=4.6){const outer=new THREE.Group(),bbox=new THREE.Box3().setFromObject(raw),size=bbox.getSize(new THREE.Vector3());
+if(size.y<.0001)throw Error('Ungültiges Charaktermodell');const scale=height/size.y;raw.scale.setScalar(scale);raw.position.set(-(bbox.min.x+bbox.max.x)*.5*scale,-bbox.min.y*scale,-(bbox.min.z+bbox.max.z)*.5*scale);outer.add(raw);return outer}
+async function loadModel(char){const loader=new GLTFLoader();try{const gltf=await loader.loadAsync(assetURL+char.model);return {source:gltf.scene,animations:gltf.animations}}
+catch(err){status.textContent='Ein Modell fehlt: '+char.name+' – Ersatzfigur verwendet';return {source:humanoidFallback(char.color),animations:[]}}}
+async function setupCharacters(){const results=await Promise.all(characters.map(loadModel));results.forEach((item,i)=>{const c=characters[i],p=pedestalPoints[i];loaded.set(c.id,item);place(cylinder(5.4,5.9,1.6,24),stone,p[0],.8,p[1]);const trim=place(new THREE.TorusGeometry(5,.22,8,40),bronze,p[0],1.66,p[1]);trim.rotation.x=Math.PI/2;
+let statue=normalizedCharacter(cloneSkeleton(item.source));statue.position.set(p[0],1.65,p[1]);statue.rotation.y=Math.atan2(-p[0],-p[1]);scene.add(statue);displays.set(c.id,statue);
+if(item.animations.length){let mixer=new THREE.AnimationMixer(statue);const action=mixer.clipAction(item.animations.find(a=>/idle/i.test(a.name))||item.animations[0]);action.play();mixers.push(mixer)}
+});setPlayer('knight');$('loading').remove();status.textContent='Arena bereit · E an einem Podest wählt eine Figur'}
+let player=new THREE.Group();scene.add(player);let selected='knight',playerMixer=null;
+function setPlayer(id){const data=loaded.get(id);if(!data)return;selected=id;scene.remove(player);playerMixer=null;player=normalizedCharacter(cloneSkeleton(data.source));scene.add(player);if(data.animations.length){playerMixer=new THREE.AnimationMixer(player);let clip=data.animations.find(a=>/walk|run/i.test(a.name))||data.animations.find(a=>/idle/i.test(a.name))||data.animations[0];playerMixer.clipAction(clip).play()}
+document.querySelectorAll('.choice').forEach(btn=>btn.classList.toggle('active',btn.dataset.character===id));status.textContent='Ausgewählt: '+characters.find(c=>c.id===id).name}
+document.querySelectorAll('.choice').forEach(btn=>btn.addEventListener('click',()=>setPlayer(btn.dataset.character)));
+let keys=Object.create(null),position=new THREE.Vector3(0,0,10),yaw=0,pitch=.19,zoom=12,velocityY=0,jump=0;
+const inputKeys=new Set(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight','Space','KeyE']);
+window.addEventListener('keydown',e=>{if(e.target.closest('button,input,textarea,select'))return;if(inputKeys.has(e.code)){keys[e.code]=true;e.preventDefault()}if(e.code==='Space'&&!e.repeat&&jump===0){velocityY=10}if(e.code==='KeyE'&&!e.repeat){let nearest=null,dist=Infinity;pedestalPoints.forEach((p,i)=>{const d=Math.hypot(position.x-p[0],position.z-p[1]);if(d<dist){dist=d;nearest=characters[i]}});if(dist<9&&nearest)setPlayer(nearest.id)}},true);
+window.addEventListener('keyup',e=>{if(inputKeys.has(e.code))keys[e.code]=false},true);window.addEventListener('blur',()=>{keys=Object.create(null)});
+renderer.domElement.tabIndex=0;renderer.domElement.addEventListener('click',()=>{renderer.domElement.focus();try{renderer.domElement.requestPointerLock()?.catch(()=>{})}catch(e){}});
+document.addEventListener('mousemove',e=>{if(document.pointerLockElement===renderer.domElement){yaw-=e.movementX*.0024;pitch=Math.max(-.25,Math.min(.9,pitch+e.movementY*.0024))}});
+renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(5,Math.min(19,zoom+e.deltaY*.012))},{passive:false});
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+let last=performance.now(),frames=0,fpsStart=last,fps=0;const clock=new THREE.Clock();
+function loop(now){requestAnimationFrame(loop);let dt=Math.min((now-last)/1000,.04);last=now;frames++;if(now-fpsStart>1000){fps=Math.round(frames*1000/(now-fpsStart));frames=0;fpsStart=now;$('fps').textContent=fps+' FPS · WASD aktiv'}
+const forward=Number(!!keys.KeyW)-Number(!!keys.KeyS),side=Number(!!keys.KeyD)-Number(!!keys.KeyA),len=Math.hypot(forward,side);
+if(len){let step=(keys.ShiftLeft||keys.ShiftRight?12:6.5)*dt/len,dx=Math.sin(yaw)*forward+Math.cos(yaw)*side,dz=Math.cos(yaw)*forward-Math.sin(yaw)*side;
+position.x+=dx*step;position.z+=dz*step;let d=Math.hypot(position.x,position.z);if(d>42){position.x*=42/d;position.z*=42/d}player.rotation.y=Math.atan2(dx,dz)}
+if(velocityY||jump){velocityY-=24*dt;jump+=velocityY*dt;if(jump<0){jump=0;velocityY=0}}
+player.position.set(position.x,jump,position.z);
+if(playerMixer)playerMixer.update(dt*(len?1:0.4));for(let m of mixers)m.update(dt);
+const target=new THREE.Vector3(position.x,2.5+jump,position.z),offset=new THREE.Vector3(-Math.sin(yaw)*zoom*Math.cos(pitch),zoom*.55+Math.sin(pitch)*zoom,-Math.cos(yaw)*zoom*Math.cos(pitch));camera.position.lerp(target.clone().add(offset),.18);camera.lookAt(target);sky.position.copy(camera.position);
+renderer.render(scene,camera)}
+requestAnimationFrame(loop);
+setupCharacters().catch(err=>{$('loading').remove();$('error').style.display='grid';$('errorText').textContent=String(err);console.error(err)});
 </script></body></html>
