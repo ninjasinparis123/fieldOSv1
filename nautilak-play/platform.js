@@ -23,6 +23,8 @@ const keys={name:'nautilak-platform-name',wishlist:'nautilak-platform-wishlist',
 function read(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch(e){return fallback}}
 function write(key,val){try{localStorage.setItem(key,JSON.stringify(val))}catch(e){}}
 let state={page:'store',filter:'all',query:'',name:read(keys.name,'Gastspieler'),wishlist:read(keys.wishlist,[]),library:read(keys.library,['universe','skyrail','emberfall','prismforge','mossbay','aetherkin']),posts:read(keys.posts,[]),likes:read(keys.likes,[])};
+// In this free-to-play alpha, every released title belongs to the player's library.
+state.library=[...new Set([...state.library,...gameCatalog.filter(g=>g.status==='live').map(g=>g.id)])];write(keys.library,state.library);
 function safe(text){return String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function gameCard(g){let live=g.status==='live',wish=state.wishlist.includes(g.id);
 return '<article class="game-card" data-card="'+g.id+'"><div class="game-art '+g.skin+'"><span class="type">'+(live?'JETZT SPIELBAR':'IN PLANUNG')+'</span><span aria-hidden="true">'+g.icon+'</span></div><div class="card-content"><div class="card-head"><h3>'+safe(g.name)+'</h3><button class="heart '+(wish?'active':'')+'" data-wish="'+g.id+'" aria-label="'+(wish?'Von Merkliste entfernen':'Auf Merkliste setzen')+'">'+(wish?'♥':'♡')+'</button></div><p class="description">'+safe(g.desc)+'</p><div class="tagline">'+g.tags.map(t=>'<span class="tag">'+safe(t)+'</span>').join('')+'</div><div class="card-bottom"><span>'+safe(g.genre)+'</span><button class="small-btn" data-details="'+g.id+'">'+(live?'Zum Spiel':'Details')+'</button></div></div></article>'}
