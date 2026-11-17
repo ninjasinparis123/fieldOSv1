@@ -1,169 +1,49 @@
 <!doctype html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Nautilak Universe – Arena</title>
-<style>
-:root{color-scheme:dark;--ink:#e6dbc4;--gold:#dec28a;--shade:#101a20}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101a20;font-family:Georgia,serif;color:var(--ink)}button{font:inherit;cursor:pointer}
-#view{position:fixed;inset:0}canvas{width:100%;height:100%;display:block;outline:none}
-header{position:fixed;top:17px;left:20px;z-index:3;pointer-events:none;text-shadow:0 2px 12px #000e}
-.brand{font-size:21px;letter-spacing:.18em;color:#fff3d9}.sub{font-size:11px;letter-spacing:.22em;color:#e2d0a5;margin-top:6px}
-#help{position:fixed;bottom:18px;left:20px;z-index:3;background:#091016b8;border:1px solid #aaa28965;padding:12px 15px;border-radius:5px;line-height:1.6;font:12px system-ui,sans-serif;max-width:470px}
-#status{display:block;color:#e4ce94;margin-top:4px}
-#roster{position:fixed;right:20px;top:20px;z-index:3;width:min(255px,42vw);padding:16px 15px 14px;background:linear-gradient(135deg,#0a1318e9,#20272ad9);border:1px solid #b7a47e80;border-radius:7px;box-shadow:0 12px 35px #0007}
-#roster h2{font-weight:normal;letter-spacing:.14em;font-size:16px;margin:0 0 12px;color:var(--gold)}
-.choice{width:100%;text-align:left;color:#ded6c2;padding:9px 10px;margin:3px 0;background:#242d32ad;border:1px solid #797b7560;border-radius:4px}
-.choice:hover,.choice.active{border-color:#e7c98f;background:#53524278}
-.choice small{display:block;color:#beb5a3;font:10px system-ui,sans-serif;margin-top:3px}
-#fps{font:11px system-ui,sans-serif;color:#e4dbcd;margin-top:11px}
-#crosshair{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.72;font:17px system-ui;pointer-events:none}
-#error{position:fixed;inset:0;display:none;place-items:center;background:#101a20;z-index:20;padding:30px;text-align:center}
-#error strong{display:block;font-size:21px;color:#ffccad;margin-bottom:8px}
-#loading{position:fixed;inset:0;display:grid;place-items:center;z-index:15;background:#111d23;color:var(--gold);font-size:18px;letter-spacing:.12em}
-@media(max-width:650px){#roster{right:9px;top:9px;width:160px;padding:10px}#roster h2{font-size:12px}.choice{font-size:11px;padding:5px}.choice small{font-size:9px}header{top:12px;left:10px}.brand{font-size:15px}#help{left:8px;bottom:8px;right:8px;font-size:10px;padding:8px}#crosshair{display:none}}
-</style>
-</head><body>
-<div id="view"></div>
-<header><div class="brand">NAUTILAK UNIVERSE</div><div class="sub">ARENA DER ACHT PFADE · BUILD 0.7 RPG</div></header>
-<aside id="roster"><h2>CHARAKTER WÄHLEN</h2>
-<button class="choice active" data-character="knight">I · Ritter<small>Erde + Feuer</small></button>
-<button class="choice" data-character="warrior">II · Krieger<small>Feuer + Luft</small></button>
-<button class="choice" data-character="mage">III · Zauberer<small>Wasser + Luft</small></button>
-<button class="choice" data-character="spirit">IV · Naturgeist<small>Erde + Wasser</small></button>
-<div id="fps">CHARAKTERMODELLE: 0 / 4</div><div id="assetCheck" style="font:11px system-ui,sans-serif;color:#d1bd9d;margin-top:6px;line-height:1.5">Prüfe 3D-Assets …</div></aside>
-<div id="crosshair">✦</div>
-<div id="help">Klick in die Arena → Mausblick · <b>WASD</b> bewegen · Leertaste springen · Shift sprinten · E Figur am Podest wählen · Esc Maus freigeben<span id="status">Spawnpunkt: Arena des Weltenbaums</span></div>
-<div id="loading">NAUTILAK – ARENA WIRD ERSCHAFFEN …</div>
-<div id="error"><div><strong>Die Spielszene konnte nicht gestartet werden.</strong><span id="errorText"></span></div></div>
-<script>
-window.addEventListener('error',e=>{const x=document.getElementById('status');if(x)x.textContent='FEHLER: '+e.message});
-window.addEventListener('unhandledrejection',e=>{const x=document.getElementById('status');if(x)x.textContent='LADEFEHLER: '+String(e.reason?.message||e.reason)});
-</script>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
-<script type="module">
-import * as THREE from 'three';
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {clone as cloneSkeleton} from 'three/addons/utils/SkeletonUtils.js';
-import {enhanceArena,makeCreature} from './arena-features.js';
-import {installRpg} from './rpg-systems.js';
-const $=id=>document.getElementById(id),view=$('view'),status=$('status');
-const scene=new THREE.Scene();scene.background=new THREE.Color(0x9bb7c4);scene.fog=new THREE.FogExp2(0xabb6a8,.0065);
-const camera=new THREE.PerspectiveCamera(68,innerWidth/innerHeight,.1,350);
-let renderer;
-try{renderer=new THREE.WebGLRenderer({antialias:false,powerPreference:'default'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.05));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.25;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;view.append(renderer.domElement)}
-catch(e){$('loading').remove();$('error').style.display='grid';$('errorText').textContent=e.message;throw e}
-scene.add(new THREE.HemisphereLight(0xecf2f4,0x6a5547,2.4));
-const sun=new THREE.DirectionalLight(0xffe5bc,2.3);sun.position.set(80,110,-40);sun.castShadow=true;sun.shadow.mapSize.set(512,512);sun.shadow.camera.left=-70;sun.shadow.camera.right=70;sun.shadow.camera.top=70;sun.shadow.camera.bottom=-70;sun.shadow.camera.near=1;sun.shadow.camera.far=250;sun.shadow.bias=-.0008;scene.add(sun);
-const fill=new THREE.DirectionalLight(0x91b4e2,.75);fill.position.set(-75,35,85);scene.add(fill);
-const skyMat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,vertexShader:'varying vec3 v;void main(){v=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec3 v;void main(){vec3 d=normalize(v);float h=clamp(d.y*.9+.4,0.,1.);vec3 c=mix(vec3(.91,.75,.54),vec3(.26,.48,.72),smoothstep(0.,1.,h));float s=max(0.,dot(d,normalize(vec3(.8,.27,-.5))));c+=vec3(.9,.57,.23)*pow(s,80.)*.6;gl_FragColor=vec4(c,1.);}'});
-const sky=new THREE.Mesh(new THREE.SphereGeometry(320,24,14),skyMat);sky.renderOrder=-100;scene.add(sky);
-function stoneTexture(){let c=document.createElement('canvas');c.width=c.height=256;let x=c.getContext('2d');x.fillStyle='#a7a59a';x.fillRect(0,0,256,256);let seed=19;const rnd=()=>{seed=(Math.imul(1664525,seed)+1013904223)>>>0;return seed/4294967296};for(let i=0;i<3500;i++){let v=90+rnd()*85;x.fillStyle='rgba('+v+','+(v-5)+','+(v-14)+','+(rnd()*.35)+')';x.fillRect(rnd()*256,rnd()*256,rnd()*5+1,rnd()*5+1)}x.strokeStyle='#4d4f4d88';x.lineWidth=2;for(let y=0;y<256;y+=32){x.beginPath();x.moveTo(0,y);x.lineTo(256,y);x.stroke();for(let t=(Math.floor(y/32)%2)*32;t<256;t+=64){x.beginPath();x.moveTo(t,y);x.lineTo(t,y+32);x.stroke()}}let map=new THREE.CanvasTexture(c);map.wrapS=map.wrapT=THREE.RepeatWrapping;map.colorSpace=THREE.SRGBColorSpace;map.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return map}
-const stoneTex=stoneTexture(),floorTex=stoneTex.clone();floorTex.repeat.set(9,9);floorTex.needsUpdate=true;
-const stone=new THREE.MeshLambertMaterial({map:stoneTex,color:0xe8e6de}),floorMat=new THREE.MeshLambertMaterial({map:floorTex,color:0xc8c4b9}),dark=new THREE.MeshLambertMaterial({color:0x515b62}),bronze=new THREE.MeshLambertMaterial({color:0xc6a26e}),brick=new THREE.MeshLambertMaterial({color:0x88796b}),grass=new THREE.MeshLambertMaterial({color:0x56815d}),bannerMats=[0x8f2936,0x284e74,0x526344,0x8a672e].map(color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide}));
-function place(geo,mat,x,y,z,rx=0,ry=0,rz=0){const mesh=new THREE.Mesh(geo,mat);mesh.position.set(x,y,z);mesh.rotation.set(rx,ry,rz);mesh.receiveShadow=mat!==dark;scene.add(mesh);return mesh}
-const cylinder=(rt,rb,h,n=32)=>new THREE.CylinderGeometry(rt,rb,h,n);
-place(cylinder(65,67,2,96),brick,0,-1.6,0);place(cylinder(52,52,1,96),floorMat,0,-.4,0);
-const arenaRing=new THREE.Group();scene.add(arenaRing);
-function addRing(radius,y,thickness,height,mat){const mesh=new THREE.Mesh(new THREE.RingGeometry(radius-thickness,radius,128,1),mat);mesh.rotation.x=-Math.PI/2;mesh.position.y=y;scene.add(mesh)}
-for(let row=0;row<5;row++){let radius=48+row*3.4;const ring=new THREE.Mesh(new THREE.CylinderGeometry(radius+2,radius+2,1.6,96,1,true),row%2?stone:brick);ring.position.y=1.1+row*2.2;scene.add(ring);addRing(radius+2,2+row*2.2,3.2,1.5,row%2?stone:brick)}
-for(let i=0;i<28;i++){const a=i*Math.PI*2/28,rad=62,x=Math.sin(a)*rad,z=Math.cos(a)*rad;
-let col=place(cylinder(1.25,1.6,17,10),stone,x,14,z);place(cylinder(2.4,2.4,1.1,10),bronze,x,23,z);place(new THREE.ConeGeometry(2.7,6,8),dark,x,26.4,z);
-if(i%2===0){const cloth=place(new THREE.PlaneGeometry(4.2,8),bannerMats[i%4],x*.94,16.3,z*.94,0,a,0);cloth.rotation.y=a;}}
-for(let i=0;i<4;i++){let a=(i*Math.PI/2)+Math.PI/4,x=Math.sin(a)*44,z=Math.cos(a)*44;let gate=place(new THREE.BoxGeometry(10,12,3.5),stone,x,6,z,0,a,0);const passage=place(new THREE.BoxGeometry(6,7,3.8),dark,x,3.3,z,0,a,0);gate.position.y=11.5}
-for(let i=0;i<16;i++){let a=i*Math.PI*2/16,x=Math.sin(a)*35,z=Math.cos(a)*35;place(cylinder(.24,.34,4.2,8),dark,x,2.1,z);let flame=place(new THREE.ConeGeometry(.85,2.1,8),new THREE.MeshBasicMaterial({color:i%2?0xf3b653:0xf7d08b}),x,5.1,z);flame.rotation.z=.05}
-const pedestalPoints=[[-17,-16],[17,-16],[-17,16],[17,16]];
-const contactShadow=new THREE.Mesh(new THREE.CircleGeometry(1.5,24),new THREE.MeshBasicMaterial({color:0x1b2526,transparent:true,opacity:.28,depthWrite:false}));
-contactShadow.rotation.x=-Math.PI/2;contactShadow.position.y=.04;scene.add(contactShadow);
-const characters=[
- {id:'knight',name:'Ritter',elements:'Erde + Feuer',model:'Male/King.glb',color:0xd2b27b,asset:'quaternius'},
- {id:'warrior',name:'Krieger',elements:'Feuer + Luft',model:'Male/Adventurer.glb',color:0xae5552,asset:'quaternius'},
- {id:'mage',name:'Zauberer',elements:'Wasser + Luft',model:'Female/Witch.glb',color:0x6095c8,asset:'quaternius'},
- {id:'spirit',name:'Naturgeist',elements:'Erde + Wasser',model:'orc.glb',color:0x75a97c,asset:'jev'}
-];
-const displays=new Map(),loaded=new Map(),mixers=[];let resultsLoaded=0;
-// CC0 character meshes from KayKit and Quaternius community game projects.
-const assetRoots={
- quaternius:'https://cdn.jsdelivr.net/gh/LuanDucate/Ducz.CharacterCreator@fcd215b58eec5c9ed97d0ba5f696d0e7dc085e08/public/models/',
- jev:'https://cdn.jsdelivr.net/gh/kikoncuo/jevfire@5df83b558bf635e006d31f8f2fc2798d0e3ff051/web/public/assets/',
- tactical:'https://cdn.jsdelivr.net/gh/sion-rgb/tactical-slash@8bf8d835cb7afa7cb3f4d893b0966c6b4e9b7727/assets/characters/player/'
-};
-
-/* Authored medieval CC0 buildings and landscaping around the arena. */
-async function installScenery(){
- const sceneryLoader=new GLTFLoader(),sceneryRoot=assetRoots.jev;
- const specs=[
-  {file:'hall.glb',x:0,z:-86,width:32},
-  {file:'tower.glb',x:-52,z:-80,width:14},
-  {file:'tower.glb',x:52,z:-80,width:14},
-  {file:'house.glb',x:-72,z:15,width:19},
-  {file:'house.glb',x:72,z:15,width:19},
-  {file:'tree.glb',x:-88,z:60,width:16},
-  {file:'tree.glb',x:88,z:60,width:16},
-  {file:'tree.glb',x:-96,z:-30,width:20},
-  {file:'tree.glb',x:96,z:-30,width:20},
-  {file:'rock.glb',x:-72,z:45,width:8},
-  {file:'rock.glb',x:73,z:51,width:11}
- ];
- const unique=[...new Set(specs.map(o=>o.file))];
- const results=await Promise.allSettled(unique.map(file=>sceneryLoader.loadAsync(sceneryRoot+file)));
- const templates=new Map();results.forEach((result,i)=>{if(result.status==='fulfilled')templates.set(unique[i],result.value.scene)});
- let n=0;
- for(const spec of specs){const template=templates.get(spec.file);if(!template)continue;
-  const model=template.clone(true),b=new THREE.Box3().setFromObject(model),size=b.getSize(new THREE.Vector3());if(size.x<.001||size.y<.001)continue;
-  const scale=spec.width/Math.max(size.x,size.z);model.scale.setScalar(scale);model.position.set(spec.x-(b.min.x+b.max.x)*.5*scale,-b.min.y*scale-.5,spec.z-(b.min.z+b.max.z)*.5*scale);
-  model.traverse(obj=>{if(obj.isMesh){obj.receiveShadow=true;obj.castShadow=false}});
-  scene.add(model);n++;
- }
- return n
-}
-installScenery().then(n=>{status.textContent+=' · '+n+' Umgebungsmodelle geladen'}).catch(err=>console.warn('Scenery fallback',err));
-
-function humanoidFallback(color){const group=new THREE.Group(),m=new THREE.MeshLambertMaterial({color}),skin=new THREE.MeshLambertMaterial({color:0xc9a88a}),iron=new THREE.MeshLambertMaterial({color:0x454d56});
-function part(geo,material,x,y,z){const a=new THREE.Mesh(geo,material);a.position.set(x,y,z);group.add(a)}
-part(new THREE.BoxGeometry(1.25,1.7,.75),m,0,1.9,0);part(new THREE.SphereGeometry(.45,12,8),skin,0,3.15,0);
-for(let side of [-1,1]){part(new THREE.CylinderGeometry(.24,.3,1.45,8),m,side*.83,1.88,0);part(new THREE.CylinderGeometry(.3,.35,1.35,8),iron,side*.37,.64,0)}
-part(new THREE.BoxGeometry(1.45,.3,.9),iron,0,1.08,0);return group}
-function normalizedCharacter(raw,height=4.6){raw.traverse(obj=>{if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true;if(obj.material){const mats=Array.isArray(obj.material)?obj.material:[obj.material];for(const mat of mats){if(mat.isMeshStandardMaterial){mat.roughness=Math.max(.36,mat.roughness??.6);mat.metalness=Math.min(.5,mat.metalness??0)}}}}});const outer=new THREE.Group(),bbox=new THREE.Box3().setFromObject(raw),size=bbox.getSize(new THREE.Vector3());
-if(size.y<.0001)throw Error('Ungültiges Charaktermodell');const scale=height/size.y;raw.scale.setScalar(scale);raw.position.set(-(bbox.min.x+bbox.max.x)*.5*scale,-bbox.min.y*scale,-(bbox.min.z+bbox.max.z)*.5*scale);outer.add(raw);return outer}
-async function loadModel(char){
- if(char.asset==='procedural')return {source:makeCreature(char.id),animations:[],ok:true};
- const loader=new GLTFLoader(),primary=assetRoots[char.asset]+char.model;
- const raw=char.asset==='jev'?'https://raw.githubusercontent.com/kikoncuo/jevfire/5df83b558bf635e006d31f8f2fc2798d0e3ff051/web/public/assets/':char.asset==='quaternius'?'https://raw.githubusercontent.com/LuanDucate/Ducz.CharacterCreator/fcd215b58eec5c9ed97d0ba5f696d0e7dc085e08/public/models/':'https://raw.githubusercontent.com/sion-rgb/tactical-slash/8bf8d835cb7afa7cb3f4d893b0966c6b4e9b7727/assets/characters/player/';
- let firstError=null;
- for(const url of [primary,raw+char.model]){
-  try{const gltf=await loader.loadAsync(url);if(!gltf.scene||!gltf.scene.children.length)throw Error('Leeres Modell');return {source:gltf.scene,animations:gltf.animations,ok:true}}
-  catch(err){firstError=String(err?.message||err)}
- }
- return {source:humanoidFallback(char.color),animations:[],ok:false,error:firstError}
-}
-async function setupCharacters(){const results=await Promise.all(characters.map(loadModel));const good=results.filter(item=>item.ok).length;resultsLoaded=good;$('assetCheck').textContent='3D-Charaktere geladen: '+good+' / 8'+(good<4?' · '+results.filter(x=>!x.ok).map((x,i)=>x.error||'Ladefehler').slice(0,1).join(' ').slice(0,75):' · alle geladen ✓');results.forEach((item,i)=>{const c=characters[i],p=pedestalPoints[i];loaded.set(c.id,item);place(cylinder(5.4,5.9,1.6,24),stone,p[0],.8,p[1]);const trim=place(new THREE.TorusGeometry(5,.22,8,40),bronze,p[0],1.66,p[1]);trim.rotation.x=Math.PI/2;
-let statue=normalizedCharacter(cloneSkeleton(item.source));statue.position.set(p[0],1.65,p[1]);statue.rotation.y=Math.atan2(-p[0],-p[1]);scene.add(statue);displays.set(c.id,statue);
-if(item.animations.length){let mixer=new THREE.AnimationMixer(statue);const action=mixer.clipAction(item.animations.find(a=>/idle/i.test(a.name))||item.animations[0]);action.play();mixers.push(mixer)}
-});setPlayer('knight');$('loading').remove();status.textContent='Arena Build 0.6 · '+good+'/8 Charaktere geladen · E am Podest wählt'}
-let player=new THREE.Group();scene.add(player);let selected='knight',playerMixer=null;
-function setPlayer(id){const data=loaded.get(id);if(!data)return;selected=id;scene.remove(player);playerMixer=null;player=normalizedCharacter(cloneSkeleton(data.source));scene.add(player);if(data.animations.length){playerMixer=new THREE.AnimationMixer(player);let clip=data.animations.find(a=>/walk|run/i.test(a.name))||data.animations.find(a=>/idle/i.test(a.name))||data.animations[0];playerMixer.clipAction(clip).play()}
-document.querySelectorAll('.choice').forEach(btn=>btn.classList.toggle('active',btn.dataset.character===id));status.textContent='Ausgewählt: '+characters.find(c=>c.id===id).name}
-document.querySelectorAll('.choice').forEach(btn=>btn.addEventListener('click',()=>setPlayer(btn.dataset.character)));
-let keys=Object.create(null),position=new THREE.Vector3(0,0,10),yaw=0,pitch=.19,zoom=12,velocityY=0,jump=0;
-const inputKeys=new Set(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight','Space','KeyE']);
-window.addEventListener('keydown',e=>{if(e.target.closest('button,input,textarea,select'))return;if(inputKeys.has(e.code)){keys[e.code]=true;e.preventDefault()}if(e.code==='Space'&&!e.repeat&&jump===0){velocityY=10}if(e.code==='KeyE'&&!e.repeat){let nearest=null,dist=Infinity;pedestalPoints.forEach((p,i)=>{const d=Math.hypot(position.x-p[0],position.z-p[1]);if(d<dist){dist=d;nearest=characters[i]}});if(dist<9&&nearest)setPlayer(nearest.id)}},true);
-window.addEventListener('keyup',e=>{if(inputKeys.has(e.code))keys[e.code]=false},true);window.addEventListener('blur',()=>{keys=Object.create(null)});
-renderer.domElement.tabIndex=0;renderer.domElement.addEventListener('click',()=>{renderer.domElement.focus();try{renderer.domElement.requestPointerLock()?.catch(()=>{})}catch(e){}});
-document.addEventListener('mousemove',e=>{if(document.pointerLockElement===renderer.domElement){yaw-=e.movementX*.0024;pitch=Math.max(-.25,Math.min(.9,pitch+e.movementY*.0024))}});
-renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(5,Math.min(19,zoom+e.deltaY*.012))},{passive:false});
-window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
-const rpg=installRpg({scene,getPosition:()=>position,notify:text=>{status.textContent=text}});
-const arenaFeatures=enhanceArena({scene,renderer,characters,pedestalPoints,rpg,
-getPosition:()=>position,getYaw:()=>yaw,getPlayer:()=>player,getSelected:()=>selected,
-getLoaded:()=>loaded,getKeys:()=>keys,setPlayer,status});
-let last=performance.now(),frames=0,fpsStart=last,fps=0;const clock=new THREE.Clock();
-function loop(now){requestAnimationFrame(loop);let dt=Math.min((now-last)/1000,.04);last=now;frames++;if(now-fpsStart>1000){fps=Math.round(frames*1000/(now-fpsStart));frames=0;fpsStart=now;$('fps').textContent=fps+' FPS · '+resultsLoaded+' / 8 Charaktere'}
-const forward=Number(!!keys.KeyW)-Number(!!keys.KeyS),side=Number(!!keys.KeyD)-Number(!!keys.KeyA),len=Math.hypot(forward,side);
-if(len){let step=(keys.ShiftLeft||keys.ShiftRight?12:6.5)*dt/len,dx=Math.sin(yaw)*forward+Math.cos(yaw)*side,dz=Math.cos(yaw)*forward-Math.sin(yaw)*side;
-position.x+=dx*step;position.z+=dz*step;let d=Math.hypot(position.x,position.z);if(d>42){position.x*=42/d;position.z*=42/d}player.rotation.y=Math.atan2(dx,dz)}
-if(velocityY||jump){velocityY-=24*dt;jump+=velocityY*dt;if(jump<0){jump=0;velocityY=0}}
-arenaFeatures.update(dt);rpg.update(dt);player.position.set(position.x,jump,position.z);contactShadow.position.x=position.x;contactShadow.position.z=position.z;contactShadow.material.opacity=.28*Math.max(.12,1-jump/9);
-if(playerMixer)playerMixer.update(dt*(len?1:0.4));for(let m of mixers)m.update(dt);
-const target=new THREE.Vector3(position.x,2.5+jump,position.z),offset=new THREE.Vector3(-Math.sin(yaw)*zoom*Math.cos(pitch),zoom*.55+Math.sin(pitch)*zoom,-Math.cos(yaw)*zoom*Math.cos(pitch));camera.position.lerp(target.clone().add(offset),.18);camera.lookAt(target);sky.position.copy(camera.position);
-renderer.render(scene,camera)}
-requestAnimationFrame(loop);
-setupCharacters().catch(err=>{$('loading').remove();$('error').style.display='grid';$('errorText').textContent=String(err);console.error(err)});
-</script></body></html>
+<meta name="theme-color" content="#0b1018"><meta name="description" content="Nautilak – Gaming-Plattform für Entdeckung, Spielbibliothek und Community.">
+<title>NAUTILAK – Spiele. Community. Deine Welt.</title><link rel="stylesheet" href="./platform.css"></head>
+<body>
+<header class="top"><div class="shell top-inner">
+<a class="logo" href="./" aria-label="Nautilak Startseite">
+<span class="logo-mark" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 18L12 3l8 15M8 13h8M7 21h10"/></svg></span>NAUTILAK</a>
+<nav class="nav" aria-label="Hauptnavigation">
+<button data-page="store" class="active">STORE</button><button data-page="library">BIBLIOTHEK</button><button data-page="community">COMMUNITY</button>
+</nav>
+<div class="top-actions"><button class="btn ghost" data-about>Über die Alpha</button><button class="btn primary" data-profile>Profil</button><div class="avatar-mini" id="navAvatar">G</div></div>
+</div></header>
+<div class="shell layout"><main id="main">
+<div class="eyebrow" id="introText">ENTDECKEN · SPIELEN · VERNETZEN</div>
+<div class="subnav" id="categoryBar" aria-label="Spielekategorien">
+<button class="active" data-filter="all">ALLE SPIELE</button><button data-filter="live">SPIELBAR</button><button data-filter="rpg">RPG</button><button data-filter="action">ACTION</button><button data-filter="explore">EXPLORATION</button><button data-filter="strategy">STRATEGIE</button>
+<div class="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="searchInput" type="search" placeholder="Spiele durchsuchen" aria-label="Spiele durchsuchen" autocomplete="off"></div>
+</div>
+<section class="feature" id="feature" aria-label="Empfohlenes Spiel">
+<div class="feature-art"></div><div class="feature-over"></div><div class="hero-orbit" aria-hidden="true"></div>
+<div class="feature-body"><div class="eyebrow">FEATURED · NAUTILAK ORIGINAL</div><h1>EINE WELT.<br><em>ACHT PFADE.</em><br>DEIN ABENTEUER.</h1><p>Entdecke unser erstes spielbares Fantasy-RPG. Meistere die Arena, entwickle deinen Charakter und reise durch die offene Welt.</p>
+<div class="feature-actions"><a href="./game.html" class="btn primary">▶ JETZT SPIELEN</a><button data-details="universe" class="btn ghost">SPIEL ANSEHEN</button></div>
+<div class="feature-foot"><span class="status-dot"></span>Spielbarer Browser-Prototyp · kostenlos testen</div>
+</div></section>
+<section class="section" id="gamesSection"><div class="section-title"><div><h2 id="gamesHeading">Spiele entdecken</h2><p id="gamesSub">Ein spielbares Spiel und weitere geplante Welten.</p></div><button class="text-action" data-page="library">Meine Bibliothek</button></div><div class="games" id="games"></div></section>
+<section class="section" id="communitySection"><div class="section-title"><div><h2>Aus der Community</h2><p>Neuigkeiten teilen, Ideen sammeln und Spieler verbinden.</p></div><span class="tiny">Lokale Community-Vorschau</span></div>
+<div class="community-grid">
+<div class="feed-card"><div class="composer"><div class="avatar-mini" aria-hidden="true">✦</div><textarea id="postInput" maxlength="700" aria-label="Community-Beitrag schreiben" placeholder="Was beschäftigt dich in der Gaming-Welt? Teile deine Idee …"></textarea></div>
+<div class="feed-actions"><span class="helper">Nur in deinem Browser · Strg + Enter zum Posten</span><button class="btn primary" data-post>Beitrag veröffentlichen</button></div><div class="divider"></div><div id="posts"></div></div>
+<div class="panel"><h3>NAUTILAK INSIDER</h3>
+<div class="activity"><div class="activity-icon">⚔️</div><div><strong>Nautilak Universe</strong><p>Die Arena der acht Pfade ist als Browser-Spiel verfügbar. Der erste Titel unserer Plattform.</p></div></div>
+<div class="activity"><div class="activity-icon">🎒</div><div><strong>Skills & Inventar</strong><p>Leveln, Ressourcen sammeln und Ausrüstung herstellen – inspiriert von klassischen Fantasy-RPGs.</p></div></div>
+<div class="activity"><div class="activity-icon">🌐</div><div><strong>Gemeinsam spielen</strong><p>Öffentliche Profile, Multiplayer-Services und echte Community-Accounts stehen auf der Roadmap.</p></div></div>
+<button class="btn ghost" data-about style="margin-top:12px">Mehr zur Plattform</button>
+</div></div></section>
+</main>
+<aside class="sidebar" aria-label="Spieler und Plattform">
+<div class="sidebar-card"><h3>DEIN SPIELERPROFIL</h3><div class="profile"><div class="avatar-mini" id="profileAvatar">G</div><div><strong id="profileName">Gastspieler</strong><small>Lokales Profil · Alpha</small></div></div><span class="profile-badge">● BEREIT ZUM SPIELEN</span><div class="stat-row"><span>In Bibliothek</span><b id="statsGames">1</b></div><div class="stat-row"><span>Auf Merkliste</span><b id="statsWish">0</b></div><div class="divider"></div><button class="btn" style="width:100%" data-profile>Profil bearbeiten</button></div>
+<div class="sidebar-card"><h3>DEINE SPIELE</h3><a href="./game.html" class="friend"><div class="avatar-mini" style="background:#344f47">⚔</div><div><b>Nautilak Universe</b><small>Browser-Spiel · jetzt spielbar</small></div><span class="presence on"></span></a><div class="divider"></div><button class="btn ghost" style="width:100%" data-page="library">Bibliothek öffnen</button></div>
+<div class="sidebar-card"><h3>FREUNDE & CHAT</h3><p style="font-size:12px;line-height:1.8;color:#9cb0bd;margin:0">Freundeslisten, Direktnachrichten und Gruppen werden mit dem Account-System aktiviert.</p><p class="tiny">Noch keine öffentlichen Nutzerkonten.</p></div>
+<div class="sidebar-card"><h3>PLATTFORM-STATUS</h3><div class="stat-row" style="margin-top:0;border-top:0;padding-top:0"><span>Nautilak Platform</span><b>ALPHA</b></div><div class="stat-row"><span>Spielbare Titel</span><b>1</b></div><div class="stat-row"><span>Community</span><b>Vorschau</b></div><p class="tiny" style="line-height:1.6;margin-top:13px">Deine lokalen Daten sind nur in diesem Browser verfügbar.</p></div>
+</aside></div>
+<footer class="shell footer"><span>© 2026 Nautilak. Eine unabhängige Gaming-Plattform in Entwicklung.</span><span>Store · Community · Library · Eigene Spiele</span></footer>
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-label="Dialog" aria-modal="true" aria-hidden="true"><div class="modal" id="modalContent"></div></div>
+<div id="toast" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#223f50;border:1px solid #77b6cb;color:#effaff;padding:11px 20px;border-radius:7px;box-shadow:0 8px 28px #0008;z-index:99;font-size:12px;opacity:0;pointer-events:none;transition:opacity .2s" aria-live="polite"></div>
+<style>#toast.show{opacity:1}</style>
+<script src="./platform.js" defer></script>
+</body></html>
