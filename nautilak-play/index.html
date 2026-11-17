@@ -163,7 +163,8 @@ async function prepareNatureAssets(){
    const scale=targetHeight/size.y;
    item.model.scale.setScalar(scale);item.model.position.set(-min.x*scale,-min.y*scale,-min.z*scale);
    item.model.traverse(obj=>{if(obj.isMesh){obj.castShadow=false;obj.receiveShadow=false;obj.frustumCulled=true}});
-   if(item.name==='bush.glb')natureModels.bush=item.model;else natureModels.trees.push(item.model);
+   const anchor=new THREE.Group();anchor.add(item.model);
+   if(item.name==='bush.glb')natureModels.bush=anchor;else natureModels.trees.push(anchor);
  }
  natureModels.loaded=!!natureModels.trees.length;
  if(!natureModels.loaded){natureModels.failed=true;return}
