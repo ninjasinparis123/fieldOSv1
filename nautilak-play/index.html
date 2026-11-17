@@ -71,6 +71,7 @@ window.addEventListener('error',function(e){var x=document.getElementById('input
 window.addEventListener('unhandledrejection',function(e){var x=document.getElementById('inputStatus');if(x)x.textContent='LADEFEHLER: '+String(e.reason?.message||e.reason||'Unbekannt').slice(0,145)});
 </script><script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js';
+import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/GLTFLoader.js';
 const $=id=>document.getElementById(id),skey='nautilak-universe-v2';let game={mode:'official',name:'Wanderer',class:'warden',race:'human',elements:['air','earth'],coins:120,wood:10,nature:75,influence:0,points:3,skills:{},land:false,quest:0,day:1,element:"air",elementLevels:{},mana:100,flight:false};try{game={...game,...JSON.parse(localStorage.getItem(skey)||'{}')}}catch(e){}game.elementLevels=game.elementLevels||{};game.elements=Array.isArray(game.elements)?[...new Set(game.elements.filter(e=>['air','water','earth','fire'].includes(e)))].slice(0,2):[game.element||'air','earth'];for(const e of ['air','water','earth','fire'])if(game.elements.length<2&&!game.elements.includes(e))game.elements.push(e);game.element=game.elements.includes(game.element)?game.element:game.elements[0];game.race=['human','elf','orc','spirit','dragon'].includes(game.race)?game.race:'human';game.class=['warrior','mage','warden','knight','assassin','shifter'].includes(game.class)?game.class:'warden';game.mana=Number.isFinite(game.mana)?game.mana:100;game.flight=false;const clamp=(n,min,max)=>Math.max(min,Math.min(max,n)), msg=t=>$('message').textContent=t,write=()=>{try{localStorage.setItem(skey,JSON.stringify(game))}catch(e){}},refresh=()=>{for(const k of ['coins','wood','influence','points'])$(k).textContent=game[k];$('nature').textContent=game.nature+'%';$('elementName').textContent=game.elements.map(e=>({air:'Luft',water:'Wasser',earth:'Erde',fire:'Feuer'})[e]).join(' + ');$('heroTitle').textContent=game.name+' · '+({warrior:'Krieger',mage:'Zauberer',warden:'Wächter',knight:'Ritter',assassin:'Assassine',shifter:'Gestaltwandler'}[game.class]);$('modeDesc').textContent=game.mode==='official'?'Offizielle Regeln (Prototyp: lokal; spätere Serverprüfung erforderlich).':'Sandbox mit kostenlosen Bauressourcen. Kein Transfer ins offizielle Reich.';$('creatures').textContent=String(Math.round(10+game.nature/8));};$('charName').value=game.name;$('charRace').value=game.race;$('charClass').value=game.class;$('mode').value=game.mode;function save(){refresh();write()}function modal(title,content){$('modalTitle').textContent=title;$('modalBody').innerHTML=content;$('shade').classList.add('show')}$('close').onclick=()=>$('shade').classList.remove('show');$('shade').addEventListener('click',e=>{if(e.target===$('shade'))$('shade').classList.remove('show')});document.addEventListener('keydown',e=>{if(e.key==='Escape')$('shade').classList.remove('show')});
 
 const elemental={air:{name:'Luft',title:'Himmelswanderer',skills:['Windstoß','Luftschild','Schweben','Freier Flug'],creatures:['Wolkenhirsch','Sturmfalken','Nebelrochen']},water:{name:'Wasser',title:'Gezeitenrufer',skills:['Wasserschwall','Eiskristall','Strömung','Heilquelle'],creatures:['Quellotter','Flussdrache','Nebelwal']},earth:{name:'Erde',title:'Steinwächter',skills:['Steinstoß','Erdwall','Felsenrüstung','Bodenwelle'],creatures:['Moosbär','Kristallschildkröte','Wurzelwächter']},fire:{name:'Feuer',title:'Flammenhüter',skills:['Funken','Flammenbogen','Feuerschild','Hitzeschub'],creatures:['Aschenfuchs','Glutgreif','Sonnenhirsch']}};
@@ -107,6 +108,9 @@ const mat=c=>new THREE.MeshLambertMaterial({color:c});
 const materials={trunk:mat(0x624a32),pine:mat(0x315d46),pine2:mat(0x55734d),snow:mat(0x9eacaa),desert:mat(0xa99b72),glow:mat(0x54ac9d),stone:mat(0x656b67),house:mat(0xbba282),roof:mat(0x594844),road:mat(0x958773)};
 const colorMap={underworld:new THREE.Color(0x503340),forest:new THREE.Color(0x4e804e),snow:new THREE.Color(0x97a8a8),steppe:new THREE.Color(0xa8a16e),ruins:new THREE.Color(0x74796e),glow:new THREE.Color(0x438977)};
 const chunkSize=64,chunkSegments=18,loadRadius=2,unloadRadius=3,activeChunks=new Map();
+// These are Quaternius CC0 models from the public skyline-run repository, pinned at commit 0c41526.
+const natureAssetBase='https://cdn.jsdelivr.net/gh/anshaneja5/skyline-run@0c41526d8d4130c37c15e219c2c3737fa8cb4ad8/public/assets/models/';
+const natureModels={trees:[],bush:null,loaded:false,failed:false};
 const trunkGeom=new THREE.CylinderGeometry(.23,.43,3.3,5),leafGeom=new THREE.ConeGeometry(2.2,5.8,6),hutGeom=new THREE.BoxGeometry(7,4,6),roofGeom=new THREE.ConeGeometry(5.5,3,4);
 
 
@@ -144,18 +148,52 @@ for(let i=0;i<9;i++){let a=i*Math.PI*2/9;let rune=new THREE.Mesh(new THREE.Octah
 function makePortal(group,x,z,under=false){const y=terrainHeight(x,z);const gateStone=materials.stone;for(let side of [-1,1]){let pillar=new THREE.Mesh(new THREE.BoxGeometry(2.5,11,3),gateStone);pillar.position.set(x+side*5,y+5.5,z);group.add(pillar)}let top=new THREE.Mesh(new THREE.BoxGeometry(12,2.6,3.2),gateStone);top.position.set(x,y+11,z);group.add(top);let vortex=new THREE.Mesh(new THREE.PlaneGeometry(9,9),portalGlow);vortex.position.set(x,y+5.7,z);group.add(vortex);let marker=new THREE.Mesh(new THREE.OctahedronGeometry(1.4),under?starglow:portalGlow);marker.position.set(x,y+13,z);group.add(marker)}
 
 function house(x,z,group){let h=new THREE.Mesh(hutGeom,materials.house);h.position.set(x,terrainHeight(x,z)+2,z);group.add(h);let roof=new THREE.Mesh(roofGeom,materials.roof);roof.rotation.y=Math.PI/4;roof.position.set(x,terrainHeight(x,z)+5.4,z);group.add(roof)}
+
+/* Real textured GLB scenery is loaded exactly once.
+   Scene chunks clone the source nodes; geometry and materials are shared on the GPU. */
+async function prepareNatureAssets(){
+ const labels=['tree1.glb','tree2.glb','tree3.glb','bush.glb'],loader=new GLTFLoader();
+ const results=await Promise.allSettled(labels.map(name=>loader.loadAsync(natureAssetBase+name)));
+ const loaded=results.map((result,i)=>result.status==='fulfilled'?{name:labels[i],model:result.value.scene}:null).filter(Boolean);
+ if(!loaded.length){natureModels.failed=true;$('inputStatus').textContent='3D-Modelle konnten nicht geladen werden – vereinfachter Wald aktiv';return}
+ for(const item of loaded){const box=new THREE.Box3().setFromObject(item.model),size=box.getSize(new THREE.Vector3()),min=box.min.clone();if(size.y<.01)continue;
+   // Normalize source dimensions; the bottom of the model is exactly at terrain height.
+   const targetHeight=item.name==='bush.glb'?1.9:10;
+   const scale=targetHeight/size.y;
+   item.model.scale.setScalar(scale);item.model.position.set(-min.x*scale,-min.y*scale,-min.z*scale);
+   item.model.traverse(obj=>{if(obj.isMesh){obj.castShadow=false;obj.receiveShadow=false;obj.frustumCulled=true}});
+   if(item.name==='bush.glb')natureModels.bush=item.model;else natureModels.trees.push(item.model);
+ }
+ natureModels.loaded=!!natureModels.trees.length;
+ if(!natureModels.loaded){natureModels.failed=true;return}
+ // Recreate already generated chunks after the assets arrive.
+ for(const id of [...activeChunks.keys()])unloadChunk(id);
+ scheduleChunks(true);
+ for(let i=0;i<Math.min(4,pending.length);i++){const item=pending.shift();addChunk(item.x,item.z)}
+ $('inputStatus').textContent='Echte GLB-Naturmodelle: '+natureModels.trees.length+' Baumarten geladen ✓';
+}
+function addRealNature(group,forest,shrubs){
+ if(!natureModels.loaded)return false;
+ // Capped per-chunk count bounds low-end laptop draw calls and GPU time.
+ for(let i=0;i<Math.min(15,forest.length);i++){let [x,z,k]=forest[i],proto=natureModels.trees[i%natureModels.trees.length],obj=proto.clone(true);obj.position.set(x,terrainHeight(x,z),z);obj.rotation.y=hash(x|0,z|0,7)*6.283;obj.scale.multiplyScalar(.72+k*.3);group.add(obj)}
+ if(natureModels.bush)for(let i=0;i<Math.min(9,shrubs.length);i++){let [x,z,k]=shrubs[i],obj=natureModels.bush.clone(true);obj.position.set(x,terrainHeight(x,z),z);obj.scale.multiplyScalar(k);group.add(obj)}
+ return true;
+}
+
 function addChunk(cx,cz){let id=cx+':'+cz;if(activeChunks.has(id))return;let group=new THREE.Group(),geo=new THREE.PlaneGeometry(chunkSize,chunkSize,chunkSegments,chunkSegments);geo.rotateX(-Math.PI/2);geo.translate(cx*chunkSize,0,cz*chunkSize);let a=geo.attributes.position,colors=[];for(let i=0;i<a.count;i++){let x=a.getX(i),z=a.getZ(i);a.setY(i,terrainHeight(x,z));let c=regionColor(x,z);colors.push(c.r,c.g,c.b)}geo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geo.computeVertexNormals();const terrain=new THREE.Mesh(geo,soilMat);group.add(terrain);
 
 const forest=[],stones=[],shrubs=[];for(let ix=0;ix<8;ix++)for(let iz=0;iz<8;iz++){let x=cx*chunkSize-31+ix*8+hash(ix+cx*8,iz+cz*8)*3,z=cz*chunkSize-31+iz*8+hash(iz+cz*8,ix+cx*8)*3,n=hash(x|0,z|0),bi=regionKind(x,z);if(Math.hypot(x,z)<34||Math.abs(z)<5.5||Math.hypot(x-43,z-2)<20)continue;if(n>.37&&bi!=='ruins'&&bi!=='underworld')forest.push([x,z,.75+hash(x|0,z|0,7)*.65]);else if(n>.19)stones.push([x,z,.7+hash(x|0,z|0,8)]);else shrubs.push([x,z,.6+hash(x|0,z|0,9)])}
-instanced(group,geoStem,artBark,forest,(m,p)=>{let [x,z,k]=p;m.makeTranslation(x,terrainHeight(x,z)+2.15*k,z);m.scale(new THREE.Vector3(k,k,k))});
-for(let l=0;l<3;l++)instanced(group,geoCrown,artLeaves[l],forest,(m,p,i)=>{let [x,z,k]=p,height=[4.7,6.1,7.3][l]*k,size=[1.2,1,.74][l]*k;m.makeTranslation(x+Math.sin(i*1.7+l)*.4,terrainHeight(x,z)+height,z+Math.cos(i*1.9+l)*.4);m.scale(new THREE.Vector3(size,size*.73,size))});
+if(!addRealNature(group,forest,shrubs)){
+ instanced(group,geoStem,artBark,forest,(m,p)=>{let [x,z,k]=p;m.makeTranslation(x,terrainHeight(x,z)+2.15*k,z);m.scale(new THREE.Vector3(k,k,k))});
+ for(let l=0;l<3;l++)instanced(group,geoCrown,artLeaves[l],forest,(m,p,i)=>{let [x,z,k]=p,height=[4.7,6.1,7.3][l]*k,size=[1.2,1,.74][l]*k;m.makeTranslation(x+Math.sin(i*1.7+l)*.4,terrainHeight(x,z)+height,z+Math.cos(i*1.9+l)*.4);m.scale(new THREE.Vector3(size,size*.73,size))});
+}
 instanced(group,geoRock,artRock,stones,(m,p)=>{let [x,z,k]=p;m.makeTranslation(x,terrainHeight(x,z)+.4*k,z);m.scale(new THREE.Vector3(k,k*.5,k))});
-instanced(group,geoShrub,artShrub,shrubs,(m,p)=>{let [x,z,k]=p;m.makeTranslation(x,terrainHeight(x,z)+.25*k,z);m.scale(new THREE.Vector3(k*1.5,k*.75,k))});
+if(!natureModels.loaded||!natureModels.bush)instanced(group,geoShrub,artShrub,shrubs,(m,p)=>{let [x,z,k]=p;m.makeTranslation(x,terrainHeight(x,z)+.25*k,z);m.scale(new THREE.Vector3(k*1.5,k*.75,k))});
 if(cx===0&&cz===0){buildWorldTree(group);makePortal(group,0,-31);house(35,28,group);house(-37,23,group);sanctuary(group,48,6)}if(cx===0&&cz===10){makePortal(group,0,640,true)}
 if(cx===-2&&cz===-2){let ruin=new THREE.Mesh(new THREE.CylinderGeometry(5,6,18,8),materials.stone);ruin.position.set(-128,terrainHeight(-128,-128)+9,-128);group.add(ruin)}
 if(cz===0){let road=new THREE.Mesh(new THREE.PlaneGeometry(chunkSize,5),materials.road);road.rotation.x=-Math.PI/2;road.position.set(cx*chunkSize,terrainHeight(cx*chunkSize,0)+.15,0);group.add(road)}
 scene.add(group);activeChunks.set(id,{group,geo,terrainMaterial:terrain.material})}
-function unloadChunk(id){let rec=activeChunks.get(id);if(!rec)return;scene.remove(rec.group);rec.geo.dispose();rec.group.traverse(o=>{if(o.isInstancedMesh&&o.geometry!==geo){/* shared geometry stays allocated */}});activeChunks.delete(id)}
+function unloadChunk(id){let rec=activeChunks.get(id);if(!rec)return;scene.remove(rec.group);rec.geo.dispose();activeChunks.delete(id)}
 let pending=[],originCx=NaN,originCz=NaN;
 function scheduleChunks(force=false){let cx=Math.floor((pos.x+32)/chunkSize),cz=Math.floor((pos.z+32)/chunkSize);if(!force&&cx===originCx&&cz===originCz)return;originCx=cx;originCz=cz;for(const id of activeChunks.keys()){let [x,z]=id.split(':').map(Number);if(Math.max(Math.abs(x-cx),Math.abs(z-cz))>unloadRadius)unloadChunk(id)}
 pending=[];for(let x=-loadRadius;x<=loadRadius;x++)for(let z=-loadRadius;z<=loadRadius;z++){let ax=x+cx,az=z+cz;if(!activeChunks.has(ax+':'+az))pending.push({x:ax,z:az,d:x*x+z*z})}pending.sort((a,b)=>a.d-b.d)}
@@ -196,6 +234,7 @@ renderer.domElement.addEventListener('wheel',e=>{dist=Math.max(0,Math.min(20,dis
 function resize(){let w=wrap.clientWidth,h=wrap.clientHeight;cam.aspect=w/h;cam.updateProjectionMatrix();renderer.setSize(w,h,false)}
 new ResizeObserver(resize).observe(wrap);resize();
 scheduleChunks(true);for(let i=0;i<Math.min(4,pending.length);i++){let item=pending.shift();addChunk(item.x,item.z)}
+prepareNatureAssets().catch(err=>{$('inputStatus').textContent='Naturmodelle: '+String(err?.message||err).slice(0,95)});
 $('veil').remove();let previous=performance.now(),lastZone='',clock=0,frames=0,fpsTime=performance.now(),fps=0;
 function nearClimbable(){const root=Math.hypot(pos.x,pos.z);const nearTree=root>=5.5&&root<=14&&pos.z<100;const dx=Math.abs(pos.x-48),dz=Math.abs(pos.z-6),nearCathedral=((dx>5.9&&dx<10&&dz<13)||(dz>8&&dz<13&&dx<9));return nearTree||nearCathedral}
 function climbTick(dt){if(keys.Space&&keys.KeyW&&nearClimbable()){climbing=true;climbHeight=Math.min(24,climbHeight+dt*5);grounded=true;jumpVelocity=0;jumpHeight=0;inputStatus.textContent='KLETTERN · '+Math.round(climbHeight)+' m'}else if(climbing&&keys.Space&&keys.KeyS){climbHeight=Math.max(0,climbHeight-dt*5);if(climbHeight===0)climbing=false}else if(climbing&&!nearClimbable()){climbing=false}if(!climbing&&climbHeight>0)climbHeight=Math.max(0,climbHeight-dt*9)}
