@@ -22,7 +22,7 @@ header{position:fixed;top:17px;left:20px;z-index:3;pointer-events:none;text-shad
 </style>
 </head><body>
 <div id="view"></div>
-<header><div class="brand">NAUTILAK UNIVERSE</div><div class="sub">DIE ARENA DER ACHT PFADE · BUILD 0.6</div></header>
+<header><div class="brand">NAUTILAK UNIVERSE</div><div class="sub">ARENA DER ACHT PFADE · BUILD 0.7 RPG</div></header>
 <aside id="roster"><h2>CHARAKTER WÄHLEN</h2>
 <button class="choice active" data-character="knight">I · Ritter<small>Erde + Feuer</small></button>
 <button class="choice" data-character="warrior">II · Krieger<small>Feuer + Luft</small></button>
@@ -43,6 +43,7 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {clone as cloneSkeleton} from 'three/addons/utils/SkeletonUtils.js';
 import {enhanceArena,makeCreature} from './arena-features.js';
+import {installRpg} from './rpg-systems.js';
 const $=id=>document.getElementById(id),view=$('view'),status=$('status');
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x9bb7c4);scene.fog=new THREE.FogExp2(0xabb6a8,.0065);
 const camera=new THREE.PerspectiveCamera(68,innerWidth/innerHeight,.1,350);
@@ -72,14 +73,15 @@ const pedestalPoints=[[-17,-16],[17,-16],[-17,16],[17,16]];
 const contactShadow=new THREE.Mesh(new THREE.CircleGeometry(1.5,24),new THREE.MeshBasicMaterial({color:0x1b2526,transparent:true,opacity:.28,depthWrite:false}));
 contactShadow.rotation.x=-Math.PI/2;contactShadow.position.y=.04;scene.add(contactShadow);
 const characters=[
- {id:'knight',name:'Ritter',elements:'Erde + Feuer',model:'knight.glb',color:0xd2b27b,asset:'jev'},
- {id:'warrior',name:'Krieger',elements:'Feuer + Luft',model:'barbarian.glb',color:0xae5552,asset:'jev'},
- {id:'mage',name:'Zauberer',elements:'Wasser + Luft',model:'player_priest.glb',color:0x6095c8,asset:'tactical'},
+ {id:'knight',name:'Ritter',elements:'Erde + Feuer',model:'Male/King.glb',color:0xd2b27b,asset:'quaternius'},
+ {id:'warrior',name:'Krieger',elements:'Feuer + Luft',model:'Male/Adventurer.glb',color:0xae5552,asset:'quaternius'},
+ {id:'mage',name:'Zauberer',elements:'Wasser + Luft',model:'Female/Witch.glb',color:0x6095c8,asset:'quaternius'},
  {id:'spirit',name:'Naturgeist',elements:'Erde + Wasser',model:'orc.glb',color:0x75a97c,asset:'jev'}
 ];
 const displays=new Map(),loaded=new Map(),mixers=[];let resultsLoaded=0;
 // CC0 character meshes from KayKit and Quaternius community game projects.
 const assetRoots={
+ quaternius:'https://cdn.jsdelivr.net/gh/LuanDucate/Ducz.CharacterCreator@fcd215b58eec5c9ed97d0ba5f696d0e7dc085e08/public/models/',
  jev:'https://cdn.jsdelivr.net/gh/kikoncuo/jevfire@5df83b558bf635e006d31f8f2fc2798d0e3ff051/web/public/assets/',
  tactical:'https://cdn.jsdelivr.net/gh/sion-rgb/tactical-slash@8bf8d835cb7afa7cb3f4d893b0966c6b4e9b7727/assets/characters/player/'
 };
@@ -124,7 +126,7 @@ if(size.y<.0001)throw Error('Ungültiges Charaktermodell');const scale=height/si
 async function loadModel(char){
  if(char.asset==='procedural')return {source:makeCreature(char.id),animations:[],ok:true};
  const loader=new GLTFLoader(),primary=assetRoots[char.asset]+char.model;
- const raw=char.asset==='jev'?'https://raw.githubusercontent.com/kikoncuo/jevfire/5df83b558bf635e006d31f8f2fc2798d0e3ff051/web/public/assets/': 'https://raw.githubusercontent.com/sion-rgb/tactical-slash/8bf8d835cb7afa7cb3f4d893b0966c6b4e9b7727/assets/characters/player/';
+ const raw=char.asset==='jev'?'https://raw.githubusercontent.com/kikoncuo/jevfire/5df83b558bf635e006d31f8f2fc2798d0e3ff051/web/public/assets/':char.asset==='quaternius'?'https://raw.githubusercontent.com/LuanDucate/Ducz.CharacterCreator/fcd215b58eec5c9ed97d0ba5f696d0e7dc085e08/public/models/':'https://raw.githubusercontent.com/sion-rgb/tactical-slash/8bf8d835cb7afa7cb3f4d893b0966c6b4e9b7727/assets/characters/player/';
  let firstError=null;
  for(const url of [primary,raw+char.model]){
   try{const gltf=await loader.loadAsync(url);if(!gltf.scene||!gltf.scene.children.length)throw Error('Leeres Modell');return {source:gltf.scene,animations:gltf.animations,ok:true}}
@@ -148,7 +150,8 @@ renderer.domElement.tabIndex=0;renderer.domElement.addEventListener('click',()=>
 document.addEventListener('mousemove',e=>{if(document.pointerLockElement===renderer.domElement){yaw-=e.movementX*.0024;pitch=Math.max(-.25,Math.min(.9,pitch+e.movementY*.0024))}});
 renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(5,Math.min(19,zoom+e.deltaY*.012))},{passive:false});
 window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
-const arenaFeatures=enhanceArena({scene,renderer,characters,pedestalPoints,
+const rpg=installRpg({scene,getPosition:()=>position,notify:text=>{status.textContent=text}});
+const arenaFeatures=enhanceArena({scene,renderer,characters,pedestalPoints,rpg,
 getPosition:()=>position,getYaw:()=>yaw,getPlayer:()=>player,getSelected:()=>selected,
 getLoaded:()=>loaded,getKeys:()=>keys,setPlayer,status});
 let last=performance.now(),frames=0,fpsStart=last,fps=0;const clock=new THREE.Clock();
@@ -157,7 +160,7 @@ const forward=Number(!!keys.KeyW)-Number(!!keys.KeyS),side=Number(!!keys.KeyD)-N
 if(len){let step=(keys.ShiftLeft||keys.ShiftRight?12:6.5)*dt/len,dx=Math.sin(yaw)*forward+Math.cos(yaw)*side,dz=Math.cos(yaw)*forward-Math.sin(yaw)*side;
 position.x+=dx*step;position.z+=dz*step;let d=Math.hypot(position.x,position.z);if(d>42){position.x*=42/d;position.z*=42/d}player.rotation.y=Math.atan2(dx,dz)}
 if(velocityY||jump){velocityY-=24*dt;jump+=velocityY*dt;if(jump<0){jump=0;velocityY=0}}
-arenaFeatures.update(dt);player.position.set(position.x,jump,position.z);contactShadow.position.x=position.x;contactShadow.position.z=position.z;contactShadow.material.opacity=.28*Math.max(.12,1-jump/9);
+arenaFeatures.update(dt);rpg.update(dt);player.position.set(position.x,jump,position.z);contactShadow.position.x=position.x;contactShadow.position.z=position.z;contactShadow.material.opacity=.28*Math.max(.12,1-jump/9);
 if(playerMixer)playerMixer.update(dt*(len?1:0.4));for(let m of mixers)m.update(dt);
 const target=new THREE.Vector3(position.x,2.5+jump,position.z),offset=new THREE.Vector3(-Math.sin(yaw)*zoom*Math.cos(pitch),zoom*.55+Math.sin(pitch)*zoom,-Math.cos(yaw)*zoom*Math.cos(pitch));camera.position.lerp(target.clone().add(offset),.18);camera.lookAt(target);sky.position.copy(camera.position);
 renderer.render(scene,camera)}
