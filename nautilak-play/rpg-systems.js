@@ -5,6 +5,7 @@ const items={wood:'🪵 Baumstamm',ore:'🪨 Kupfererz',fish:'🐟 Fisch',bar:'�
 export function xpForLevel(n){let total=0;for(let i=1;i<n;i++)total+=Math.floor(i+300*Math.pow(2,i/7));return Math.floor(total/4)}
 export function levelForXp(xp){let low=1,high=99;while(low<high){let mid=Math.ceil((low+high)/2);if(xpForLevel(mid)<=xp)low=mid;else high=mid-1}return low}
 export function installRpg({scene,getPosition,notify=()=>{},mode='arena'}){
+ const ECON=window.NautilakEconomy;ECON.mountWallet();
  const key='nautilak-skills-v1',fresh={xp:{},items:{},gold:0,quest:0,progress:{wood:0,ore:0,fish:0,wins:0}};
  for(const k in skills)fresh.xp[k]=0;let state=fresh;
  try{let saved=JSON.parse(localStorage.getItem(key)||'null');if(saved&&typeof saved==='object')state={...fresh,...saved,xp:{...fresh.xp,...saved.xp},items:{...saved.items},progress:{...fresh.progress,...saved.progress}}}catch(e){}
@@ -18,7 +19,7 @@ export function installRpg({scene,getPosition,notify=()=>{},mode='arena'}){
  function slots(){return Object.values(state.items).reduce((sum,n)=>sum+Math.ceil(n/25),0)}
  function addItem(item,n=1){let old=state.items[item]||0,delta=Math.ceil((old+n)/25)-Math.ceil(old/25);if(slots()+delta>28){popup('Inventar voll (28 Plätze)');return false}state.items[item]=old+n;write();return true}
  function consume(item,n){if((state.items[item]||0)<n)return false;state.items[item]-=n;if(!state.items[item])delete state.items[item];write();return true}
- function gain(skill,amount){let old=levelForXp(state.xp[skill]||0);state.xp[skill]=(state.xp[skill]||0)+amount;let lv=levelForXp(state.xp[skill]);if(lv>old)popup('LEVEL UP · '+skills[skill]+' '+lv);write();return lv}
+ function gain(skill,amount){let old=levelForXp(state.xp[skill]||0);state.xp[skill]=(state.xp[skill]||0)+Math.max(1,Math.round(amount*(ECON.unlocked('blessing')?1.25:1)));let lv=levelForXp(state.xp[skill]);if(lv>old)popup('LEVEL UP · '+skills[skill]+' '+lv);write();return lv}
  function checkQuest(){const p=state.progress;if(state.quest===0&&p.wood>=3&&p.ore>=2&&p.fish>=1){state.quest=1;state.gold+=60;popup('Quest geschafft · +60 Gold!')}if(state.quest===1&&p.wins>=3){state.quest=2;state.gold+=100;addItem('charm');popup('Wächter besiegt · +100 Gold + Amulett')}if(state.quest===2&&(state.items.bar||0)>=2){state.quest=3;state.gold+=200;popup('Questreihe geschafft · +200 Gold!')}write()}
  function craft(kind){if(kind==='bar'){if(!consume('ore',2))return popup('2 Erz benötigt');addItem('bar');gain('smithing',55)}if(kind==='charm'){if((state.items.bar||0)<1||(state.items.wood||0)<1)return popup('Barren + Holz benötigt');consume('bar',1);consume('wood',1);addItem('charm');gain('crafting',60)}checkQuest();render()}
  function render(){const c=document.getElementById('skillsContents');if(tab==='skills')c.innerHTML=Object.entries(skills).map(([id,label])=>'<div class="stat"><span>'+label+'</span><strong>Lv '+levelForXp(state.xp[id]||0)+' · '+Math.floor(state.xp[id]||0)+' XP</strong></div>').join('');
@@ -38,10 +39,10 @@ export function installRpg({scene,getPosition,notify=()=>{},mode='arena'}){
  if(r.kind==='fish'){let water=new THREE.Mesh(new THREE.CylinderGeometry(3.5,3.5,.12,28),mats.fish);water.position.y=.06;root.add(water)}
  scene.add(root)}
  function near(){const p=getPosition();let result=null,dist=1e9;for(const r of resources){let d=Math.hypot(p.x-r.x,p.z-r.z);if(d<dist){dist=d;result=r}}return dist<=6?result:null}
- function gather(){const r=near();if(!r)return popup('Kein Rohstoff in Reichweite');if(r.ready>t)return popup('Rohstoff regeneriert sich …');if(!addItem(r.kind))return;r.ready=t+4.5;state.progress[r.kind]++;gain(r.skill,r.kind==='wood'?30:r.kind==='ore'?38:32);popup('+'+skills[r.skill]+' XP · '+(items[r.kind]||r.kind));checkQuest();render()}
+ function gather(){const r=near();if(!r)return popup('Kein Rohstoff in Reichweite');if(r.ready>t)return popup('Rohstoff regeneriert sich …');if(!addItem(r.kind))return;r.ready=t+4.5;state.progress[r.kind]++;if((state.progress.wood+state.progress.ore+state.progress.fish)%3===0)ECON.award('relic',2,'Drei Rohstoffe gesammelt');gain(r.skill,r.kind==='wood'?30:r.kind==='ore'?38:32);popup('+'+skills[r.skill]+' XP · '+(items[r.kind]||r.kind));checkQuest();render()}
  const hotkeys={KeyV:'skills',KeyB:'bag',KeyN:'quest'};window.addEventListener('keydown',e=>{if(e.repeat||e.target?.closest?.('button,input,textarea,select'))return;if(hotkeys[e.code]){e.preventDefault();toggle(hotkeys[e.code])}if(e.code==='KeyG'){e.preventDefault();gather()}},true);
  function update(dt){t+=dt;if(t>messageUntil)toast.style.opacity=0}
  function combatHit(type,dmg){gain(type,dmg*2)}
- function defeated(){state.progress.wins++;state.gold+=12;if(Math.random()<.25)addItem('scale',1);gain('strength',42);gain('defence',28);checkQuest();render();popup('Wächter besiegt · +12 Gold + Kampf-XP')}
+ function defeated(){state.progress.wins++;ECON.award('relic',2,'Trainingswächter besiegt');state.gold+=12;if(Math.random()<.25)addItem('scale',1);gain('strength',42);gain('defence',28);checkQuest();render();popup('Wächter besiegt · +12 Gold + Kampf-XP')}
  return {update,combatHit,defeated,addItem,near,gather,state}
 }
