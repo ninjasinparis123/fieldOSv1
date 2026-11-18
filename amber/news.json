@@ -1,0 +1,82 @@
+{
+  "edition": "2026-11-18",
+  "updatedAt": "2026-11-18T14:00:00Z",
+  "method": "Fünf quellenbasierte redaktionelle Kurzüberblicke; die Inhalte sind keine repräsentativen Umfragen oder Anlageberatung.",
+  "items": [
+    {
+      "id": "amber-20261118-geopolitik",
+      "editorialDate": "2026-11-18",
+      "publishedAt": "2026-11-18T06:17:00+01:00",
+      "category": "geopolitics",
+      "categoryLabel": "Geopolitik",
+      "source": "tagesschau",
+      "sourceUrl": "https://www.tagesschau.de/ausland/asien/apec-trump-putin-xi-100.html",
+      "title": "Diplomatie zwischen Washington, Peking und Moskau: Was steht auf dem Spiel?",
+      "dek": "Die tagesschau berichtet über ein Treffen der Staatschefs beim APEC-Gipfel, bei dem unter anderem Sicherheitsfragen und künstliche Intelligenz eine Rolle spielen.",
+      "summary": "Die drei Großmächte verfolgen teils gegensätzliche Interessen. Der berichtete Austausch lenkt den Blick auf internationale Sicherheit, wirtschaftliche Abhängigkeiten und die Regeln für neue Technologien. Welche konkreten Vereinbarungen entstehen, lässt sich aus der Ankündigung allein noch nicht ableiten.",
+      "question": "Welche Themen sollten bei Gesprächen zwischen Großmächten Vorrang haben?",
+      "kind": "Redaktioneller Kurzüberblick",
+      "verified": true
+    },
+    {
+      "id": "amber-20261118-humanitaer",
+      "editorialDate": "2026-11-18",
+      "publishedAt": "2026-11-18T09:00:00+01:00",
+      "category": "humanitarian",
+      "categoryLabel": "Humanitäres",
+      "source": "Vereinte Nationen",
+      "sourceUrl": "https://palestine.un.org/en/326353-winter-rains-deepen-gaza-crisis-amid-restricted-access-and-aid-cuts",
+      "title": "Winterregen verschärft die Lage vieler Vertriebener in Gaza",
+      "dek": "UN-Organisationen warnen vor zusätzlichen Belastungen durch beschädigte Notunterkünfte, eingeschränkte Hilfslieferungen und Finanzierungslücken.",
+      "summary": "Nach Angaben der Vereinten Nationen haben Regenfälle die ohnehin schwierige Versorgung in provisorischen Unterkünften weiter beeinträchtigt. In den Berichten geht es unter anderem um Unterkunft, Ernährung, Zugang zu Hilfsgütern und Schutz vor Kälte. Die Zahlen und Einschätzungen stammen aus der genannten UN-Mitteilung.",
+      "question": "Welche Form humanitärer Unterstützung ist bei akuten Wetterkrisen am dringendsten?",
+      "kind": "Quellenbasierter Kurzüberblick",
+      "verified": true
+    },
+    {
+      "id": "amber-20261118-krypto",
+      "editorialDate": "2026-11-18",
+      "publishedAt": "2026-11-18T12:42:00+01:00",
+      "category": "crypto",
+      "categoryLabel": "Krypto",
+      "source": "CoinDesk",
+      "sourceUrl": "https://www.coindesk.com/markets/2026/11/18/bitcoin-drops-as-nvidia-earnings-report-drives-stock-index-futures-higher",
+      "title": "Bitcoin unter Druck: Warum die Rendite im Basisgeschäft eine Rolle spielt",
+      "dek": "CoinDesk berichtet über eine Abkühlung bestimmter Bitcoin-Futures-Strategien und einen zurückhaltenden Kryptomarkt.",
+      "summary": "Der Bericht beschreibt geringere Erträge sogenannter Basisgeschäfte, bei denen Marktteilnehmer gleichzeitig Positionen am Spot- und Terminmarkt eingehen. Wenn die Rendite solcher Strategien sinkt, können sich Anreize und Kapitalströme verändern. Das ist keine Aussage darüber, wohin sich der Bitcoin-Preis als Nächstes bewegt.",
+      "question": "Sollte eine gesellschaftliche Plattform komplexe Krypto-Themen stärker erklären, statt nur Kurse zu zeigen?",
+      "kind": "Marktüberblick · keine Anlageberatung",
+      "verified": true
+    },
+    {
+      "id": "amber-20261118-wirtschaft",
+      "editorialDate": "2026-11-18",
+      "publishedAt": "2026-11-18T12:00:00+01:00",
+      "category": "finance",
+      "categoryLabel": "Wirtschaft & Finanzen",
+      "source": "Reuters",
+      "sourceUrl": "https://www.reuters.com/world/china/global-markets-wrapup-1-2026-11-18/",
+      "title": "Zwischen KI-Hoffnung und Marktrisiken: Investoren bewerten die Lage neu",
+      "dek": "Reuters berichtet über zurückhaltende Aktienmärkte im Zusammenhang mit Nvidia, technologischen Gewinnerwartungen und einem möglichen Börsengang von Anthropic.",
+      "summary": "Der Bericht beschreibt, wie stark Erwartungen an künstliche Intelligenz die Wahrnehmung der Aktienmärkte prägen. Hohe Zukunftserwartungen können Chancen eröffnen, aber auch die Anfälligkeit gegenüber Enttäuschungen erhöhen. Wirtschaftliche Prognosen sind dabei von überprüfbaren Unternehmenszahlen zu unterscheiden.",
+      "question": "Wie viel wirtschaftliche Hoffnung sollte eine Gesellschaft auf wenige große Technologieunternehmen setzen?",
+      "kind": "Wirtschaftsüberblick · keine Anlageberatung",
+      "verified": true
+    },
+    {
+      "id": "amber-20261118-technologie",
+      "editorialDate": "2026-11-18",
+      "publishedAt": "2026-11-18T08:08:00+01:00",
+      "category": "technology",
+      "categoryLabel": "Technologie",
+      "source": "Reuters Breakingviews",
+      "sourceUrl": "https://www.reuters.com/commentary/breakingviews/chip-curbs-threaten-us-china-trade-truce-2026-11-18/",
+      "title": "Chip-Exportregeln zeigen, wie eng Technologie und Geopolitik verbunden sind",
+      "dek": "Ein Reuters-Breakingviews-Kommentar untersucht Spannungen zwischen Handelspolitik, Halbleiterexporten und internationaler Konkurrenz.",
+      "summary": "Fortgeschrittene Halbleiter sind für moderne KI-Systeme wichtig. Exportbeschränkungen können deshalb nicht nur Unternehmen, sondern auch internationale Handelsbeziehungen beeinflussen. Der verlinkte Text ist als Analyse beziehungsweise Kommentar zu lesen, nicht als neutrale amtliche Meldung.",
+      "question": "Sollten besonders leistungsfähige KI-Chips international stärker reguliert werden?",
+      "kind": "Analysequelle klar gekennzeichnet",
+      "verified": true
+    }
+  ]
+}
