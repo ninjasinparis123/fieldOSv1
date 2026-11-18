@@ -56,3 +56,8 @@ $('searchInput').addEventListener('input',e=>{state.query=e.target.value;gamesRe
 $('postInput').addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')post()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 render();
+if(window.NautilakEconomy){
+ const economy=window.NautilakEconomy;
+ function renderEconomy(){const state=economy.snapshot(),total=Object.values(state.wallet).reduce((a,b)=>a+b,0),crafted=Object.values(state.upgrades).filter(Boolean).length;const label=$('economyWalletValue');if(label)label.textContent=total+' Ressourcen gesammelt · '+crafted+'/6 Upgrades'}
+ economy.subscribe(renderEconomy);renderEconomy()
+}
