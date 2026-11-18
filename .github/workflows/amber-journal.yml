@@ -1,0 +1,40 @@
+name: Amber Journal Daily Edition
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Once daily, 07:17 UTC (08:17 CET / 09:17 CEST)
+    - cron: "17 7 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: amber-journal-daily
+  cancel-in-progress: false
+
+jobs:
+  update-journal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Amber frontend branch
+        uses: actions/checkout@v4
+        with:
+          ref: amber-social-preview
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Fetch source-linked journalism (no paid APIs)
+        run: python3 amber/scripts/update_journal.py
+
+      - name: Commit the daily journal issue
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add amber/news.json
+          if git diff --cached --quiet; then
+            echo "No new verified sources. Nothing to publish."
+          else
+            git commit -m "Amber Journal: source-backed daily RSS edition"
+            git push origin HEAD:amber-social-preview
+          fi
