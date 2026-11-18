@@ -15,6 +15,7 @@ import re
 import sys
 import urllib.parse
 import urllib.request
+import urllib.error
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
@@ -54,6 +55,7 @@ QUESTIONS = {
 GENERIC = "Welche Perspektiven fehlen in der öffentlichen Diskussion?"
 SAFE_DOMAINS = ("tagesschau.de","dw.com","heise.de","coindesk.com","news.un.org","nasa.gov","commission.europa.eu","gamestar.de","eurogamer.net")
 ATOM = "{http://www.w3.org/2005/Atom}"
+RSS1 = "{http://purl.org/rss/1.0/}"
 
 def clean(value: str, limit=220):
     value = re.sub(r"<[^>]+>"," ",value or "")
@@ -94,11 +96,12 @@ def read_feed(name, url, category, label):
         content=resp.read(2_000_000)
     root=ET.fromstring(content)
     items=root.findall(".//item")
+    items+=root.findall(".//"+RSS1+"item")
     items+=root.findall(".//"+ATOM+"entry")
     result=[]
     for entry in items[:55]:
-        title=clean(child_text(entry,["title",ATOM+"title"]),145)
-        link=child_text(entry,["link",ATOM+"link"])
+        title=clean(child_text(entry,["title",RSS1+"title",ATOM+"title"]),145)
+        link=child_text(entry,["link",RSS1+"link",ATOM+"link"])
         if not link:
             for el in entry.findall(ATOM+"link"):
                 if el.attrib.get("rel","alternate")=="alternate" and el.attrib.get("href"):
