@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Amber Phönix">
+<defs><linearGradient id="amberglow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F4CB83"/><stop offset=".48" stop-color="#D79B59"/><stop offset="1" stop-color="#AF6532"/></linearGradient></defs>
+<g fill="url(#amberglow)">
+<path d="M40 59C24 50 16 35 24 6c-1 22 16 25 26 35C45 28 48 20 63 22c-9 6-6 10 6 11-7 8-17 12-19 23 6-4 12-5 18-2 10 3 17-3 28-13-4 22-24 29-43 24-5 12 4 20 6 33-17-9-22-24-17-35C31 71 23 81 22 91 12 75 22 63 40 59Z"/>
+<path d="M35 51C19 58 7 48 2 33c12 10 22 8 28 3 3 6 4 12 5 15Z"/>
+<path d="M55 55c12-8 24-2 39-21-2 21-18 32-39 29Z"/>
+</g><path d="M62 30c3 0 5 2 5 4-3 0-5-1-5-4Z" fill="#37483C"/>
+</svg>
