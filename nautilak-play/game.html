@@ -37,7 +37,7 @@ header{position:fixed;top:17px;left:20px;z-index:3;pointer-events:none;text-shad
 window.addEventListener('error',e=>{const x=document.getElementById('status');if(x)x.textContent='FEHLER: '+e.message});
 window.addEventListener('unhandledrejection',e=>{const x=document.getElementById('status');if(x)x.textContent='LADEFEHLER: '+String(e.reason?.message||e.reason)});
 </script>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
+<script src="./economy.js"></script><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
 <script type="module">
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
