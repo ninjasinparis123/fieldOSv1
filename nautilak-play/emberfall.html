@@ -13,12 +13,12 @@
 <section class="panel towerDetails" id="details"><h2>TURM VERBESSERN</h2><p id="detailText"></p><div class="controls"><button id="upgrade" class="btn primary">↑ Upgrade</button><button id="sell" class="btn warning">Verkaufen</button></div></section>
 <section class="panel"><h2>DEIN ZIEL</h2><p>Halte das Tor bis Welle 12. Zerstörte Gegner bringen Gold; Upgrades erhöhen Schaden und Reichweite. Bossgegner erscheinen in Welle 5 und 10.</p><p>Jede Runde ist neu spielbar. Bester Wellenrekord wird lokal gespeichert.</p></section></aside></div>
 <div class="foot">Originales Nautilak-Spiel · Canvas 2D Engine · Desktop & Touch · Solo, kein Online-Multiplayer</div>
-<script>
+<script src="./economy.js"></script><script>
 'use strict';
-const $=id=>document.getElementById(id),cv=$('battlefield'),ctx=cv.getContext('2d');
-const W=1100,H=700,road=[[-30,200],[180,200],[180,450],[415,450],[415,155],[660,155],[660,530],[870,530],[870,327],[1140,327]];
+const $=id=>document.getElementById(id),ECON=window.NautilakEconomy,cv=$('battlefield'),ctx=cv.getContext('2d');
+ECON.mountWallet();const W=1100,H=700,road=[[-30,200],[180,200],[180,450],[415,450],[415,155],[660,155],[660,530],[870,530],[870,327],[1140,327]];
 const towers=[],enemies=[],shots=[],particles=[],decor=[],costs={bolt:80,frost:125,blast:170},colors={bolt:'#a3e6d7',frost:'#80d9ff',blast:'#f7ac7e'};
-let wave=0,lives=20,gold=240,best=Number(localStorage.getItem('emberfall-best')||0),mode='ready',chosen='bolt',picked=null,time=0,spawnCount=0,spawnTimer=0,elapsed=0,fast=1,last=performance.now(),toastTime=0,mouse={x:-100,y:-100};
+let wave=0,rewardedWave=0,lives=20,gold=240,best=Number(localStorage.getItem('emberfall-best')||0),mode='ready',chosen='bolt',picked=null,time=0,spawnCount=0,spawnTimer=0,elapsed=0,fast=1,last=performance.now(),toastTime=0,mouse={x:-100,y:-100};
 $('best').textContent=best;let maxWave=12;
 const cfg={bolt:{damage:18,range:132,rate:.52,color:'#a3e6d7',speed:440},frost:{damage:11,range:120,rate:.84,color:'#80d9ff',speed:300},blast:{damage:37,range:115,rate:1.6,color:'#ffba85',speed:245}};
 for(let i=0;i<80;i++){let x=(i*73.17+37)%W,y=(i*97.93+67)%H;decor.push({x,y,r:3+(i%6)*1.8,type:i%4})}
@@ -28,7 +28,7 @@ const segments=[];let totalLength=0;for(let i=0;i<road.length-1;i++){let a=road[
 function getPath(distance){let d=Math.max(0,distance);for(const s of segments){if(d<=s.start+s.len){let t=(d-s.start)/s.len;return {x:s.a[0]+(s.b[0]-s.a[0])*t,y:s.a[1]+(s.b[1]-s.a[1])*t}}}return {x:road.at(-1)[0],y:road.at(-1)[1]}}
 function notice(msg){$('toast').textContent=msg;$('toast').classList.add('show');toastTime=2.5;$('hint').textContent=msg}
 function updateHud(){$('wave').textContent=wave+'/12';$('gold').textContent=gold;$('lives').textContent=lives;$('best').textContent=best;$('nextWave').disabled=mode!=='playing'||spawnCount>0||enemies.length>0||wave>=maxWave}
-function start(){wave=0;lives=20;gold=240;time=0;spawnCount=0;spawnTimer=0;elapsed=0;fast=1;towers.length=0;enemies.length=0;shots.length=0;particles.length=0;mode='playing';picked=null;$('details').classList.remove('show');$('overlay').hidden=true;$('speed').textContent='⚡ 1× Tempo';updateHud();notice('Wähle einen Turm und platziere ihn neben dem Weg!')}
+function start(){wave=0;rewardedWave=0;lives=20;gold=240+(ECON.unlocked('wardseal')?100:0);time=0;spawnCount=0;spawnTimer=0;elapsed=0;fast=1;towers.length=0;enemies.length=0;shots.length=0;particles.length=0;mode='playing';picked=null;$('details').classList.remove('show');$('overlay').hidden=true;$('speed').textContent='⚡ 1× Tempo';updateHud();notice('Wähle einen Turm und platziere ihn neben dem Weg!')}
 function end(win){mode='over';if(wave>best){best=wave;localStorage.setItem('emberfall-best',String(best))}$('endTitle').textContent=win?'DAS TOR IST SICHER':'DAS TOR IST GEFALLEN';$('endText').textContent=win?'Du hast alle 12 Wellen verteidigt! Stelle dich einer neuen Herausforderung.':'Du hast Welle '+wave+' erreicht. Baue früh und verbessere die richtigen Türme.';$('play').textContent='NEUE PARTIE';$('overlay').hidden=false;updateHud()}
 $('play').addEventListener('click',start);
 $('nextWave').addEventListener('click',()=>{if(mode!=='playing'||spawnCount>0||enemies.length>0||wave>=maxWave)return;wave++;spawnCount=6+wave*3;spawnTimer=.2;updateHud();notice('Welle '+wave+' beginnt!')});
@@ -54,7 +54,7 @@ for(let i=enemies.length-1;i>=0;i--){const e=enemies[i];e.progress+=dt*e.speed*(
 for(const t of towers){t.charge-=dt;if(t.charge>0)continue;let c=cfg[t.type],range=c.range+14*(t.level-1);let enemy=enemies.filter(e=>Math.hypot(e.x-t.x,e.y-t.y)<range).sort((a,b)=>b.progress-a.progress)[0];if(enemy){shoot(t,enemy);t.charge=c.rate/(1+.21*(t.level-1))}}
 for(let i=shots.length-1;i>=0;i--){let s=shots[i];s.life-=dt;let e=s.target;if(!e||e.hp<=0||!enemies.includes(e)||s.life<=0){shots.splice(i,1);continue}let dx=e.x-s.x,dy=e.y-s.y,d=Math.hypot(dx,dy);let speed=cfg[s.type].speed;if(d<Math.max(e.size,12)+speed*dt){if(s.radius){for(const target of [...enemies]){if(Math.hypot(target.x-e.x,target.y-e.y)<s.radius)damage(target,s.damage,target===e?s.type:'splash')}}else damage(e,s.damage,s.type);shots.splice(i,1)}else{s.x+=dx/d*speed*dt;s.y+=dy/d*speed*dt}}
 for(let i=particles.length-1;i>=0;i--){let p=particles[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.94;p.vy*=.94;p.life-=dt;if(p.life<=0)particles.splice(i,1)}
-if(wave===maxWave&&!enemies.length&&!spawnCount){end(true)}toastTime-=dt;if(toastTime<=0)$('toast').classList.remove('show');if(picked)updateDetails()}
+if(wave>rewardedWave&&!enemies.length&&!spawnCount){rewardedWave=wave;ECON.award('ember',wave%3===0?3:1,'Welle '+wave+' verteidigt')}if(wave===maxWave&&!enemies.length&&!spawnCount){end(true)}toastTime-=dt;if(toastTime<=0)$('toast').classList.remove('show');if(picked)updateDetails()}
 function roundRect(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
 function world(){const bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#224c4c');bg.addColorStop(.47,'#385c4e');bg.addColorStop(1,'#264a41');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
 ctx.save();ctx.globalAlpha=.15;for(let y=0;y<H;y+=44)for(let x=0;x<W;x+=44){ctx.fillStyle=(x+y)%88?'#95c893':'#19483b';ctx.fillRect(x,y,43,43)}ctx.restore();
