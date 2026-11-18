@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-const $=id=>document.getElementById(id);
-const isIsland=document.body.dataset.game==='island',GAME=isIsland?'MOSSBAY':'AETHERKIN';
+const $=id=>document.getElementById(id),ECON=window.NautilakEconomy;ECON.mountWallet();
+const isIsland=document.body.dataset.game==='island',GAME=isIsland?'MOSSBAY':'AETHERKIN',GROW_MS=ECON.unlocked('garden')?10000:18000;
 let saveKey='nautilak-'+(isIsland?'mossbay':'aetherkin')+'-v1';
 const defaults=isIsland?{wood:0,shells:0,fish:0,seeds:4,harvest:0,flowers:0,plots:[],quests:0,gold:0}:{team:['Emberlyn'],owned:['Emberlyn'],win:0,crystals:5,gold:0,encounters:0};
 let data;try{data={...defaults,...(JSON.parse(localStorage.getItem(saveKey)||'null')||{})}}catch(e){data={...defaults}};
@@ -68,7 +68,7 @@ obj(new THREE.OctahedronGeometry(.26,0),a,0,3.7,.1,c);return c}
 if(isIsland){for(let i=0;i<4;i++){let c=critter(creatureTypes[(i+1)%5],Math.sin(i*2)*20,Math.cos(i*2)*17,.65);villagers.push({obj:c,base:c.position.clone(),name:['Nori','Peb','Luma','Timo'][i]})}}
 else{for(let i=0;i<5;i++){let c=critter(creatureTypes[i],Math.sin(i*1.26)*20,Math.cos(i*1.26)*20,1.1);villagers.push({obj:c,base:c.position.clone(),name:creatureTypes[i].name,type:creatureTypes[i]})}}
 const plots=[];if(isIsland)for(let i=0;i<8;i++){let x=-8+(i%4)*3.5,z=-5+Math.floor(i/4)*3.8;const ground=obj(new THREE.BoxGeometry(2.9,.14,2.9),makeMat(0x755b43),x,.33,z);const plant=new THREE.Group();plant.position.set(x,.4,z);scene.add(plant);plots.push({x,z,plant,index:i})}
-function refreshPlots(){for(const p of plots){p.plant.clear();let item=data.plots[p.index];if(!item)continue;let age=Math.max(0,Date.now()-item.t)/1000,size=Math.min(1,age/18);obj(new THREE.ConeGeometry(.38+size*.4,.7+size*1.3,7),makeMat(age>18?0xe7bf79:0x67ad55),0,.4+size*.4,0,p.plant)}}
+function refreshPlots(){for(const p of plots){p.plant.clear();let item=data.plots[p.index];if(!item)continue;let age=Math.max(0,Date.now()-item.t)/1000,size=Math.min(1,age/(GROW_MS/1000));obj(new THREE.ConeGeometry(.38+size*.4,.7+size*1.3,7),makeMat(age>=GROW_MS/1000?0xe7bf79:0x67ad55),0,.4+size*.4,0,p.plant)}}
 refreshPlots();
 let battle=null;const creatureMap=new Map(creatureTypes.map(x=>[x.name,x]));
 function announce(msg){$('hint').textContent=msg;noticeUntil=nowTime+4}
@@ -77,8 +77,8 @@ for(const v of villagers){let q=Math.hypot(pos.x-v.base.x,pos.z-v.base.z);if(q<d
 if(isIsland)for(const p of plots){let q=Math.hypot(pos.x-p.x,pos.z-p.z);if(q<d){best={kind:'plot',target:p};d=q}}
 return d<4.6?best:null}
 function interact(){if(battle)return;const n=nearest();if(!n)return announce('Gehe näher an Pflanzen, Tiere oder Ressourcen');
-if(n.kind==='spot'){let s=n.target;if(nowTime<s.ready)return announce('Hier wächst gerade Neues');s.ready=nowTime+6; if(isIsland){if(s.type==='wood')data.wood++;if(s.type==='fish')data.fish++;if(s.type==='shell')data.shells++;if(s.type==='flower')data.flowers++;if(Math.random()<.45)data.seeds++;announce('Gesammelt: '+s.type+' · Vielleicht sind Samen dabei!')}else{data.crystals++;announce('+1 Aetherkristall gesammelt');if(Math.random()<.35)startBattle(creatureTypes[Math.floor(Math.random()*5)])}save();renderHud()}
-if(n.kind==='plot'){let p=n.target,item=data.plots[p.index];if(!item){if(data.seeds<1)return announce('Keine Samen. Sammle Blumen oder Holz.');data.seeds--;data.plots[p.index]={t:Date.now()};announce('Samen gepflanzt – in 18 Sekunden reif')}else if(Date.now()-item.t>=18000){data.harvest++;data.gold+=5;delete data.plots[p.index];announce('Ernte! +5 Münzen')}else announce('Die Pflanze wächst noch');save();refreshPlots();renderHud()}
+if(n.kind==='spot'){let s=n.target;if(nowTime<s.ready)return announce('Hier wächst gerade Neues');s.ready=nowTime+6; if(isIsland){if(s.type==='wood')data.wood++;if(s.type==='fish'){data.fish++;if(data.fish%3===0)ECON.award('seed',1,'Drei Fische an der Küste gefangen')}if(s.type==='shell')data.shells++;if(s.type==='flower')data.flowers++;if(Math.random()<.45)data.seeds++;announce('Gesammelt: '+s.type+' · Vielleicht sind Samen dabei!')}else{data.crystals++;announce('+1 Aetherkristall gesammelt');if(Math.random()<.35)startBattle(creatureTypes[Math.floor(Math.random()*5)])}save();renderHud()}
+if(n.kind==='plot'){let p=n.target,item=data.plots[p.index];if(!item){if(data.seeds<1)return announce('Keine Samen. Sammle Blumen oder Holz.');data.seeds--;data.plots[p.index]={t:Date.now()};announce('Samen gepflanzt – in '+(GROW_MS/1000)+' Sekunden reif')}else if(Date.now()-item.t>=GROW_MS){data.harvest++;data.gold+=5;ECON.award('seed',2,'Erfolgreiche Gartenernte');delete data.plots[p.index];announce('Ernte! +5 Münzen')}else announce('Die Pflanze wächst noch');save();refreshPlots();renderHud()}
 if(n.kind==='friend'){let v=n.target;if(isIsland){let names=['Nori','Peb','Luma','Timo'];announce(v.name+': '+['Schön, dass du da bist!','Guck dir die Muscheln am Strand an!','Dein Garten sieht hübsch aus!','Angel heute etwas Leckeres!'][names.indexOf(v.name)]);data.gold+=1}else startBattle(v.type);save();renderHud()}}
 function renderHud(){if(isIsland){$('stats').textContent='🪵 '+data.wood+'  🐚 '+data.shells+'  🐟 '+data.fish+'  🌱 '+data.seeds+'  🥕 '+data.harvest+'  🪙 '+data.gold;
 $('quest').textContent=data.harvest>=3?'Quest geschafft! Drei Ernten eingebracht.':data.harvest+'/3 Ernten · Baue einen kleinen Garten auf.'}
@@ -89,9 +89,9 @@ function startBattle(enemy){if(isIsland||battle)return;const ally=creatureMap.ge
 function showBattle(note){if(!battle)return;const b=battle;h.textContent=note;$('battleAlly').textContent=b.ally.emoji+' '+b.ally.name+' · '+Math.max(0,b.aHp)+' LP';$('battleEnemy').textContent=b.enemy.emoji+' '+b.enemy.name+' · '+Math.max(0,b.eHp)+' LP';
 actions.innerHTML=b.ally.moves.map((m,i)=>'<button data-move="'+i+'">'+m+'</button>').join('')+'<button data-move="bond">🤝 Freundschaft anbieten (2 Kristalle)</button><button data-move="run">Rückzug</button>'}
 function battleAction(move){if(!battle)return;const b=battle;if(move==='run'){overlay.hidden=true;battle=null;return announce('Du hast dich zurückgezogen')}
-if(move==='bond'){if(data.crystals<2)return showBattle('Du brauchst zwei Aetherkristalle');if(b.eHp>43)return showBattle('Das Wesen ist noch zu unruhig. Schwäche es zuerst.');data.crystals-=2;const chance=Math.min(.9,.6+(43-b.eHp)*.012);if(Math.random()<chance){if(!data.owned.includes(b.enemy.name))data.owned.push(b.enemy.name);if(data.team.length<3&&!data.team.includes(b.enemy.name))data.team.push(b.enemy.name);data.gold+=9;save();overlay.hidden=true;battle=null;renderHud();return announce(b.enemy.name+' hat sich dir angeschlossen!')} }
+if(move==='bond'){if(data.crystals<2)return showBattle('Du brauchst zwei Aetherkristalle');if(b.eHp>43)return showBattle('Das Wesen ist noch zu unruhig. Schwäche es zuerst.');data.crystals-=2;const chance=Math.min(.95,.6+(43-b.eHp)*.012+(ECON.unlocked('kinbond')?.18:0));if(Math.random()<chance){const newlyFound=!data.owned.includes(b.enemy.name);if(newlyFound)data.owned.push(b.enemy.name);ECON.award('sigil',newlyFound?3:1,newlyFound?'Neue Kreatur befreundet':'Kreatur erneut befreundet');if(data.team.length<3&&!data.team.includes(b.enemy.name))data.team.push(b.enemy.name);data.gold+=9;save();overlay.hidden=true;battle=null;renderHud();return announce(b.enemy.name+' hat sich dir angeschlossen!')} }
 else{let i=Number(move),power=[17,28,4][i],damage=Math.max(0,power+Math.floor(Math.random()*9)-4);if(i===2){b.guard=1;b.aHp=Math.min(100,b.aHp+8)}else b.eHp-=damage}
-if(b.eHp<=0){data.win++;data.crystals+=2;data.gold+=12;save();overlay.hidden=true;battle=null;renderHud();return announce('Sieg! +2 Kristalle +12 Münzen')}
+if(b.eHp<=0){data.win++;ECON.award('sigil',2,'Kreaturenduell gewonnen');data.crystals+=2;data.gold+=12;save();overlay.hidden=true;battle=null;renderHud();return announce('Sieg! +2 Kristalle +12 Münzen')}
 b.round++;let attack=Math.max(0,15+Math.floor(Math.random()*13)-b.guard*13);b.guard=0;b.aHp-=attack;
 if(b.aHp<=0){overlay.hidden=true;battle=null;return announce('Dein Wesen muss sich ausruhen. Versuche es erneut!')}
 showBattle(b.enemy.name+' greift an: -'+attack+' LP');save();renderHud()}
