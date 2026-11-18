@@ -1,7 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Amber – drei Perspektiven">
-<title>Amber – drei Perspektiven</title>
-<path d="M7.3 26.3C13.6 14.1 27.7 14 33.2 21.1C39.5 29.1 26.2 40.2 17.8 47.7C13.4 51.6 10.8 53.6 8.4 51.8C2.1 46.7 1.8 36.8 7.3 26.3Z" fill="#C27A3D"/>
-<path d="M28.4 11.3C42.2 3.9 58.5 15.1 58.9 30.6C59.2 39.2 52.8 44.7 46.4 40.6C37.4 34.7 38.4 20.3 28.4 11.3Z" fill="#214A3F"/>
-<path d="M38.7 41C48.9 34.9 56.7 40.6 60.5 31.7L60.5 53.2C50.8 60 36.5 55.3 27.8 48.8C29.8 46.7 34.4 43.6 38.7 41Z" fill="#214A3F"/>
-<path d="M29.5 37.8C33.1 34.8 35.4 33.1 37.6 29.9" stroke="#fff9ef" stroke-width="2.4" stroke-linecap="round" fill="none" opacity=".42"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Amber Lagerfeuer">
+<defs>
+<radialGradient id="bg" cx="50%" cy="63%" r="72%"><stop offset="0" stop-color="#2D1B18"/><stop offset=".56" stop-color="#18171B"/><stop offset="1" stop-color="#10131C"/></radialGradient>
+<radialGradient id="aura"><stop offset="0" stop-color="#F69320" stop-opacity=".20"/><stop offset="1" stop-color="#F69320" stop-opacity="0"/></radialGradient>
+<linearGradient id="fireMain" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stop-color="#FFF3B9"/><stop offset=".36" stop-color="#FFD66A"/><stop offset=".72" stop-color="#FFAB25"/><stop offset="1" stop-color="#F26E0E"/></linearGradient>
+<linearGradient id="fireSide" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE290"/><stop offset=".55" stop-color="#FFB02A"/><stop offset="1" stop-color="#FF740B"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BD743D"/><stop offset=".4" stop-color="#995125"/><stop offset="1" stop-color="#653316"/></linearGradient>
+<filter id="glow" x="-35%" y="-35%" width="170%" height="170%"><feGaussianBlur stdDeviation="17"/></filter>
+<filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#050505" flood-opacity=".28"/></filter>
+<clipPath id="round"><rect width="512" height="512" rx="106"/></clipPath>
+</defs>
+<g clip-path="url(#round)">
+<rect width="512" height="512" fill="url(#bg)"/>
+<circle cx="256" cy="270" r="235" fill="url(#aura)"/>
+<path d="M265 93 C301 125 326 157 312 196 C299 236 251 266 241 321 C201 298 185 273 199 236 C208 214 236 186 254 160 C272 137 273 111 265 93Z" fill="#F99D1E" opacity=".36" filter="url(#glow)"/>
+<g filter="url(#shadow)">
+<path d="M258 87 C291 114 331 160 309 208 C290 249 253 270 242 328 C204 306 176 287 193 239 C203 209 242 182 259 149 C270 127 269 105 258 87Z" fill="url(#fireMain)"/>
+<path d="M315 204 C345 233 363 260 352 290 C343 316 321 327 299 338 C280 321 260 307 269 283 C279 253 305 241 315 204Z" fill="url(#fireSide)"/>
+<path d="M239 267 C248 244 277 232 283 209 C294 242 263 274 260 319 C246 308 230 290 239 267Z" fill="#FFEA96" opacity=".88"/>
+</g>
+<g filter="url(#shadow)">
+<g transform="rotate(28 256 367)"><rect x="124" y="339" width="264" height="56" rx="27" fill="url(#wood)"/><path d="M151 347 Q240 339 368 349" fill="none" stroke="#F6AF67" stroke-opacity=".43" stroke-linecap="round" stroke-width="5"/><path d="M161 382 Q274 380 364 381" fill="none" stroke="#381C12" stroke-opacity=".45" stroke-linecap="round" stroke-width="4"/></g>
+<g transform="rotate(-28 256 367)"><rect x="124" y="339" width="264" height="56" rx="27" fill="url(#wood)"/><path d="M148 347 Q260 340 365 349" fill="none" stroke="#F5A65E" stroke-opacity=".5" stroke-linecap="round" stroke-width="5"/><path d="M151 380 Q269 383 370 381" fill="none" stroke="#3C2116" stroke-opacity=".48" stroke-linecap="round" stroke-width="4"/></g>
+</g></g>
 </svg>
