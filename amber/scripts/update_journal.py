@@ -154,13 +154,13 @@ def main():
     if not fresh:
         print("No new source-backed articles; retaining prior issue.")
         return
-    ordered=(fresh+old)[:90]
+    ordered=(fresh+old)[:400] # preserve 100+ historical retrospective entries
     store={"edition":TODAY,"updatedAt":datetime.now(timezone.utc).isoformat(),
       "method":"Automatic RSS-linked briefing; not independent editorial fact-checking. Each entry cites its original publisher.",
       "todayCount":sum(n.get("editorialDate")==TODAY for n in ordered),
       "items":ordered}
     OUTPUT.write_text(json.dumps(store,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print(f"Published {len(fresh)} new briefs ({len(ordered)} in archive).",flush=True)
+    print(f"Published {len(fresh)} new briefs ({len(ordered)} in archive; historical items retained).",flush=True)
     if len(fresh)<5:print("WARNING: Fewer than five fresh, source-backed news items; no fabricated substitutes.",file=sys.stderr)
 
 if __name__=="__main__":
