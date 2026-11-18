@@ -8,8 +8,8 @@
 <section class="panel"><h2>STEUERUNG</h2><p>1 / 2 / 3 – Stück auswählen<br>R – Stück drehen<br>Maus / Touch – platzieren<br>Prisma-Puls – Notfallwerkzeug<br><span class="small">Solo, kostenlos im Browser, lokaler Rekord.</span></p></section>
 </aside></div><div class="toast" id="toast"></div>
 <div id="overlay" class="overlay" hidden><div class="dialog"><div class="brand">ORIGINAL BLOCK PUZZLE</div><h2 id="overTitle">KEIN PLATZ MEHR</h2><p id="overText"></p><button id="tryAgain" class="btn primary">NEU VERSUCHEN</button></div></div>
-<script>
-'use strict';const $=id=>document.getElementById(id),N=9,PALETTE=['#7fdde7','#c49aff','#ffa98e','#9de0a4','#f2d18c','#95b0ff','#ff91ba'];
+<script src="./economy.js"></script><script>
+'use strict';const ECON=window.NautilakEconomy;ECON.mountWallet();const $=id=>document.getElementById(id),N=9,PALETTE=['#7fdde7','#c49aff','#ffa98e','#9de0a4','#f2d18c','#95b0ff','#ff91ba'];
 const SHAPES=[
  [[0,0]],[[0,0],[1,0]],[[0,0],[1,0],[2,0]],[[0,0],[0,1],[0,2]],[[0,0],[1,0],[0,1]],[[0,0],[1,0],[2,0],[3,0]],[[0,0],[0,1],[0,2],[0,3]],[[0,0],[1,0],[0,1],[1,1]],[[0,0],[0,1],[0,2],[1,2]],[[0,0],[1,0],[2,0],[1,1]],[[0,0],[1,0],[2,0],[0,1]],[[0,0],[1,0],[2,0],[1,1],[1,2]],[[0,0],[1,0],[2,0],[3,0],[2,1]],[[0,0],[0,1],[1,1],[1,2]],[[0,0],[1,0],[2,0],[0,1],[0,2]],[[0,0],[1,0],[2,0],[1,1],[0,2]],[[0,0],[1,0],[0,1],[1,1],[0,2],[1,2]]
 ];
@@ -33,7 +33,7 @@ function updateHud(){$('score').textContent=points.toLocaleString('de-DE');$('be
 function gameOver(){over=true;if(points>best){best=points;localStorage.setItem('prismforge-best',String(best))}$('overTitle').textContent='KRISTALLSTURM VORBEI';$('overText').textContent='Dein Ergebnis: '+points+' Punkte. '+(points>=1200?'Mission bestanden!':'Versuche mehr Kombinationen!');$('overlay').hidden=false;updateHud()}
 function checkEnd(){if(queue.every(x=>!x))spawnTray();const possible=queue.some(p=>canFitAnywhere(p));if(!possible&&energy<100){gameOver();return}updateHud()}
 function clearLines(){const lines=[];for(let y=0;y<N;y++)if(Array.from({length:N},(_,x)=>board[y*N+x]).every(Boolean))lines.push({row:y});for(let x=0;x<N;x++)if(Array.from({length:N},(_,y)=>board[y*N+x]).every(Boolean))lines.push({col:x});
-if(lines.length){const marked=new Set();for(const line of lines)for(let i=0;i<N;i++)marked.add(line.row!==undefined?line.row*N+i:i*N+line.col);for(const i of marked)board[i]=0;combo++;energy=Math.min(100,energy+lines.length*35);points+=lines.length*110*combo+marked.size*8;announce('✦ '+lines.length+' Linie'+(lines.length>1?'n':'')+' entfernt · Kombo ×'+combo)}else combo=0}
+if(lines.length){const marked=new Set();for(const line of lines)for(let i=0;i<N;i++)marked.add(line.row!==undefined?line.row*N+i:i*N+line.col);for(const i of marked)board[i]=0;combo++;energy=Math.min(100,energy+lines.length*35);points+=lines.length*110*combo+marked.size*8;ECON.award('prism',lines.length+(combo>=3?1:0),lines.length+' Linie(n), Kombo '+combo);announce('✦ '+lines.length+' Linie'+(lines.length>1?'n':'')+' entfernt · Kombo ×'+combo)}else combo=0}
 function place(x,y){if(over)return;if(pulseMode){let removed=0;for(let yy=y-1;yy<=y+1;yy++)for(let xx=x-1;xx<=x+1;xx++)if(xx>=0&&xx<N&&yy>=0&&yy<N&&board[yy*N+xx]){board[yy*N+xx]=0;removed++}energy=0;pulseMode=false;points+=removed*5;announce('Prisma-Puls: '+removed+' Kristalle entfernt');renderBoard();checkEnd();return}
 let p=queue[selected];if(!p)return announce('Wähle zuerst ein Stück');if(!fits(p,x,y))return announce('Hier passt dieses Stück nicht. Drehe es mit R.');
 for(const [dx,dy] of p.cells)board[(y+dy)*N+x+dx]=p.color+1;points+=p.cells.length*10;queue[selected]=null;clearLines();selected=Math.max(0,queue.findIndex(Boolean));renderBoard();checkEnd()}
@@ -44,7 +44,7 @@ $('board').addEventListener('click',e=>{const c=e.target.closest('[data-cell]');
 $('tray').addEventListener('click',e=>{let b=e.target.closest('[data-piece]');if(b)choose(Number(b.dataset.piece))});
 $('rotate').addEventListener('click',rotate);
 $('pulse').addEventListener('click',()=>{if(energy<100)return;pulseMode=!pulseMode;renderTray();preview();announce(pulseMode?'Wähle einen Bereich für deinen Prisma-Puls':'Prisma-Puls abgebrochen')});
-function start(){board=Array(N*N).fill(0);points=0;combo=0;energy=0;hover=null;pulseMode=false;over=false;spawnTray();renderBoard();updateHud();$('overlay').hidden=true;$('hint').textContent='Wähle unten ein Stück. Klicke dann auf ein freies Feld.'}
+function start(){board=Array(N*N).fill(0);points=0;combo=0;energy=ECON.unlocked('lens')?35:0;hover=null;pulseMode=false;over=false;spawnTray();renderBoard();updateHud();$('overlay').hidden=true;$('hint').textContent='Wähle unten ein Stück. Klicke dann auf ein freies Feld.'}
 $('restart').addEventListener('click',start);$('tryAgain').addEventListener('click',start);
 window.addEventListener('keydown',e=>{if(['Digit1','Digit2','Digit3'].includes(e.code)){e.preventDefault();choose(Number(e.code.at(-1))-1)}if(e.code==='KeyR'){e.preventDefault();rotate()}});
 start();
