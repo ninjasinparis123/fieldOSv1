@@ -7,7 +7,7 @@
 <a class="logo" href="./" aria-label="Nautilak Startseite">
 <span class="logo-mark" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 18L12 3l8 15M8 13h8M7 21h10"/></svg></span>NAUTILAK</a>
 <nav class="nav" aria-label="Hauptnavigation">
-<button data-page="store" class="active">STORE</button><button data-page="library">BIBLIOTHEK</button><button data-page="community">COMMUNITY</button>
+<button data-page="store" class="active">STORE</button><button data-page="library">BIBLIOTHEK</button><button data-page="community">COMMUNITY</button><a class="nav-link" href="./expeditions.html">WERKSTATT</a>
 </nav>
 <div class="top-actions"><button class="btn ghost" data-about>Über die Alpha</button><button class="btn primary" data-profile>Profil</button><div class="avatar-mini" id="navAvatar">G</div></div>
 </div></header>
@@ -23,6 +23,7 @@
 <div class="feature-actions"><a href="./game.html" class="btn primary">▶ JETZT SPIELEN</a><button data-details="universe" class="btn ghost">SPIEL ANSEHEN</button></div>
 <div class="feature-foot"><span class="status-dot"></span>Spielbarer Browser-Prototyp · kostenlos testen</div>
 </div></section>
+<a href="./expeditions.html" class="economyStrip"><span class="economyEmoji">🧰</span><span><strong>DIE WERKSTATT DER WELTEN</strong><small>Spiele sechs Abenteuer, sammle seltene Ressourcen und schmiede Upgrades, die deine nächsten Reisen verändern.</small></span><span id="economyWalletValue">6 Ressourcenarten · 6 Upgrades</span><span class="economyArrow">→</span></a>
 <section class="section" id="gamesSection"><div class="section-title"><div><h2 id="gamesHeading">Spiele entdecken</h2><p id="gamesSub">Sechs spielbare Browsergames in verschiedenen Genres.</p></div><button class="text-action" data-page="library">Meine Bibliothek</button></div><div class="games" id="games"></div></section>
 <section class="section" id="communitySection"><div class="section-title"><div><h2>Aus der Community</h2><p>Neuigkeiten teilen, Ideen sammeln und Spieler verbinden.</p></div><span class="tiny">Lokale Community-Vorschau</span></div>
 <div class="community-grid">
@@ -45,5 +46,5 @@
 <div class="modal-overlay" id="modalOverlay" role="dialog" aria-label="Dialog" aria-modal="true" aria-hidden="true"><div class="modal" id="modalContent"></div></div>
 <div id="toast" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#223f50;border:1px solid #77b6cb;color:#effaff;padding:11px 20px;border-radius:7px;box-shadow:0 8px 28px #0008;z-index:99;font-size:12px;opacity:0;pointer-events:none;transition:opacity .2s" aria-live="polite"></div>
 <style>#toast.show{opacity:1}</style>
-<script src="./platform.js" defer></script>
+<script src="./economy.js" defer></script><script src="./platform.js" defer></script>
 </body></html>
