@@ -1,8 +1,84 @@
 {
-  "edition": "2026-11-18",
-  "updatedAt": "2026-11-18T15:50:00Z",
-  "method": "Fünf quellenbasierte redaktionelle Kurzüberblicke; die Inhalte sind keine repräsentativen Umfragen oder Anlageberatung.",
+  "edition": "2026-11-19",
+  "updatedAt": "2026-11-19T07:22:29.754992+00:00",
+  "method": "Automatic RSS-linked briefing; not independent editorial fact-checking. Each entry cites its original publisher.",
+  "todayCount": 5,
   "items": [
+    {
+      "id": "rss-3b3516bab95ee440",
+      "editorialDate": "2026-11-19",
+      "publishedAt": "2026-11-19T07:07:11+00:00",
+      "category": "geopolitics",
+      "categoryLabel": "Geopolitik",
+      "source": "tagesschau",
+      "sourceUrl": "https://www.tagesschau.de/tagesschau_in_100_sekunden/video-1686278.html",
+      "title": "tagesschau in 100 Sekunden",
+      "dek": "tagesschau hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
+      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: tagesschau in 100 Sekunden. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
+      "question": "Welche Konsequenzen könnten sich für internationale Zusammenarbeit ergeben?",
+      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
+      "verified": false
+    },
+    {
+      "id": "rss-720e5a90f1a7a711",
+      "editorialDate": "2026-11-19",
+      "publishedAt": "2026-11-19T07:00:00+00:00",
+      "category": "technology",
+      "categoryLabel": "Technologie",
+      "source": "heise online",
+      "sourceUrl": "https://www.heise.de/news/betterCode-PHP-2026-PHP-Groessen-und-der-richtige-Umgang-mit-PHP2Shell-11525749.html?wt_mc=rss.red.ho.ho.atom.beitrag.beitrag",
+      "title": "heise-Angebot: betterCode() PHP 2026: PHP-Größen und der richtige Umgang mit PHP2Shell",
+      "dek": "heise online hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
+      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: heise-Angebot: betterCode() PHP 2026: PHP-Größen und der richtige Umgang mit PHP2Shell. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
+      "question": "Wie sollten Chancen und Risiken dieser Technologie abgewogen werden?",
+      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
+      "verified": false
+    },
+    {
+      "id": "rss-7bc910a996602e2a",
+      "editorialDate": "2026-11-19",
+      "publishedAt": "2026-11-19T06:23:19+00:00",
+      "category": "crypto",
+      "categoryLabel": "Krypto",
+      "source": "CoinDesk",
+      "sourceUrl": "https://www.coindesk.com/markets/2026/11/19/fed-s-push-for-more-rate-hikes-leans-on-backward-looking-data-as-gas-prices-slide-analysts-argue",
+      "title": "Fed's rate hike push may be a mistake. Here's why",
+      "dek": "CoinDesk hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
+      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: Fed's rate hike push may be a mistake. Here's why. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
+      "question": "Welche Fragen zur Sicherheit und Regulierung digitaler Finanzmärkte sind offen?",
+      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
+      "verified": false
+    },
+    {
+      "id": "rss-ff1feb3dacfd4975",
+      "editorialDate": "2026-11-19",
+      "publishedAt": "2026-11-19T05:58:00+00:00",
+      "category": "society",
+      "categoryLabel": "Gesellschaft",
+      "source": "Deutsche Welle",
+      "sourceUrl": "https://www.dw.com/en/is-the-ai-bubble-bursting-just-as-anthropic-goes-public/a-79896537?maca=en-rss-en-all-1573-rdf",
+      "title": "Is the AI bubble bursting just as Anthropic goes public?",
+      "dek": "Deutsche Welle hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
+      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: Is the AI bubble bursting just as Anthropic goes public?. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
+      "question": "Welche Perspektiven fehlen in der öffentlichen Diskussion?",
+      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
+      "verified": false
+    },
+    {
+      "id": "rss-2e20115a61007f76",
+      "editorialDate": "2026-11-19",
+      "publishedAt": "2026-11-19T05:05:00+00:00",
+      "category": "science",
+      "categoryLabel": "Wissenschaft",
+      "source": "NASA",
+      "sourceUrl": "https://science.nasa.gov/image-article/apod-2026-november-19-the-horsehead-and-flame-nebulas/",
+      "title": "APOD: 2026 November 19 – The Horsehead and Flame Nebulas",
+      "dek": "NASA hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
+      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: APOD: 2026 November 19 – The Horsehead and Flame Nebulas. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
+      "question": "Welche offenen Fragen sollte die Wissenschaft weiter untersuchen?",
+      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
+      "verified": false
+    },
     {
       "id": "amber-20261118-geopolitik",
       "editorialDate": "2026-11-18",
@@ -5542,7 +5618,5 @@
         }
       ]
     }
-  ],
-  "archiveCount": 104,
-  "archiveMethod": "Historische Rückblicke 2020–2025. Jede Quelle ist eine thematische Hintergrundseite, keine automatisch einzeln geprüfte Primärquelle. Eigene Illustrationen, keine Pressefotos."
+  ]
 }
