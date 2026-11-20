@@ -40,14 +40,14 @@
       "publishedAt": "2026-11-20T06:41:00+00:00",
       "category": "society",
       "categoryLabel": "Gesellschaft",
-      "source": "Deutsche Welle",
-      "sourceUrl": "https://www.dw.com/en/germany-news-lufthansa-to-cut-1-000-jobs-reports-say/live-79998529?maca=en-rss-en-all-1573-rdf",
-      "title": "Germany news: Lufthansa to cut 1,000 jobs, reports say",
-      "dek": "Deutsche Welle hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
-      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: Germany news: Lufthansa to cut 1,000 jobs, reports say. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
-      "question": "Welche Perspektiven fehlen in der öffentlichen Diskussion?",
-      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
-      "verified": false
+      "source": "Deutsche Welle (AFP/dpa)",
+      "sourceUrl": "https://amp.dw.com/en/lufthansa-to-cut-1000-jobs-citing-ongoing-losses-reports/a-80000062",
+      "title": "Lufthansa plant laut Medienberichten den Abbau von 1.000 Stellen",
+      "dek": "Ein internes Schreiben verweist auf anhaltende Verluste; Umfang und Zeitplan bleiben teilweise offen.",
+      "summary": "Die Lufthansa plant nach übereinstimmenden Medienberichten, an ihren Drehkreuzen Frankfurt und München rund 1.000 Stellen abzubauen. Grundlage ist ein internes Schreiben der Unternehmensleitung, über das die Deutsche Welle am 20. November unter Berufung auf dpa und weitere Medien berichtet. Demnach verzeichnete die Fluggesellschaft in den ersten neun Monaten des Jahres einen operativen Verlust von 180 Millionen Euro. Neben Stellenstreichungen werden Änderungen bei Abläufen und Flugkapazitäten beschrieben. Unklar ist bislang, wann die Maßnahmen umgesetzt werden und ob sie bereits angekündigte Kürzungen einschließen. Die Entwicklung wirft Fragen nach Wettbewerbsfähigkeit, Arbeitsbedingungen und den Folgen für Beschäftigte auf. Die genannten Zahlen und Pläne beruhen auf Medienberichten über das Schreiben; weitere Bestätigungen bleiben abzuwarten.",
+      "question": "Welche Auswirkungen könnten die geplanten Einsparungen auf Beschäftigte, Reisende und den Luftverkehr haben?",
+      "kind": "article",
+      "verified": true
     },
     {
       "id": "rss-a2774c52b8768502",
@@ -57,12 +57,12 @@
       "categoryLabel": "Krypto",
       "source": "CoinDesk",
       "sourceUrl": "https://www.coindesk.com/markets/2026/11/20/here-s-what-s-crashing-gold-and-likely-weighing-on-bitcoin-too",
-      "title": "Here's what's crashing gold and likely weighing on bitcoin too",
-      "dek": "CoinDesk hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
-      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: Here's what's crashing gold and likely weighing on bitcoin too. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
-      "question": "Welche Fragen zur Sicherheit und Regulierung digitaler Finanzmärkte sind offen?",
-      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
-      "verified": false
+      "title": "Gold und Bitcoin unter Druck: Höhere Realzinsen als mögliche Ursache",
+      "dek": "Steigende inflationsbereinigte Renditen und ein stärkerer Dollar belasten laut Marktberichten mehrere Anlageklassen.",
+      "summary": "Gold und Bitcoin standen am 20. November unter Verkaufsdruck. CoinDesk berichtete am Morgen von einem Goldpreis um 3.514 US-Dollar je Feinunze und einem Bitcoin-Kurs um 61.900 Dollar. Als mögliche Erklärung nennt die Marktanalyse steigende inflationsbereinigte US-Zinsen: Werden sichere Zinsanlagen attraktiver, steigen die Opportunitätskosten für Vermögenswerte ohne laufenden Ertrag. Ein stärkerer Dollar kann diesen Effekt verstärken. Die Einordnung ist eine Marktanalyse, kein Beweis für eine einzelne Ursache der Kursbewegungen. Preise verändern sich fortlaufend und die genannten Werte sind Momentaufnahmen aus dem Bericht. Für die öffentliche Debatte ist interessant, warum ein als digitales Gold beschriebenes Gut in angespannten Marktphasen ebenfalls stark schwanken kann.",
+      "question": "Welche Faktoren könnten erklären, warum Gold und Bitcoin zeitweise gleichzeitig an Wert verlieren?",
+      "kind": "article · Marktanalyse",
+      "verified": true
     },
     {
       "id": "rss-bd57de37da4bccfe",
