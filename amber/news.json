@@ -10,14 +10,14 @@
       "publishedAt": "2026-11-23T07:20:04+00:00",
       "category": "geopolitics",
       "categoryLabel": "Geopolitik",
-      "source": "tagesschau",
-      "sourceUrl": "https://www.tagesschau.de/ausland/afrika/russisches-schiff-libyen-100.html",
-      "title": "Russisches Kriegsschiff nach Explosion in Libyen gesunken",
-      "dek": "tagesschau hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
-      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: Russisches Kriegsschiff nach Explosion in Libyen gesunken. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
-      "question": "Welche Konsequenzen könnten sich für internationale Zusammenarbeit ergeben?",
-      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
-      "verified": false
+      "source": "Reuters",
+      "sourceUrl": "https://www.reuters.com/world/europe/zelenskiy-says-ukraine-sank-russian-corvette-near-libyas-coast-hit-cargo-ship-2026-11-23/",
+      "title": "Ukraine bestätigt Angriff auf russische Kriegsschiffe vor Libyen",
+      "dek": "Nach der Explosion im Hafen von Bengasi bestätigt Kiew einen Drohneneinsatz. Libyen fordert Aufklärung.",
+      "summary": "Im Hafen von Bengasi im Osten Libyens ist am 22. November die russische Korvette „Merkury“ nach einer Explosion gesunken. Am 23. November erklärte der ukrainische Präsident Wolodymyr Selenskyj, ukrainische Seedrohnen hätten das Schiff angegriffen. Nach Angaben der Nachrichtenagentur Reuters zeigen überprüfte Aufnahmen Feuer und Rauch an den betroffenen Schiffen. Die ostlibyschen Behörden verlangen eine internationale Untersuchung; Russland hatte zunächst keine unmittelbare Stellungnahme abgegeben. Die Entwicklung ist geopolitisch bedeutsam, weil der Krieg damit auch Häfen außerhalb des Schwarzen Meeres berührt. Ungeklärt bleiben Einzelheiten des Einsatzes und mögliche weitere Schäden. Die Angaben zu beteiligten Einheiten beruhen teilweise auf Erklärungen der Konfliktparteien.",
+      "question": "Welche Folgen könnte der Vorfall für die Sicherheit libyscher Häfen und die regionale Diplomatie haben?",
+      "kind": "Redaktionell geprüft · Kurzartikel",
+      "verified": true
     },
     {
       "id": "rss-32a0359c4d63562a",
@@ -37,17 +37,17 @@
     {
       "id": "rss-b85309ebeee7e1d4",
       "editorialDate": "2026-11-23",
-      "publishedAt": "2026-11-23T07:11:00+00:00",
+      "publishedAt": "2026-11-23T06:48:00+00:00",
       "category": "society",
       "categoryLabel": "Gesellschaft",
-      "source": "Deutsche Welle",
-      "sourceUrl": "https://www.dw.com/en/germany-news-metalworkers-go-on-strike-as-pay-dispute-heats-up/live-80015633?maca=en-rss-en-all-1573-rdf",
-      "title": "Germany news: Metalworkers go on strike as pay dispute heats up",
-      "dek": "Deutsche Welle hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
-      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: Germany news: Metalworkers go on strike as pay dispute heats up. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
-      "question": "Welche Perspektiven fehlen in der öffentlichen Diskussion?",
-      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
-      "verified": false
+      "source": "tagesschau",
+      "sourceUrl": "https://www.tagesschau.de/wirtschaft/unternehmen/streiks-ig-metall-norden-100.html",
+      "title": "Neue Warnstreiks in der Metall- und Elektroindustrie",
+      "dek": "Rund 23.000 Beschäftigte im Norden wurden zu ganztägigen Arbeitsniederlegungen aufgerufen.",
+      "summary": "In der norddeutschen Metall- und Elektroindustrie haben am 23. November weitere ganztägige Warnstreiks begonnen. Nach Angaben der IG Metall wurden etwa 23.000 Beschäftigte in mehreren Bundesländern zur Arbeitsniederlegung aufgerufen. Die Gewerkschaft verlangt fünf Prozent mehr Lohn bei zwölf Monaten Laufzeit. Die Arbeitgeberseite bietet eine Einmalzahlung und eine spätere Erhöhung um 1,3 Prozent bei längerer Vertragsdauer. Die Verhandlungen sind bislang ohne Einigung geblieben. Betroffen sind unter anderem Standorte der Automobil- und Zulieferindustrie. Die Auseinandersetzung fällt in eine wirtschaftlich schwierige Phase mit Kostendruck und schwacher Nachfrage. Wie stark die Streiks Produktion und Verhandlungen beeinflussen, ist derzeit offen. Beide Seiten bewerten die Angemessenheit der Forderungen unterschiedlich.",
+      "question": "Welche Kriterien sollten bei einem Tarifabschluss zwischen Kaufkraft, Beschäftigungssicherung und Wettbewerbsfähigkeit berücksichtigt werden?",
+      "kind": "Redaktionell geprüft · Kurzartikel",
+      "verified": true
     },
     {
       "id": "rss-db76386fa489384f",
@@ -57,12 +57,12 @@
       "categoryLabel": "Technologie",
       "source": "heise online",
       "sourceUrl": "https://www.heise.de/news/E-Motorraeder-Energica-wagt-nach-der-Insolvenz-einen-Neustart-11533966.html?wt_mc=rss.red.ho.ho.atom.beitrag.beitrag",
-      "title": "E-Motorräder: Energica wagt nach der Insolvenz einen Neustart",
-      "dek": "heise online hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
-      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: E-Motorräder: Energica wagt nach der Insolvenz einen Neustart. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
-      "question": "Wie sollten Chancen und Risiken dieser Technologie abgewogen werden?",
-      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
-      "verified": false
+      "title": "Energica plant Neustart bei elektrischen Motorrädern",
+      "dek": "Nach der Insolvenz will die Marke mit neuen Eigentümern und Produktion in Asien zurückkehren.",
+      "summary": "Der italienische Elektromotorradhersteller Energica plant nach seiner Insolvenz von 2024 einen Neustart. Laut einem am 23. November veröffentlichten Bericht sollen Investoren aus Singapur die Marke übernommen haben. Die Fertigung soll aus Kostengründen künftig in Asien erfolgen. Zunächst ist eine Neuauflage des Reisemotorrads Experia vorgesehen; erste Auslieferungen werden für Anfang 2027 angestrebt. Weitere bekannte Modelle könnten später folgen. Energica war auch als Lieferant von Rennmotorrädern für die MotoE-Serie bekannt. Die geplante Rückkehr zeigt, wie schwierig der Markt für leistungsstarke elektrische Zweiräder trotz technischer Fortschritte bleibt. Ob Produktionsaufbau, Finanzierung und Nachfrage die angekündigten Pläne tragen, ist noch nicht gesichert.",
+      "question": "Welche Faktoren entscheiden darüber, ob elektrische Motorräder einen größeren Markt erreichen?",
+      "kind": "Redaktionell geprüft · Kurzartikel",
+      "verified": true
     },
     {
       "id": "rss-f2140fee950f7a18",
