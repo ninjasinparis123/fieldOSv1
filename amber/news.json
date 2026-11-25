@@ -1,23 +1,23 @@
 {
   "edition": "2026-11-25",
-  "updatedAt": "2026-11-25T07:22:53.576863+00:00",
+  "updatedAt": "2026-11-25T14:23:49Z",
   "method": "Automatic RSS-linked briefing; not independent editorial fact-checking. Each entry cites its original publisher.",
   "todayCount": 5,
   "items": [
     {
       "id": "rss-d44b6fdbb3ab6d3a",
       "editorialDate": "2026-11-25",
-      "publishedAt": "2026-11-25T07:12:00+00:00",
-      "category": "technology",
-      "categoryLabel": "Technologie",
-      "source": "heise online",
-      "sourceUrl": "https://www.heise.de/news/Solarstrom-knackt-erstmals-die-Marke-von-100-Terawattstunden-11537125.html?wt_mc=rss.red.ho.ho.atom.beitrag.beitrag",
-      "title": "Solarstrom knackt erstmals die Marke von 100 Terawattstunden",
-      "dek": "heise online hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
-      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: Solarstrom knackt erstmals die Marke von 100 Terawattstunden. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
-      "question": "Wie sollten Chancen und Risiken dieser Technologie abgewogen werden?",
-      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
-      "verified": false
+      "publishedAt": "2026-11-25T08:38:00Z",
+      "category": "environment",
+      "categoryLabel": "Umwelt",
+      "source": "Golem.de / dpa",
+      "sourceUrl": "https://www.golem.de/news/energiewende-deutschland-erzeugt-mit-solarenergie-erstmals-100-terawattstunden-2611-215627.html",
+      "title": "Deutschland erreicht 100 Terawattstunden Solarstrom",
+      "dek": "Am 25. November wurde eine neue Jahresbestmarke für Photovoltaik gemeldet.",
+      "summary": "Deutschland hat 2026 erstmals mehr als 100 Terawattstunden Strom aus Sonnenenergie erzeugt. Das berichtete Golem am 25. November unter Berufung auf Daten des Fraunhofer ISE. Der genaue Zeitpunkt der Überschreitung ist nicht angegeben. Die Statistik berücksichtigt auch geschätzten Eigenverbrauch von Solaranlagen. Im gesamten Vorjahr waren es 90 Terawattstunden. Neben dem Ausbau der Photovoltaik begünstigten nach Angaben des Bundesverbands Solarwirtschaft viele Sonnenstunden die Entwicklung. Windenergie lieferte im laufenden Jahr bislang rund 123 Terawattstunden. Einordnung: Die Jahresproduktion allein sagt wenig darüber aus, ob Strom jederzeit bedarfsgerecht verfügbar ist. Dafür sind auch zeitliche Erzeugungsprofile, Speicher und Netze relevant.",
+      "question": "Welche Kennzahlen sollten neben der jährlichen Stromproduktion zur Bewertung der Energiewende herangezogen werden?",
+      "kind": "Redaktionell geprüft · Kurzartikel",
+      "verified": true
     },
     {
       "id": "rss-2a1836773324095e",
@@ -37,17 +37,17 @@
     {
       "id": "rss-03ddcf3f8eda3095",
       "editorialDate": "2026-11-25",
-      "publishedAt": "2026-11-25T06:57:00+00:00",
+      "publishedAt": "2026-11-25",
       "category": "society",
       "categoryLabel": "Gesellschaft",
-      "source": "Deutsche Welle",
-      "sourceUrl": "https://www.dw.com/en/domestic-violence-soars-to-record-high-in-germany/a-80041678?maca=en-rss-en-all-1573-rdf",
-      "title": "Domestic violence soars to record high in Germany",
-      "dek": "Deutsche Welle hat diese Meldung veröffentlicht. Die Fakten und Einzelheiten stehen in der verlinkten Originalquelle.",
-      "summary": "Automatisch zusammengestellter Quellenhinweis von Amber Journal. Thema der Originalmeldung: Domestic violence soars to record high in Germany. Dieser Kurzbeitrag enthält keine unabhängig verifizierten Zusatzbehauptungen. Für Details, unterschiedliche Perspektiven und eventuelle Aktualisierungen bitte den Originalbericht lesen.",
-      "question": "Welche Perspektiven fehlen in der öffentlichen Diskussion?",
-      "kind": "Automatischer Quellenhinweis · nicht redaktionell geprüft",
-      "verified": false
+      "source": "Bundesregierung",
+      "sourceUrl": "https://www.bundesregierung.de/breg-de/aktuelles/schutz-vor-gewalt-gegen-frauen-2415316",
+      "title": "Internationaler Aktionstag rückt Gewalt gegen Frauen in den Fokus",
+      "dek": "Am 25. November informiert die Bundesregierung über Schutzangebote und aktuelle Zahlen.",
+      "summary": "Der internationale Aktionstag gegen Gewalt an Frauen findet am 25. November statt. Die Bundesregierung informiert aus diesem Anlass über Hilfsangebote und Schutzmaßnahmen. Grundlage sind unter anderem die bereits am Vortag vorgestellten Lagebilder des Bundeskriminalamts für 2025. Demnach wurden 280.129 Menschen als Opfer häuslicher Gewalt registriert, darunter überwiegend Frauen und Mädchen. Die Zahl weiblicher Opfer digitaler Gewalt lag bei 31.221. Das bundesweite Hilfetelefon ist unter 116 016 erreichbar. Einordnung: Polizeiliche Statistiken bilden nur bekannt gewordene Fälle ab. Veränderungen der registrierten Zahlen lassen deshalb nicht unmittelbar auf das gesamte Ausmaß der Gewalt schließen. Der heutige Aktionstag ist von der gestrigen Vorstellung der Statistik zu unterscheiden.",
+      "question": "Wie lässt sich die Erreichbarkeit und Wirksamkeit von Schutz- und Beratungsangeboten überprüfen?",
+      "kind": "Redaktionell geprüft · Kurzartikel",
+      "verified": true
     },
     {
       "id": "rss-911d4240e98fae9d",
